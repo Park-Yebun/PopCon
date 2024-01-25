@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.user.mapper.UserMapper">
+
+    <insert id="addUser" parameterType="UserDto">
+        insert into user (user_id,user_email,user_image_path,user_password,user_platform,user_nickname,user_birth,user_sex,user_type,user_token,user_business,user_phone,user_salt)
+        values (#{userId},#{userEmail},#{userImagePath},#{userPassword},#{userPlatform},#{userNickname},#{userBirth},#{userSex},#{userType},#{userToken},#{userBusiness},#{userPhone},#{userSalt})
+    </insert>
+
+    <select id="findDuplicate" parameterType="String" resultType="int">
+        select count(user_id) from user
+        <where>
+            <if test="type == 'id'">user_id = #{value}</if>
+            <if test="type == 'email'">user_email = #{value}</if>
+        </where>
+    </select>
+</mapper>
