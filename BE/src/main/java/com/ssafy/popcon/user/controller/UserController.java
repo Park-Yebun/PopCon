@@ -1,10 +1,14 @@
 package com.ssafy.popcon.user.controller;
 
 import com.ssafy.popcon.user.dto.UserDto;
+import com.ssafy.popcon.user.dto.UserModifyDto;
+import com.ssafy.popcon.user.service.UserModifyService;
 import com.ssafy.popcon.user.service.UserRegisterService;
+import com.ssafy.popcon.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +31,8 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserRegisterService userRegisterService;
+    private final UserModifyService userModifyService;
+    private final JWTUtil jwtUtil;
 
     // 회원가입
     @PostMapping
@@ -58,17 +64,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<?> tempadmin() throws Exception{
+    // 회원 정보 수정
+    @PatchMapping("/{userId}")
+    public ResponseEntity<?> userModify(@PathVariable String userId, @RequestPart(value="file",required=false) MultipartFile multipartFile, @RequestPart UserModifyDto userModifyDto, @RequestHeader("Authorization") String token) throws Exception{
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-        GrantedAuthority auth = iter.next();
-
+        int result=userModifyService.modifyUser(userId,multipartFile,userModifyDto,token);
+        if(result==0){
             return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(authentication.getName()+", "+ auth.getAuthority());
+                    .status(HttpStatus.CONFLICT)
+                    .body("회원 정보 수정이 완료되지 않았습니다.");
+        }
+
+        // 토큰 재발급
+        token= jwtUtil.createJwt(userModifyDto.getNewUserId(), userModifyDto.getUserType(),60*60*1000L*24*7);   // 7 days
+        HttpHeaders header = new HttpHeaders();
+        header.add("Authorization", "Bearer " + token); // 새로운 토큰을 헤더를 추가
+
+        return ResponseEntity.ok()
+                .headers(header)
+                .body("회원 정보 수정이 완료되었습니다.");
     }
 }

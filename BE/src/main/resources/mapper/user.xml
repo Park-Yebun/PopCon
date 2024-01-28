@@ -17,13 +17,13 @@
         <result column="user_token" property="userToken"/>
         <result column="user_business" property="userBusiness"/>
         <result column="user_phone" property="userPhone"/>
-        <result column="user_salt" property="userSalt"/>
+        <result column="user_deleted" property="userDeleted"/>
     </resultMap>
 
 
     <insert id="addUser" parameterType="UserDto">
-        insert into user (user_id,user_email,user_image_path,user_password,user_platform,user_nickname,user_birth,user_sex,user_type,user_token,user_business,user_phone,user_salt)
-        values (#{userId},#{userEmail},#{userImagePath},#{userPassword},#{userPlatform},#{userNickname},#{userBirth},#{userSex},#{userType},#{userToken},#{userBusiness},#{userPhone},#{userSalt})
+        insert into user (user_id,user_email,user_image_path,user_password,user_platform,user_nickname,user_birth,user_sex,user_type,user_token,user_business,user_phone)
+        values (#{userId},#{userEmail},#{userImagePath},#{userPassword},#{userPlatform},#{userNickname},#{userBirth},#{userSex},#{userType},#{userToken},#{userBusiness},#{userPhone})
     </insert>
 
     <select id="findDuplicate" parameterType="String" resultType="int">
@@ -35,6 +35,22 @@
     </select>
 
     <select id="findUser" resultMap="user">
-        select * from user where user_id=#{userId}
+        select * from user where user_id=#{userId} and user_deleted='N'
     </select>
+
+    <update id="modifyUser" parameterType="UserModifyDto">
+        update user
+        <set>
+            user_password=#{userPassword},
+            user_phone=#{userPhone},
+            user_id=#{newUserId}, user_nickname=#{userNickname},
+            <if test="userType == 'CORP'">
+                user_business=#{userBusiness},
+            </if>
+            <if test="userImagePath != null">
+                user_image_path=#{userImagePath}
+            </if>
+        </set>
+        where user_id=#{userId}
+    </update>
 </mapper>

@@ -44,7 +44,7 @@ public class UserRegisterService {
     }
 
     // 중복 체크
-    public int findDuplicate(Map<String, String> map) {
+    public int findDuplicate(Map<String, String> map) throws Exception{
         return userMapper.findDuplicate(map.get("type"),map.get("value"));
     }
 }
