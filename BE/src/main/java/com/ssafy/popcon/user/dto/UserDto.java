@@ -21,6 +21,6 @@ public class UserDto {
     private String userToken;
     private String userBusiness;
     private String userPhone;
-    private String userSalt;
+    private String userDeleted;
 
 }
