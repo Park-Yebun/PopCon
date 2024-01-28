@@ -7,9 +7,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.security.core.Authentication;
+
+
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 @RestController
@@ -51,4 +58,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<?> tempadmin() throws Exception{
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+        GrantedAuthority auth = iter.next();
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(authentication.getName()+", "+ auth.getAuthority());
+    }
 }

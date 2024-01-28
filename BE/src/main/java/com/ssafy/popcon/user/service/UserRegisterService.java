@@ -8,6 +8,7 @@ import com.ssafy.popcon.util.S3UploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class UserRegisterService {
 
     private final UserMapper userMapper;
     private final S3UploadUtil s3UploadUtil;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // 회원가입
@@ -33,8 +35,9 @@ public class UserRegisterService {
         }
 
         // 패스워드 암호화
-        userDto.setUserSalt(PwEncryptUtil.makeSalt());
-        userDto.setUserPassword(PwEncryptUtil.pwHashing(userDto.getUserPassword(),userDto.getUserSalt()));
+//        userDto.setUserSalt(PwEncryptUtil.makeSalt());
+//        userDto.setUserPassword(PwEncryptUtil.pwHashing(userDto.getUserPassword(),userDto.getUserSalt()));
+        userDto.setUserPassword(bCryptPasswordEncoder.encode(userDto.getUserPassword()));
 
         // DB 저장
         userMapper.addUser(userDto);

@@ -8,10 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserDto {
+    private String userPk;
     private String userId;
     private String userEmail;
     private String userImagePath;
-    private String userImageName;
     private String userPassword;
     private String userPlatform;
     private String userNickname;
@@ -22,6 +22,5 @@ public class UserDto {
     private String userBusiness;
     private String userPhone;
     private String userSalt;
-
 
 }
