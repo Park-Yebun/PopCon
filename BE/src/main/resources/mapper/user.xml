@@ -62,4 +62,7 @@
         update user set user_password=#{randomPassword} where user_id=#{userId}
     </update>
 
+    <update id="removeUser" parameterType="String">
+        update user set user_deleted='Y' where user_id=#{userId}
+    </update>
 </mapper>
