@@ -19,7 +19,7 @@ public class ReviewDto {
     private String reviewPhoto;
     private String reviewDate;
     private String reviewLike;
-    private int userPK;
+    private String userId;
     private int reviewParentId;
 
 

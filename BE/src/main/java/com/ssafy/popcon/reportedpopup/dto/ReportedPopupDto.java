@@ -16,7 +16,7 @@ public class ReportedPopupDto {
     private String reportedPopupStart;
     private String reportedPopupEnd;
     private String reportedPopupEtc;
-    private int userPk;
+    private int userId;
 
 
 }

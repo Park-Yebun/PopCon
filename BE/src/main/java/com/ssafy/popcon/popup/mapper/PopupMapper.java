@@ -26,5 +26,12 @@ public interface PopupMapper {
     // 팝업 이미지 등록
     void registerPopupImage(PopupImageDto popupImageDto);
 
+    // 좋아요 추가
+    void addPopupLike(@Param("popupId") int popupId, @Param("userId") String userId);
+
+    // 좋아요 취소
+    void cancelPopupLike(@Param("popupId") int popupId, @Param("userId") String userId);
+
+
 
 }
