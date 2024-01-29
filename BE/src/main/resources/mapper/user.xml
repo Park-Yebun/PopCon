@@ -34,7 +34,7 @@
         </where>
     </select>
 
-    <select id="findUser" resultMap="user">
+    <select id="findUserById" resultMap="user">
         select * from user where user_id=#{userId} and user_deleted='N'
     </select>
 
@@ -53,4 +53,13 @@
         </set>
         where user_id=#{userId}
     </update>
+
+    <select id="findUserByEmail" resultMap="user">
+        select * from user where user_email=#{email} and user_deleted='N'
+    </select>
+
+    <update id="modifyUserPassword" parameterType="String">
+        update user set user_password=#{randomPassword} where user_id=#{userId}
+    </update>
+
 </mapper>

@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         UserDto userDto= null;
         try {
-            userDto = userMapper.findUser(userId);
+            userDto = userMapper.findUserById(userId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
