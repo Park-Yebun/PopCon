@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import SearchView from '@/views/SearchView.vue'
+import ReviewView from '@/views/ReviewView.vue'
 
 
 // 철환페이지 import
@@ -29,6 +30,7 @@ const router = createRouter({
       name: 'search',
       component: SearchView
     },
+
     //철환 라우터 리스트
     {
       path: '/edit',
@@ -79,6 +81,12 @@ const router = createRouter({
       path: '/signUpMember',
       name: 'signUpMember',
       component: SignUpMemberViewVue
+
+    {
+      path: '/review',
+      name: 'review',
+      component: ReviewView
+
     },
   ]
 })

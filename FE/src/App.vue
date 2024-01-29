@@ -7,10 +7,10 @@
 </template>
 
 <style scoped>
-.container {
-  margin: 0 auto; /* 화면 중앙 정렬을 위해 */
+body {
+  width: 360px;
+  height: 800px;
 }
-
 </style>
 
 <script>

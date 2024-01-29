@@ -1,4 +1,49 @@
 <template>
+  <div title="캐루셀" id="carouselExampleIndicators" class="carousel slide h-250">
+    <div class="carousel-indicators">
+      <button type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1">
+      </button>
+      <button type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide-to="1"
+        aria-label="Slide 2">
+      </button>
+      <button type="button"
+        data-bs-target="#carouselExampleIndicators"
+        data-bs-slide-to="2"
+        aria-label="Slide 3">
+      </button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="@/assets/images/poster_01.jpg" class="d-block w-100 rounded-bottom-4" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/images/poster_02.jpg" class="d-block w-100 rounded-bottom-4" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/images/poster_03.png" class="d-block w-100 rounded-bottom-4" alt="...">
+      </div>
+    </div>
+</div>
+<!-- 마감임박 팝업스토어 리스트 -->
+<div class="deadline-container">
+  <div class="deadline-text-group">
+    <h5>마감임박</h5>
+    <div href="#">더보기</div>
+  </div>
+  <div title="deadline-popup-group">
+    <img src="#" alt="마감임박 팝업 목록">
+  </div>
+</div>
+
+
+  <!-- 본문 -->
   <div>
     <div title="carousels">
       <img src="#" alt="캐루셀">
@@ -8,15 +53,6 @@
       </div>
     </div>
 
-    <div title="magam-imbak">
-      <div>
-        <strong>마감임박</strong>
-        <a href="#">더보기</a>
-      </div>
-      <div title="popup-group">
-        <img src="#" alt="마감임박 팝업 목록">
-      </div>
-    </div>
 
     <div title="category">
       <div>
@@ -96,5 +132,27 @@ const goSignUpMember = function() {
 </script>
 
 <style>
+/* 이미지랑 캐러셀 세로 사이즈 통일(전체 길이의 약 1/3) */
+img {
+  height: 270px;
+}
+.carousel {
+  height: 270px;
+}
+
+/* [수정중] 인디케이터 동그랗게 만들기 */
+.carousel-indicators {
+  border-radius: 5px;
+}
+
+.deadline-text-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.deadline-container {
+  margin-left: 20px;
+  margin-right: 20px;
+}
 
 </style>
