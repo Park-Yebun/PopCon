@@ -1,8 +1,8 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-</script>
 
 <template>
+  <div class="container">
+
+  </div>
   <RouterView/>
 </template>
 
@@ -12,3 +12,10 @@ body {
   height: 800px;
 }
 </style>
+
+<script>
+import { RouterLink, RouterView } from 'vue-router'
+
+export default {
+}
+</script>

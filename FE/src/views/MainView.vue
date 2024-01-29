@@ -70,6 +70,19 @@
         <a href="#">캐릭터</a>
       </div>
     </div>
+    <!-- 철환 확인용 div -->
+    <div>
+      <button @click="goEdit">프로필수정페이지</button>
+      <button @click="goLogin">로그인페이지</button>
+      <button @click="goMypage">마이페이지</button>
+      <button @click="goRecommend">추천페이지</button>
+      <button @click="goReportReview">리뷰신고페이지</button>
+      <button @click="goSearchId">아이디찾기페이지</button>
+      <button @click="goSearchPassword">비밀번호페이지</button>
+      <button @click="goSignUp">회원가입선택페이지</button>
+      <button @click="goSignUpCompany">기업회원가입페이지</button>
+      <button @click="goSignUpMember">개인회원가입페이지</button>
+    </div>
   </div>
 </template>
 
@@ -83,6 +96,38 @@ const router = useRouter()
 const goSearch = function(category) {
   router.push({ name: 'search', params: category})
 }
+//철환 라우터
+const goEdit = function() {
+  router.push({ name: 'edit'})
+}
+const goLogin = function() {
+  router.push({ name: 'login'})
+}
+const goMypage = function() {
+  router.push({ name: 'mypage'})
+}
+const goRecommend = function() {
+  router.push({ name: 'recommend'})
+}
+const goReportReview = function() {
+  router.push({ name: 'reportreview'})
+}
+const goSearchId = function() {
+  router.push({ name: 'searchId'})
+}
+const goSearchPassword = function() {
+  router.push({ name: 'searchPassword'})
+}
+const goSignUp = function() {
+  router.push({ name: 'signUp'})
+}
+const goSignUpCompany = function() {
+  router.push({ name: 'signUpCompany'})
+}
+const goSignUpMember = function() {
+  router.push({ name: 'signUpMember'})
+}
+
 
 </script>
 
