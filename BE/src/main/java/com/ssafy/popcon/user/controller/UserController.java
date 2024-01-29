@@ -89,6 +89,7 @@ public class UserController {
     public ResponseEntity<?> userFindDetails(@RequestBody Map<String,String> userFindDto) throws Exception {
         // type (찾고자 하는 값) : userId or userPassword , value : 찾는데 쓰이는 값 (아이디라면 이메일 주소, 패스워드라면 아이디)
         int result=userFindService.findUser(userFindDto);
+
         if(result==0) {  // 잘못된 정보
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -102,12 +103,20 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> userRemove(@PathVariable String userId, HttpServletRequest request) throws Exception {
-        String token=request.getHeader("Authorization");
-        int result=userRemoveService.removeUser(token);
+    public ResponseEntity<?> userRemove(@PathVariable String userId) throws Exception {
 
-       return ResponseEntity
-               .status(HttpStatus.OK)
-               .body("회원탈퇴가 완료되었습니다.");
+        int result=userRemoveService.removeUser(userId);
+
+        if(result==1) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("회원탈퇴가 완료되었습니다.");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("사용자 정보가 없습니다.");
+        }
     }
+
+
 }

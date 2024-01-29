@@ -12,11 +12,8 @@ import java.sql.SQLException;
 public class UserRemoveService {
 
     private final UserMapper userMapper;
-    private final JWTUtil jwtUtil;
 
-    public int removeUser(String token) throws Exception {
-        // token 을 통해 userId 가져오기
-        String userId= jwtUtil.getUsername(token.split(" ")[1]);
+    public int removeUser(String userId) throws Exception {
         return userMapper.removeUser(userId);
     }
 }
