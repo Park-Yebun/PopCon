@@ -2,6 +2,7 @@ package com.ssafy.popcon.user.controller;
 
 import com.ssafy.popcon.user.dto.UserDto;
 import com.ssafy.popcon.user.dto.UserModifyDto;
+import com.ssafy.popcon.user.service.UserFindService;
 import com.ssafy.popcon.user.service.UserModifyService;
 import com.ssafy.popcon.user.service.UserRegisterService;
 import com.ssafy.popcon.util.JWTUtil;
@@ -32,6 +33,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserRegisterService userRegisterService;
     private final UserModifyService userModifyService;
+    private final UserFindService userFindService;
     private final JWTUtil jwtUtil;
 
     // 회원가입
@@ -48,7 +50,7 @@ public class UserController {
 
     // 중복 체크
     @PostMapping("/duplicate")
-    public ResponseEntity<?> userAdd(@RequestBody Map<String,String> map) throws Exception{
+    public ResponseEntity<?> userCheckDetails(@RequestBody Map<String,String> map) throws Exception{
 
         int result=userRegisterService.findDuplicate(map);
 
@@ -83,5 +85,21 @@ public class UserController {
         return ResponseEntity.ok()
                 .headers(header)
                 .body("회원 정보 수정이 완료되었습니다.");
+    }
+
+    // 회원 정보 찾기
+    @PostMapping("/search")
+    public ResponseEntity<?> userFindDetails(@RequestBody Map<String,String> userFindDto) throws Exception {
+        // type (찾고자 하는 값) : userId or userPassword , value : 찾는데 쓰이는 값 (아이디라면 이메일 주소, 패스워드라면 아이디)
+        int result=userFindService.findUser(userFindDto);
+        if(result==0) {  // 잘못된 정보
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("존재하지 않는 회원 정보 입니다.");
+        } else { // 정상 작업
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("이메일로 회원 정보가 전송되었습니다.");
+        }
     }
 }
