@@ -2,6 +2,7 @@ package com.ssafy.popcon.user.controller;
 
 import com.ssafy.popcon.user.dto.UserDto;
 import com.ssafy.popcon.user.dto.UserModifyDto;
+import com.ssafy.popcon.user.service.UserRemoveService;
 import com.ssafy.popcon.user.service.UserFindService;
 import com.ssafy.popcon.user.service.UserModifyService;
 import com.ssafy.popcon.user.service.UserRegisterService;
@@ -12,16 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.security.core.Authentication;
 
-
-import java.util.Collection;
-import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -34,6 +30,7 @@ public class UserController {
     private final UserRegisterService userRegisterService;
     private final UserModifyService userModifyService;
     private final UserFindService userFindService;
+    private final UserRemoveService userRemoveService;
     private final JWTUtil jwtUtil;
 
     // 회원가입
@@ -101,5 +98,16 @@ public class UserController {
                     .status(HttpStatus.OK)
                     .body("이메일로 회원 정보가 전송되었습니다.");
         }
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> userRemove(@PathVariable String userId, HttpServletRequest request) throws Exception {
+        String token=request.getHeader("Authorization");
+        int result=userRemoveService.removeUser(token);
+
+       return ResponseEntity
+               .status(HttpStatus.OK)
+               .body("회원탈퇴가 완료되었습니다.");
     }
 }

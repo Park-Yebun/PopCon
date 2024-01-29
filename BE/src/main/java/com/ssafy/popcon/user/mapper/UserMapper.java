@@ -15,4 +15,5 @@ public interface UserMapper {
     int modifyUser(UserModifyDto userModifyDto) throws SQLException; // 회원 수정
     UserDto findUserByEmail(String email) throws SQLException;  // 이메일로 회원 조회 (아이디 찾기)
     int modifyUserPassword(String userId,String randomPassword) throws SQLException; // 패스워드 수정
+    int removeUser(String userId) throws SQLException; // 회원 탈퇴
 }
