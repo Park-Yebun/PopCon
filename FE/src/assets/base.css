@@ -59,6 +59,8 @@
 }
 
 body {
+  width: 360px;
+  border: 1px solid black;
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
