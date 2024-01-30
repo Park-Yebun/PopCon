@@ -13,7 +13,11 @@ public class UserRemoveService {
 
     private final UserMapper userMapper;
 
-    public int removeUser(String userId) throws Exception {
-        return userMapper.removeUser(userId);
+    public String removeUser(String userId) throws Exception {
+        if(userMapper.removeUser(userId)==1) {
+            return "remove complete";
+        } else {
+            return "remove error";
+        }
     }
 }

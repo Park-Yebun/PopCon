@@ -4,7 +4,6 @@
 <mapper namespace="com.ssafy.popcon.user.mapper.UserMapper">
 
     <resultMap type="UserDto" id="user">
-        <result column="user_pk" property="userPk"/>
         <result column="user_id" property="userId"/>
         <result column="user_email" property="userEmail"/>
         <result column="user_image_path" property="userImagePath"/>

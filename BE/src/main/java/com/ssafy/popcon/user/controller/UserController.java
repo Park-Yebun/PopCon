@@ -49,14 +49,14 @@ public class UserController {
     @PostMapping("/duplicate")
     public ResponseEntity<?> userCheckDetails(@RequestBody Map<String,String> map) throws Exception{
 
-        int result=userRegisterService.findDuplicate(map);
+        String result=userRegisterService.findDuplicate(map);
 
-        if(result==0){
+        if(result.equals("not duplicate")){
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("사용 가능한 "+map.get("type")+" 입니다.");
         }
-        else{
+        else {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("이미 존재하는 "+map.get("type")+" 입니다.");
@@ -67,8 +67,8 @@ public class UserController {
     @PatchMapping("/{userId}")
     public ResponseEntity<?> userModify(@PathVariable String userId, @RequestPart(value="file",required=false) MultipartFile multipartFile, @RequestPart UserModifyDto userModifyDto, @RequestHeader("Authorization") String token) throws Exception{
 
-        int result=userModifyService.modifyUser(userId,multipartFile,userModifyDto,token);
-        if(result==0){
+        String result=userModifyService.modifyUser(userId,multipartFile,userModifyDto,token);
+        if(result.equals("modify error")){
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("회원 정보 수정이 완료되지 않았습니다.");
@@ -88,9 +88,9 @@ public class UserController {
     @PostMapping("/search")
     public ResponseEntity<?> userFindDetails(@RequestBody Map<String,String> userFindDto) throws Exception {
         // type (찾고자 하는 값) : userId or userPassword , value : 찾는데 쓰이는 값 (아이디라면 이메일 주소, 패스워드라면 아이디)
-        int result=userFindService.findUser(userFindDto);
+        String result=userFindService.findUser(userFindDto);
 
-        if(result==0) {  // 잘못된 정보
+        if(result.equals("no information")) {  // 잘못된 정보
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("존재하지 않는 회원 정보 입니다.");
@@ -105,9 +105,9 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> userRemove(@PathVariable String userId) throws Exception {
 
-        int result=userRemoveService.removeUser(userId);
+        String result=userRemoveService.removeUser(userId);
 
-        if(result==1) {
+        if(result.equals("remove complete")) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("회원탈퇴가 완료되었습니다.");
