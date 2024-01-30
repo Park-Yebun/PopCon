@@ -1,18 +1,15 @@
 <template>
-    <div>
-      <h2>비밀번호 재설정</h2>
-      <form @submit.prevent="resetPassword">
-        <div>
-          <label for="username">아이디:</label>
-          <input type="text" id="username" v-model="username" required>
-        </div>
-        <div>
-          <label for="email">가입 시 등록한 이메일 주소:</label>
-          <input type="email" id="email" v-model="email" required>
-        </div>
-        <button type="submit">비밀번호 재설정</button>
-      </form>
-    </div>
+
+<div class="container">
+    <h1 class="text-center mt-5">비밀번호 찾기</h1>
+    <form class="mt-5">
+      <div class="mb-3">
+        <label for="id" class="form-label">아이디입력</label>
+        <input type="text" class="form-control" id="id">
+      </div>
+      <button type="submit" class="btn btn-primary">임시 비밀번호 이메일 보내기</button>
+    </form>
+  </div>
   </template>
   
   <script>

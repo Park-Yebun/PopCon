@@ -1,36 +1,57 @@
 <template>
-    <div>
-      <h2>기업 회원가입</h2>
-      <form @submit.prevent="submitForm">
-        <div>
-          <label for="companyName">회사 이름:</label>
-          <input type="text" id="companyName" v-model="companyName" required>
+  <div class="m-3">
+      <div class="mb-3">
+        <h5>회원가입</h5>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="companyName" placeholder="">
+        <label for="companyName"><i class="bi bi-buildings-fill"></i> 회사 이름</label>
+      </div>
+      <div class="row">
+        <div class="form-floating mb-3 col-8">
+          <input type="id" class="form-control" id="idInput" placeholder="">
+          <label for="idInput"><i class="bi bi-person-circle"></i> 아이디</label>
         </div>
-        <div>
-          <label for="username">아이디:</label>
-          <input type="text" id="username" v-model="username" required>
-          <button @click="checkUsernameAvailability">중복 확인</button>
+        <div class="col-4">
+          <button type="button" class="btn btnStyle col-12" style="font-size: 15px;">중복확인</button>
         </div>
-        <div>
-          <label for="email">이메일 주소:</label>
-          <input type="email" id="email" v-model="email" required>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput"><i class="bi bi-envelope"></i> 메일주소</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword"><i class="bi bi-key"></i> 패스워드</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword"><i class="bi bi-key"></i> 패스워드 확인</label>
+      </div>
+      <div class="row" style="margin-bottom: 40px;">
+        <div class="form-floating mb-3 col-8">
+          <input type="text" class="form-control" id="businessNumber" placeholder="">
+          <label for="businessNumber"><i class="bi bi-123"></i> 사업자 번호</label>
         </div>
-        <div>
-          <label for="password">비밀번호:</label>
-          <input type="password" id="password" v-model="password" required>
+        <div class="col-4">
+          <button type="button" class="btn btnStyle col-12" style="font-size: 15px;">확인</button>
         </div>
-        <div>
-          <label for="confirmPassword">비밀번호 확인:</label>
-          <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <button type="button" class="btn BtnStyle2 d-flex col-12 mx-auto mb-3 justify-content-around">
+              <p></p>
+              <p>회원가입</p>
+              <div><i class="bi bi-arrow-right-circle-fill" style="color: #FFCC00"></i></div>
+            </button>
         </div>
-        <div>
-          <label for="businessNumber">사업자 번호:</label>
-          <input type="text" id="businessNumber" v-model="businessNumber" required>
-          <button @click="checkBusinessNumberValidity">확인</button>
-        </div>
-        <button type="submit">회원가입</button>
-      </form>
+        <div class="col-2"></div>
+      </div>
     </div>
+
   </template>
   
   <script>
@@ -64,5 +85,19 @@
   </script>
   
   <style scoped>
+  .btnStyle{
+    width: 88px;
+    height: 56px;
+    flex-shrink: 0;
+    background-color: #ff534C;
+    color : white;
+  }
+  .BtnStyle2{
+    width: 210px;
+    height: 40px;
+    flex-shrink: 0;
+    background-color: #ff534C;
+    color : white;
+  }
   /* 필요한 스타일링을 추가할 수 있습니다. */
   </style>

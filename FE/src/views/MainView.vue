@@ -92,6 +92,22 @@
     <div class="category-text">
       <img class="category-logo" src="@/assets/images/category_foods.png" alt="식음료 아이콘">식음료
     </div>
+
+    <!-- 철환 확인용 div -->
+    <div>
+      <button @click="goError">오류페이지</button>
+      <button @click="goEditMember">프로필수정페이지</button>
+      <button @click="goEditCompany">기업프로필수정페이지</button>
+      <button @click="goLogin">로그인페이지</button>
+      <button @click="goMypage">마이페이지</button>
+      <button @click="goRecommend">추천페이지</button>
+      <button @click="goReportReview">리뷰신고페이지</button>
+      <button @click="goSearchId">아이디찾기페이지</button>
+      <button @click="goSearchPassword">비밀번호페이지</button>
+      <button @click="goSignUp">회원가입선택페이지</button>
+      <button @click="goSignUpCompany">기업회원가입페이지</button>
+      <button @click="goSignUpMember">개인회원가입페이지</button>
+
     <div class="category-text">
       <img class="category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
     </div>
@@ -100,6 +116,7 @@
     </div>
     <div class="category-text">
       <img class="category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
+
     </div>
   </div>
   <div class="category-container">
@@ -132,6 +149,46 @@ const router = useRouter()
 const goSearch = function(category) {
   router.push({ name: 'search', params: category})
 }
+
+//철환 라우터
+const goError = function() {
+  router.push({ name: 'error'})
+}
+const goEditMember = function() {
+  router.push({ name: 'editMember'})
+}
+const goEditCompany = function() {
+  router.push({ name: 'editCompany'})
+}
+const goLogin = function() {
+  router.push({ name: 'login'})
+}
+const goMypage = function() {
+  router.push({ name: 'mypage'})
+}
+const goRecommend = function() {
+  router.push({ name: 'recommend'})
+}
+const goReportReview = function() {
+  router.push({ name: 'reportreview'})
+}
+const goSearchId = function() {
+  router.push({ name: 'searchId'})
+}
+const goSearchPassword = function() {
+  router.push({ name: 'searchPassword'})
+}
+const goSignUp = function() {
+  router.push({ name: 'signUp'})
+}
+const goSignUpCompany = function() {
+  router.push({ name: 'signUpCompany'})
+}
+const goSignUpMember = function() {
+  router.push({ name: 'signUpMember'})
+}
+
+
 </script>
 
 <style>
