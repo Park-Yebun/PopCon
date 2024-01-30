@@ -93,7 +93,6 @@ const router = createRouter({
       name: 'signUpMember',
       component: SignUpMemberViewVue
     },
-
     {
       path: '/review',
       name: 'review',
