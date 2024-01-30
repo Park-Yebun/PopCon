@@ -1,12 +1,17 @@
 <template>
     <div>
         <div title="날짜 옵션">
-          <h4>날짜</h4>
+          <div class="date-text"
+                style=" font-size: 16px;
+                font-family: Inter;
+                font-weight: 400;
+                line-height: 34px;
+                word-wrap: break-word">날짜</div>
             <div title="button-group">
-                <span>오늘</span>
-                <span>+7일</span>
-                <span>+2주</span>
-                <span>직접선택</span>
+                <button>오늘</button>
+                <button>+7일</button>
+                <button>+2주</button>
+                <button>직접선택</button>
             </div>
         </div>
         <div title="지역 옵션">
@@ -97,5 +102,8 @@
 </script>
 
 <style>
-
+.date-text {
+    margin-top: 52px;
+    margin-left: 40px;
+}
 </style>
