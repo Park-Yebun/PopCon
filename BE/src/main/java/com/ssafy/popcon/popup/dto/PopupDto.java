@@ -30,7 +30,7 @@ public class PopupDto {
     private String popupPhone;
     private String popupHoney;
     private int popupLike;
-    private int userPk;
+    private int userId;
 
     private MultipartFile file;
     // Getters and setters
