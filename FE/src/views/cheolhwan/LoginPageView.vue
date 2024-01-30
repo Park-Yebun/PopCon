@@ -27,10 +27,10 @@
             <label class="form-check-label fw-bold" for="flexSwitchCheckChecked">아이디 기억하기</label>
           </div>
           <div class="col-7 small-text text-end">
-            <span class=" fw-bold">
+            <span class=" fw-bold" @click="goIdSearch">
               아이디 찾기
             </span>
-            <span class=" fw-bold">
+            <span class=" fw-bold" @click="goPasswordSearch">
               비밀번호 찾기
             </span>
           </div>
@@ -62,7 +62,7 @@
             <p>계정이 없으신가요?</p>
           </div>
           <div class="col-4">
-            <a href="" style="color: #ff534c;">회원가입</a>
+            <span @click="goSignUp" style="color: #ff534c;">회원가입</span>
           </div>
         </div>
 
@@ -73,30 +73,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-  setup() {
-    const emailaddress = ref('');
-    const password = ref('');
+const router = useRouter()
 
-    const login = () => {
-      // 여기에 로그인 처리 로직을 작성합니다.
-      console.log('Logging in...', emailaddress.value, password.value);
-      // 로그인 후에는 다음 페이지로 이동할 수 있습니다.
-      // 여기서는 예시로 새로운 페이지로 이동하는 것으로 가정합니다.
-      // 실제로는 라우터를 사용하여 이동하도록 구현해야 합니다.
-      // router.push('/dashboard');
-    };
+const goIdSearch = function() {
+  router.push({ name: 'searchId'})
+}
+const goPasswordSearch = function() {
+  router.push({ name: 'searchPassword'})
+}
+const goSignUp = function() {
+  router.push({ name: 'signUp'})
+}
 
-    return {
-      emailaddress,
-      password,
-      login
-    };
-  }
-};
+const emailaddress = ref('');
+const password = ref('');
+
 </script>
 
 <style scoped>
