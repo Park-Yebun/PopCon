@@ -95,7 +95,38 @@
 
     <!-- 철환 확인용 div -->
     <div>
-      <button @click="goError">오류페이지</button>
+    <div class="category-text">
+      <img class="category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
+    </div>
+    <div class="category-text">
+      <img class="category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
+    </div>
+    <div class="category-text">
+      <img class="category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
+
+    </div>
+    </div>
+    <div class="category-container">
+      <div class="category-text">
+        <img class="category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
+      </div>
+      <div class="category-text">
+        <img class="category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
+      </div>
+      <div class="category-text">
+        <img class="category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
+      </div>
+      <div class="category-text">
+        <img class="category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
+      </div>
+      <div class="category-text">
+        <img class="category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <button @click="goError">오류페이지</button>
       <button @click="goEditMember">프로필수정페이지</button>
       <button @click="goEditCompany">기업프로필수정페이지</button>
       <button @click="goLogin">로그인페이지</button>
@@ -107,35 +138,6 @@
       <button @click="goSignUp">회원가입선택페이지</button>
       <button @click="goSignUpCompany">기업회원가입페이지</button>
       <button @click="goSignUpMember">개인회원가입페이지</button>
-
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
-
-    </div>
-  </div>
-  <div class="category-container">
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
-    </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
-    </div>
-  </div>
 </div>
 </template>
 

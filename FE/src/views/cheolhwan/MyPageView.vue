@@ -29,56 +29,53 @@
     
     </div>
     <div title="마감임박 팝업리스트" class="popup-group">
-    <div class="popup">
-      <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
-    </div>
-    <div class="popup">
-      <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
-    </div>
-    <div class="popup">
-      <img src="../../assets/images/poster_03.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
-    </div>
-    <div class="popup">
-      <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
-    </div>
-    <div class="popup">
-      <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
-    </div>
-  </div>
-    <!-- <h3>방문한 팝업 스토어 이미지</h3>
-    <div v-if="visitedPopUpStores.length > 0">
-      <div v-for="(image, index) in visitedPopUpStores" :key="index">
-        <img :src="image" alt="방문한 팝업 스토어 이미지">
+      <div class="popup">
+        <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
+        <h5 class="popup-title">Card title</h5>
+      </div>
+      <div class="popup">
+        <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
+        <h5 class="popup-title">Card title</h5>
+      </div>
+      <div class="popup">
+        <img src="../../assets/images/poster_03.png" class="popup-img" alt="">
+        <h5 class="popup-title">Card title</h5>
+      </div>
+      <div class="popup">
+        <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
+        <h5 class="popup-title">Card title</h5>
+      </div>
+      <div class="popup">
+        <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
+        <h5 class="popup-title">Card title</h5>
       </div>
     </div>
-    <div v-else>
-      <p>방문한 팝업 스토어가 없습니다.</p>
-    </div>
-  </div> -->
+
   </div>
 
       
-      <!-- 방문한 팝업 스토어 이미지 목록 -->
+    <!-- 방문한 팝업 스토어 이미지 목록 -->
 
-      <div>
-      <!-- 작성한 리뷰 목록 -->
-      <div>
-        <h3>작성한 리뷰</h3>
-        <div v-if="reviews.length > 0">
-          <div v-for="(review, index) in reviews" :key="index">
-            <p>{{ review }}</p>
-          </div>
-        </div>
-        <div v-else>
-          <p>작성한 리뷰가 없습니다.</p>
+  <div>
+    <!-- 작성한 리뷰 목록 -->
+    <div>
+      <h3>작성한 리뷰</h3>
+      <div v-if="reviews.length > 0">
+        <div v-for="(review, index) in reviews" :key="index">
+          <p>{{ review }}</p>
         </div>
       </div>
+      <div v-else>
+        <p>작성한 리뷰가 없습니다.</p>
+      </div>
     </div>
+    <div class="d-flex justify-content-center m-3">
+      <button type="button" class="btnStyle">더보기</button>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button class="editBtn">회원탈퇴</button>
+    </div>
+  </div>
   </template>
   
   <script>
