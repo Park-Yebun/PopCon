@@ -12,7 +12,7 @@
         <result column="reported_popup_start" property="reportedPopupStart"/>
         <result column="reported_popup_end" property="reportedPopupEnd"/>
         <result column="reported_popup_etc" property="reportedPopupEtc"/>
-        <result column="user_pk" property="userPk"/>
+        <result column="user_Id" property="userId"/>
     </resultMap>
 
     <resultMap id="reportedPopupImageResult" type="com.ssafy.popcon.reportedpopup.dto.ReportedPopupImageDto">
@@ -28,10 +28,10 @@
 
     <!-- 제보된 팝업 등록 -->
     <insert id="registerReportedPopup" parameterType="com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto">
-        INSERT INTO popcon.reported_popup (reported_popup_name, reported_popup_source, reported_popup_brand, reported_popup_location, reported_popup_start, reported_popup_end, reported_popup_etc, user_pk)
+        INSERT INTO popcon.reported_popup (reported_popup_name, reported_popup_source, reported_popup_brand, reported_popup_location, reported_popup_start, reported_popup_end, reported_popup_etc, user_Id)
 
         VALUES (#{reportedPopupName}, #{reportedPopupSource}, #{reportedPopupBrand}, #{reportedPopupLocation},
-                #{reportedPopupStart}, #{reportedPopupEnd}, #{reportedPopupEtc}, #{userPk})
+                #{reportedPopupStart}, #{reportedPopupEnd}, #{reportedPopupEtc}, #{userId})
     </insert>
 
     <!-- 제보된 팝업 상세 조회 -->

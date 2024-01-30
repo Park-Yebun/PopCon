@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
-    
-    
+
+
     <!--팝업 전부를 불러오는 SQL 코드-->
     <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
         <result column="popup_id" property="popupId"/>
@@ -26,7 +26,7 @@
         <result column="popup_phone" property="popupPhone"/>
         <result column="popup_honey" property="popupHoney"/>
         <result column="popup_like" property="popupLike"/>
-        <result column="user_pk" property="userPk"/>
+        <result column="user_Id" property="userId"/>
     </resultMap>
 
     <resultMap id="popupImageResultMap" type="com.ssafy.popcon.popup.dto.PopupImageDto">
@@ -38,16 +38,16 @@
     <select id="getPopup" resultMap="popupResultMap">
         SELECT * FROM popcon.popup
     </select>
-    
+
     <!--팝업 등록을 하는 SQL 코드-->
     <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto">
-        INSERT INTO popcon.popup (popup_name, popup_brand, popup_content, popup_location,popup_start, popup_end, popup_operating, popup_event,popup_view, popup_car, popup_entryfee, popup_wifi,popup_eat, popup_site, popup_instar, popup_notice,popup_phone, popup_honey, popup_like, user_pk)
+        INSERT INTO popcon.popup (popup_name, popup_brand, popup_content, popup_location,popup_start, popup_end, popup_operating, popup_event,popup_view, popup_car, popup_entryfee, popup_wifi,popup_eat, popup_site, popup_instar, popup_notice,popup_phone, popup_honey, popup_like, user_id)
 
         VALUES (#{popupName}, #{popupBrand}, #{popupContent}, #{popupLocation},
                 #{popupStart}, #{popupEnd}, #{popupOperating}, #{popupEvent},
                 #{popupView}, #{popupCar}, #{popupEntryFee}, #{popupWifi},
                 #{popupEat}, #{popupSite}, #{popupInstar}, #{popupNotice},
-                #{popupPhone}, #{popupHoney}, #{popupLike}, #{userPk})
+                #{popupPhone}, #{popupHoney}, #{popupLike}, #{userId})
     </insert>
 
     <!-- 팝업 세부정보 한 개씩 보는-->

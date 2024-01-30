@@ -3,6 +3,7 @@ package com.ssafy.popcon.popup.service;
 import com.ssafy.popcon.popup.dto.PopupDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.popup.mapper.PopupMapper;
+import com.ssafy.popcon.user.dto.UserModifyDto;
 import com.ssafy.popcon.util.S3UploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.ssafy.popcon.util.JWTUtil;
 import java.util.List;
 
 @Service
@@ -18,6 +19,8 @@ import java.util.List;
 public class PopupRegisterService {
 
     private final PopupMapper popupMapper;
+    private final JWTUtil jwtUtil;
+
     private final S3UploadUtil s3UploadUtil;
     private static final Logger logger = LoggerFactory.getLogger(PopupRegisterService.class);
 
@@ -112,5 +115,17 @@ public class PopupRegisterService {
         }
     }
 
-
+//    // 팝업 좋아요 기능
+//    public int modifyUser(String userId, PopupDto popupDto, String token) throws Exception {
+//        // userId 저장
+//        popupDto.setUserPk(userId);    // 기존 아이디 저장
+//
+//        // 토큰으로 아이디 가져오고
+//        String userType = jwtUtil.getRole(token.split(" ")[1]);
+//
+//        // 여기서 좋아요 추가하는 기능을 해야함
+//        popupDto.setPopupLike();
+//
+//        return popupMapper.addPopupLike(popupDto);
+//    }
 }

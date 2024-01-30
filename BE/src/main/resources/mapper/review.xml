@@ -16,10 +16,12 @@
         <result column="review_photo" property="reviewPhoto"/>
         <result column="review_date" property="reviewDate"/>
         <result column="review_like" property="reviewLike"/>
-        <result column="user_pk" property="userPk"/>
+        <result column="user_id" property="userId"/>
         <result column="review_parent_id" property="reviewParentId"/>
     </resultMap>
 
+    <!--    <select id="" resultMap="">-->
 
+    <!--    </select>-->
 
 </mapper>
