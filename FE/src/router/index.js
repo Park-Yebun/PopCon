@@ -5,7 +5,8 @@ import ReviewView from '@/views/ReviewView.vue'
 
 
 // 철환페이지 import
-import EditPageVue from '@/views/cheolhwan/EditPage.vue'
+import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
+import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
@@ -15,7 +16,7 @@ import SearchPasswordViewVue from '@/views/cheolhwan/SearchPasswordView.vue'
 import SignUpCheckViewVue from '@/views/cheolhwan/SignUpCheckView.vue'
 import SignUpCompanyViewVue from '@/views/cheolhwan/SignUpCompanyView.vue'
 import SignUpMemberViewVue from '@/views/cheolhwan/SignUpMemberView.vue'
-
+import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,9 +34,19 @@ const router = createRouter({
 
     //철환 라우터 리스트
     {
-      path: '/edit',
-      name: 'edit',
-      component: EditPageVue
+      path: '/error',
+      name: 'error',
+      component: ErrorPageViewVue
+    },
+    {
+      path: '/edit/member',
+      name: 'editMember',
+      component: EditMemberPageVue
+    },
+    {
+      path: '/edit/company',
+      name: 'editCompany',
+      component: EditCompanyPageVue
     },
     {
       path: '/login',
@@ -73,14 +84,15 @@ const router = createRouter({
       component: SignUpCheckViewVue
     },
     {
-      path: '/signUpCompany',
+      path: '/signUp/Company',
       name: 'signUpCompany',
       component: SignUpCompanyViewVue
     },
     {
-      path: '/signUpMember',
+      path: '/signUp/Member',
       name: 'signUpMember',
       component: SignUpMemberViewVue
+    },
 
     {
       path: '/review',

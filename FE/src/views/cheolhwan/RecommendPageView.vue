@@ -80,4 +80,5 @@
   .recommendation {
     margin-right: 20px;
   }
+ 
   </style>

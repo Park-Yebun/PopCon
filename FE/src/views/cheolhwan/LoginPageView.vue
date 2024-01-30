@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="m-3">
     <div class="row mb-3">
       <div class="col-3"></div>
       <div class="col-6">
-        <img class="w-100" src="../../assets/logo/POPCON_로고_배경제거.png" alt="">
+        <img class="w-100 popcon-logo-size" src="../../assets/logo/POPCON_로고_배경제거.png" alt="">
       </div>
       <div class="col-3"></div>
     </div>
@@ -41,20 +41,29 @@
       <div class="col-2"></div>
       <div class="col-8">
         <div class="row">
-          <button type="button" class="btn btn-danger col-12 mx-auto mb-3">로그인</button>
+          <button type="button" class="btn BtnStyle2 d-flex col-12 mx-auto mb-3 justify-content-around">
+              <p></p>
+              <p>로그인</p>
+              <div><i class="bi bi-arrow-right-circle-fill" style="color: #FFCC00"></i></div>
+          </button>
         </div>
         <div class="row d-flex justify-content-center  mb-3">
           또는
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/구글logo.png" alt="구글로고">구글로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="portal-logo-size" src="../../assets/logo/구글logo.png" alt="구글로고">  구글 로그인</button>
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/Kakao_logo.jpg" alt="카카오로고">카카오로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="portal-logo-size" src="../../assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
     
         </div>
-        <div class="row">
-          계정이 없으신가요? <a href="">회원가입</a>
+        <div class="row" style="font-size: 13px; text-align: center;">
+          <div class="col-8">
+            <p>계정이 없으신가요?</p>
+          </div>
+          <div class="col-4">
+            <a href="" style="color: #ff534c;">회원가입</a>
+          </div>
         </div>
 
       </div>
@@ -62,8 +71,6 @@
     </div>
 
   </div>
-  
- 
 </template>
 
 <script>
@@ -94,11 +101,21 @@ export default {
 
 <style scoped>
 .small-text {
-  font-size: 10px; /* 원하는 크기로 설정 */
+  font-size: 12px; /* 원하는 크기로 설정 */
 }
-.logo-size{
+.portal-logo-size{
   width:20px;
   height: 20px;
 }
-
+.popcon-logo-size{
+  width:180px;
+  height: 180px;
+}
+.BtnStyle2{
+    width: 254px;
+    height: 40px;
+    flex-shrink: 0;
+    background-color: #ff534C;
+    color : white;
+  }
 </style>

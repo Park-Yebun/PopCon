@@ -1,15 +1,16 @@
 
 <template>
-    <div>
-      <h2>아이디 찾기</h2>
-      <form @submit.prevent="findUsername">
-        <div>
-          <label for="email">가입 시 등록한 이메일 주소:</label>
-          <input type="email" id="email" v-model="email" required>
-        </div>
-        <button type="submit">아이디 찾기</button>
-      </form>
-    </div>
+
+  <div class="container">
+    <h1 class="text-center mt-5">아이디 찾기</h1>
+    <form class="mt-5">
+      <div class="mb-3">
+        <label for="email" class="form-label">이메일 주소</label>
+        <input type="email" class="form-control" id="email" placeholder="example@example.com">
+      </div>
+      <button type="submit" class="btn btn-primary">아이디 찾기</button>
+    </form>
+  </div>
   </template>
   
   <script>

@@ -72,7 +72,9 @@
     </div>
     <!-- 철환 확인용 div -->
     <div>
-      <button @click="goEdit">프로필수정페이지</button>
+      <button @click="goError">오류페이지</button>
+      <button @click="goEditMember">프로필수정페이지</button>
+      <button @click="goEditCompany">기업프로필수정페이지</button>
       <button @click="goLogin">로그인페이지</button>
       <button @click="goMypage">마이페이지</button>
       <button @click="goRecommend">추천페이지</button>
@@ -97,8 +99,14 @@ const goSearch = function(category) {
   router.push({ name: 'search', params: category})
 }
 //철환 라우터
-const goEdit = function() {
-  router.push({ name: 'edit'})
+const goError = function() {
+  router.push({ name: 'error'})
+}
+const goEditMember = function() {
+  router.push({ name: 'editMember'})
+}
+const goEditCompany = function() {
+  router.push({ name: 'editCompany'})
 }
 const goLogin = function() {
   router.push({ name: 'login'})
