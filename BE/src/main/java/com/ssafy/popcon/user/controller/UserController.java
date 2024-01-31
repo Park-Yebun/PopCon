@@ -1,5 +1,6 @@
 package com.ssafy.popcon.user.controller;
 
+import com.ssafy.popcon.notification.service.NotificationService;
 import com.ssafy.popcon.user.dto.UserDto;
 import com.ssafy.popcon.user.dto.UserModifyDto;
 import com.ssafy.popcon.user.service.UserRemoveService;
@@ -31,6 +32,7 @@ public class UserController {
     private final UserModifyService userModifyService;
     private final UserFindService userFindService;
     private final UserRemoveService userRemoveService;
+    private final NotificationService notificationService;
     private final JWTUtil jwtUtil;
 
     // 회원가입
@@ -118,5 +120,13 @@ public class UserController {
         }
     }
 
+    // 로그아웃 -> 디바이스 토큰 삭제하기
+    @PostMapping("/logout")
+    public ResponseEntity<?> userTokenRemove(@RequestHeader("Authorization") String token) throws Exception{
+        notificationService.removeToken(token);
 
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("로그아웃 되었습니다.");
+    }
 }
