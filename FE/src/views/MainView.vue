@@ -81,6 +81,7 @@
 <div>
   <a @click="goSearch">검색 버튼</a>
   <a href="#">알람 버튼</a>
+  <button @click="getLocaion()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
 </div>
 
 <!-- 카테고리 -->
@@ -124,6 +125,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const router = useRouter()
 
@@ -131,6 +133,17 @@ const router = useRouter()
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
 const goSearch = function(category) {
   router.push({ name: 'search', params: category})
+}
+const lat = ref(0)
+const lng = ref(0)
+
+function getLocaion() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      lat.value = position.coords.latitude
+      lng.value = position.coords.longitude
+    })
+  }
 }
 </script>
 
