@@ -53,26 +53,26 @@
         line-height: 23px;
         word-wrap: break-word">더보기</div>
   </div>
-  <div title="마감임박 팝업리스트" class="popup-group">
-    <div class="popup">
-      <img src="@/assets/images/popup_01.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
+  <div title="마감임박 팝업리스트" class="deadline-popup-group">
+    <div class="deadline-popup">
+      <img src="@/assets/images/popup_01.png" class="deadline-popup-img" alt="">
+      <h5 class="deadline-popup-titdeadline-popuple">Card title</h5>
     </div>
-    <div class="popup">
-      <img src="@/assets/images/popup_02.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
+    <div class="deadline-popup">
+      <img src="@/assets/images/popup_02.png" class="deadline-popup-img" alt="">
+      <h5 class="deadline-popup-title">Card title</h5>
     </div>
-    <div class="popup">
-      <img src="@/assets/images/popup_03.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
+    <div class="deadline-popup">
+      <img src="@/assets/images/popup_03.png" class="deadline-popup-img" alt="">
+      <h5 class="deadline-popup-title">Card title</h5>
     </div>
-    <div class="popup">
-      <img src="@/assets/images/popup_01.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
+    <div class="deadline-popup">
+      <img src="@/assets/images/popup_01.png" class="deadline-popup-img" alt="">
+      <h5 class="deadline-popup-title">Card title</h5>
     </div>
-    <div class="popup">
-      <img src="@/assets/images/popup_02.png" class="popup-img" alt="">
-      <h5 class="popup-title">Card title</h5>
+    <div class="deadline-popup">
+      <img src="@/assets/images/popup_02.png" class="deadline-popup-img" alt="">
+      <h5 class="deadline-popup-title">Card title</h5>
     </div>
   </div>
 </div>
@@ -84,60 +84,41 @@
 </div>
 
 <!-- 카테고리 -->
-<div title="category">
-  <div class="category-container">
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_beauty.png" alt="패션/뷰티 아이콘">패션/뷰티
+<div title="main-category">
+  <div class="main-category-container">
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_beauty.png" alt="패션/뷰티 아이콘">패션/뷰티
     </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_foods.png" alt="식음료 아이콘">식음료
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_foods.png" alt="식음료 아이콘">식음료
     </div>
-
-    <!-- 철환 확인용 div -->
-    <div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
     </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
     </div>
-    <div class="category-text">
-      <img class="category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
-
-    </div>
-    </div>
-    <div class="category-container">
-      <div class="category-text">
-        <img class="category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
-      </div>
-      <div class="category-text">
-        <img class="category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
-      </div>
-      <div class="category-text">
-        <img class="category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
-      </div>
-      <div class="category-text">
-        <img class="category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
-      </div>
-      <div class="category-text">
-        <img class="category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
-      </div>
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
     </div>
   </div>
-</div>
-<div>
-  <button @click="goError">오류페이지</button>
-      <button @click="goEditMember">프로필수정페이지</button>
-      <button @click="goEditCompany">기업프로필수정페이지</button>
-      <button @click="goLogin">로그인페이지</button>
-      <button @click="goMypage">마이페이지</button>
-      <button @click="goRecommend">추천페이지</button>
-      <button @click="goReportReview">리뷰신고페이지</button>
-      <button @click="goSearchId">아이디찾기페이지</button>
-      <button @click="goSearchPassword">비밀번호페이지</button>
-      <button @click="goSignUp">회원가입선택페이지</button>
-      <button @click="goSignUpCompany">기업회원가입페이지</button>
-      <button @click="goSignUpMember">개인회원가입페이지</button>
+  <div class="main-category-container">
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
+    </div>
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
+    </div>
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
+    </div>
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
+    </div>
+    <div class="main-category-text">
+      <img class="main-category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
+    </div>
+  </div>
 </div>
 </template>
 
@@ -151,46 +132,6 @@ const router = useRouter()
 const goSearch = function(category) {
   router.push({ name: 'search', params: category})
 }
-
-//철환 라우터
-const goError = function() {
-  router.push({ name: 'error'})
-}
-const goEditMember = function() {
-  router.push({ name: 'editMember'})
-}
-const goEditCompany = function() {
-  router.push({ name: 'editCompany'})
-}
-const goLogin = function() {
-  router.push({ name: 'login'})
-}
-const goMypage = function() {
-  router.push({ name: 'mypage'})
-}
-const goRecommend = function() {
-  router.push({ name: 'recommend'})
-}
-const goReportReview = function() {
-  router.push({ name: 'reportreview'})
-}
-const goSearchId = function() {
-  router.push({ name: 'searchId'})
-}
-const goSearchPassword = function() {
-  router.push({ name: 'searchPassword'})
-}
-const goSignUp = function() {
-  router.push({ name: 'signUp'})
-}
-const goSignUpCompany = function() {
-  router.push({ name: 'signUpCompany'})
-}
-const goSignUpMember = function() {
-  router.push({ name: 'signUpMember'})
-}
-
-
 </script>
 
 <style>
@@ -253,12 +194,12 @@ img {
   margin-top: 3.19px;
 }
 
-.category-logo {
+.main-category-logo {
   width: 42px;
   height: 42px;
 }
 
-.category-text {
+.main-category-text {
   display: flex;
   flex-direction: column;
   font-size: 10px;
@@ -268,7 +209,7 @@ img {
   word-wrap: break-word
 }
 
-.category-container {
+.main-category-container {
   width: 282px;
   display: flex;
   text-align: center;
@@ -276,7 +217,7 @@ img {
   margin-left: 40px;
 }
 
-.popup-group {
+.deadline-popup-group {
   margin-top: 5.31px;
   min-width: 201.78px;
   height: 237px;
@@ -285,16 +226,16 @@ img {
   display: flex;
 }
 
-/* 스크롤 안보이게 숨기기 */
-.popup-group{
-   -ms-overflow-style: none;
-}
-.popup-group::-webkit-scrollbar{
-  display:none;
-}
-
-.popup-img {
+.deadline-popup-img {
   width: 146.56px;
   height: 170.89px;
+}
+
+/* 스크롤 안보이게 숨기기 */
+.deadline-popup-group{
+   -ms-overflow-style: none;
+}
+.deadline-popup-group::-webkit-scrollbar{
+  display:none;
 }
 </style>
