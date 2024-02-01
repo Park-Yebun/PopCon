@@ -60,6 +60,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String userType=auth.getAuthority();
 
         String token= jwtUtil.createJwt(userId,userType,60*60*1000L*24*7);   // 7 days
+
         response.addHeader("Authorization","Bearer " + token);
         // 문자열의 인코딩을 UTF-8로 설정
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
