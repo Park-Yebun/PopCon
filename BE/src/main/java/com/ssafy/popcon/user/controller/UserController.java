@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("*")
+//@CrossOrigin(origins="*", allowedHeaders="*")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -37,10 +37,10 @@ public class UserController {
 
     // 회원가입
     @PostMapping
-    public ResponseEntity<?> userAdd(@RequestPart("userDto") UserDto userDto, @RequestPart(value="file",required=false) MultipartFile file) throws Exception{
+    public ResponseEntity<?> userAdd(@RequestBody UserDto userDto) throws Exception{
         logger.debug("join userDto : {}",userDto);
 
-        userRegisterService.addUser(userDto,file);
+        userRegisterService.addUser(userDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
