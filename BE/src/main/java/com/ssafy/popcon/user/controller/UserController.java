@@ -77,12 +77,12 @@ public class UserController {
         }
 
         // 토큰 재발급
-        token= jwtUtil.createJwt(userModifyDto.getNewUserId(), userModifyDto.getUserType(),60*60*1000L*24*7);   // 7 days
-        HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", "Bearer " + token); // 새로운 토큰을 헤더를 추가
+//        token= jwtUtil.createJwt(userModifyDto.getUserId(), userModifyDto.getUserType(),60*60*1000L*24*7);   // 7 days
+//        HttpHeaders header = new HttpHeaders();
+//        header.add("Authorization", "Bearer " + token); // 새로운 토큰을 헤더를 추가
 
         return ResponseEntity.ok()
-                .headers(header)
+//                .headers(header)
                 .body("회원 정보 수정이 완료되었습니다.");
     }
 
@@ -101,6 +101,21 @@ public class UserController {
                     .status(HttpStatus.OK)
                     .body("이메일로 회원 정보가 전송되었습니다.");
         }
+    }
+
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<?> userFindById(@PathVariable String userId) throws Exception {
+        System.out.println("유저 정보 찾기!!!");
+        UserDto userDto=userFindService.findUserById(userId);
+
+        if(userDto==null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("일치하는 사용자가 없습니다.");
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userDto);
     }
 
     // 회원 탈퇴

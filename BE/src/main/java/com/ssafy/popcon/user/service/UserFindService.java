@@ -42,6 +42,10 @@ public class UserFindService {
         return "ok";
     }
 
+    public UserDto findUserById(String userId) throws Exception {
+        return userMapper.findUserById(userId);
+    }
+
     // 인증번호 및 임시 비밀번호 생성 메서드
     public String createCode() {
         Random random = new Random();

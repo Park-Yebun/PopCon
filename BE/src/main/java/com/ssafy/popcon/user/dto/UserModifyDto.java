@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserModifyDto {
 
     private String userId;
-    private String newUserId;
     private String userPassword;
     private String userPhone;   // 휴대폰 번호 or 사업장 번호
     private String userBusiness;    // 사업자 번호
