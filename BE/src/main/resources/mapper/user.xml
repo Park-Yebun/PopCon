@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.user.mapper.UserMapper">
+
+    <resultMap type="UserDto" id="user">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_image_path" property="userImagePath"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_token" property="userToken"/>
+        <result column="user_business" property="userBusiness"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_deleted" property="userDeleted"/>
+    </resultMap>
+
+
+    <insert id="addUser" parameterType="UserDto">
+        insert into user (user_id,user_email,user_image_path,user_password,user_platform,user_nickname,user_birth,user_sex,user_type,user_token,user_business,user_phone)
+        values (#{userId},#{userEmail},#{userImagePath},#{userPassword},#{userPlatform},#{userNickname},#{userBirth},#{userSex},#{userType},#{userToken},#{userBusiness},#{userPhone})
+    </insert>
+
+    <select id="findDuplicate" parameterType="String" resultType="int">
+        select count(user_id) from user
+        <where>
+            <if test="type == 'id'">user_id = #{value}</if>
+            <if test="type == 'email'">user_email = #{value}</if>
+        </where>
+    </select>
+
+    <select id="findUserById" resultMap="user">
+        select * from user where user_id=#{userId} and user_deleted='N'
+    </select>
+
+    <update id="modifyUser" parameterType="UserModifyDto">
+        update user
+        <set>
+            user_password=#{userPassword},
+            user_phone=#{userPhone},
+            user_id=#{newUserId}, user_nickname=#{userNickname},
+            <if test="userType == 'CORP'">
+                user_business=#{userBusiness},
+            </if>
+            <if test="userImagePath != null">
+                user_image_path=#{userImagePath}
+            </if>
+        </set>
+        where user_id=#{userId}
+    </update>
+
+    <select id="findUserByEmail" resultMap="user">
+        select * from user where user_email=#{email} and user_deleted='N'
+    </select>
+
+    <update id="modifyUserPassword" parameterType="String">
+        update user set user_password=#{randomPassword} where user_id=#{userId}
+    </update>
+
+    <update id="removeUser" parameterType="String">
+        update user set user_deleted='Y' where user_id=#{userId}
+    </update>
+</mapper>
