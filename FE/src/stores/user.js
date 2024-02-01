@@ -57,9 +57,11 @@ export const useMemberStore = defineStore (
       await findById(
         decodeToken.userId,
         (response) => {
-          // console.log("findById 결과 >> ", response);
+          console.log("findById 결과 >> ", response.data);
           userInfo.value = response.data; //< - 확인 후 등록 
-          
+          if(userInfo.value.userImagePath==null){
+            userInfo.value.userImagePath="https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/noProfile.png";
+          }
         },
         (error) => {
           console.log(error);

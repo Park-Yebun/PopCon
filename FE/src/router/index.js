@@ -3,7 +3,6 @@ import MainView from '@/views/MainView.vue'
 import SearchView from '@/views/SearchView.vue'
 import ReviewView from '@/views/ReviewView.vue'
 
-
 // 철환페이지 import
 import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
 import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
@@ -33,17 +32,11 @@ const onlyAuthUser = async (to, from, next) => {
     console.log(1); 
     await getUserInfo(token);
     next();
-  } else {  // 없으면 로그인 시켜 
+  } else {  // 없으면 로그인 시키기 
     next({name:"login"});
   }
 
-  // if (userInfo.value != null && token) {
-  //   await getUserInfo(token);
-  // } else {
-  //   next();
-  // }
 };
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +67,7 @@ const router = createRouter({
     {
       path: '/edit/company',
       name: 'editCompany',
+      beforeEnter: onlyAuthUser,
       component: EditCompanyPageVue
     },
     {
@@ -84,6 +78,7 @@ const router = createRouter({
     {
       path: '/mypage',
       name: 'mypage',
+      beforeEnter: onlyAuthUser,
       component: MyPageViewVue
     },
     {

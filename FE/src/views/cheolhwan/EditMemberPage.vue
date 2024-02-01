@@ -20,7 +20,7 @@ const modifyUser = ref({
 const previewImage=ref('');
 
 onMounted(() => {
-  previewImage.value = userInfo.value.userImagePath || "https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/noProfile.png";
+  previewImage.value = userInfo.value.userImagePath;
 })
 
 // 패스워드 확인용 
