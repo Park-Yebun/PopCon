@@ -18,6 +18,33 @@ import SignUpCompanyViewVue from '@/views/cheolhwan/SignUpCompanyView.vue'
 import SignUpMemberViewVue from '@/views/cheolhwan/SignUpMemberView.vue'
 import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
 
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+
+
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore();
+  const { userInfo } = storeToRefs(memberStore);
+  const { getUserInfo } = memberStore;
+
+  let token = localStorage.getItem("accessToken");
+
+  if(token!=null){  // 토큰이 있으면 아이디 찾아오기
+    console.log(1); 
+    await getUserInfo(token);
+    next();
+  } else {  // 없으면 로그인 시켜 
+    next({name:"login"});
+  }
+
+  // if (userInfo.value != null && token) {
+  //   await getUserInfo(token);
+  // } else {
+  //   next();
+  // }
+};
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -41,6 +68,7 @@ const router = createRouter({
     {
       path: '/edit/member',
       name: 'editMember',
+      beforeEnter: onlyAuthUser,
       component: EditMemberPageVue
     },
     {

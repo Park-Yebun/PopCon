@@ -3,9 +3,7 @@ import { useRouter } from "vue-router";
 import { defineStore, storeToRefs } from "pinia";
 import { jwtDecode } from "jwt-decode";
 
-import {
-  userConfirm
-} from "@/api/user.js";
+import {userConfirm, findById} from "@/api/user.js";
 import { httpStatusCode } from "@/util/http-status";
 
 export const useMemberStore = defineStore (
@@ -24,6 +22,7 @@ export const useMemberStore = defineStore (
         loginUser,
         (response) => {
           console.log("response.status", response.status);
+          console.log(response);
           if (response.status === httpStatusCode.OK) {
             let { data } = response;
             // console.log("data", data);
@@ -48,27 +47,23 @@ export const useMemberStore = defineStore (
       );
     };
 
-    const getUserInfo = (token) => {
-      let decodeToken = jwtDecode(token);
-      console.log("2. decodeToken", decodeToken);
-      findById(
+    const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 정보를 가져오기 위해 사용 , userInfo 저장함 
+      // console.log("getUserInfo 토큰 !!!!! ", token);
+      const accessToken=token.split(" ");
+      // console.log("accessToken : ",accessToken);
+      let decodeToken = jwtDecode(accessToken[1]);
+      // 2. decodeToken {userId: 'tmddus', userType: 'GENERAL', iat: 1706765617, exp: 1707370417}
+
+      await findById(
         decodeToken.userId,
         (response) => {
-          if (response.status === httpStatusCode.OK) {
-            userInfo.value = response.data.userInfo;
-            console.log("3. getUserInfo data >> ", response.data);
-          } else {
-            console.log("유저 정보 없음!!!!");
-          }
+          // console.log("findById 결과 >> ", response);
+          userInfo.value = response.data; //< - 확인 후 등록 
+          
         },
-        async (error) => {
-          console.error(
-            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
-            error.response.status
-          );
-        //   isValidToken.value = false;
-
-          await tokenRegenerate();
+        (error) => {
+          console.log(error);
+          // to do : 사용자 정보가 없습니다. 다시 로그인 하세요 ..? 로그인 페이지로 보내 ? 
         }
       );
     };
