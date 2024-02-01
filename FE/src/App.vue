@@ -1,9 +1,8 @@
 
 <template>
   <div class="container">
-
+    <RouterView/>
   </div>
-  <RouterView/>
 </template>
 
 <style scoped>
@@ -13,9 +12,9 @@ body {
 }
 </style>
 
-<script>
+<script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { ref,onMounted } from 'vue'
+// Import the functions you need from the SDKs you need
 
-export default {
-}
 </script>
