@@ -76,11 +76,16 @@ const checkEmailAvailability = function() {
 const passwordInput=ref('')
 const passwordCheckInput=ref('');
 
+const isValidInput=ref('');
+const isValidInputBoolean=ref(false);
+
 // 회원가입
 const join=function(){
   // 유효한 이메일, 아이디, 패스워드 일치 여부 확인 
   if(!isValidEmailBoolean.value || !isValidIdBoolean.value || passwordInput.value != passwordCheckInput.value || joinUser.value.userBirth=='' || joinUser.value.userSex=='') {
-    alert('유효하지 않은 입력 값이 있습니다!');
+    // alert('유효하지 않은 입력 값이 있습니다!');
+    isValidInput.value="유효하지 않은 입력 값이 있습니다!";
+    isValidInputBoolean.value=true;
   } else {
     joinUser.value.userId=idInput.value;
     joinUser.value.userEmail=emailInput.value;
@@ -157,7 +162,7 @@ const join=function(){
       <input type="text" class="form-control" id="phoneNumber" placeholder="" v-model="joinUser.userPhone">
       <label for="phoneNumber">휴대폰 번호 (선택)</label>
     </div>
-
+    <p v-show="isValidInputBoolean" style="color:red;">{{ isValidInput }}</p>
     <div class="row mb-3">
       <div class="col-2"></div>
       <div class="col-8">
