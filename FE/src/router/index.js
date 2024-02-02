@@ -19,13 +19,6 @@ import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
 
 import MemberOtherPage from '@/views/MemberOtherPage.vue'
 import ReportPopupStore from '@/views/ReportPopupStore.vue'
-import AdminOtherPage from '@/views/AdminOtherPage.vue'
-
-import NoticeList from '@/views/NoticeList.vue'
-import FAQ from '@/views/FAQ.vue'
-import onetoone from '@/views/1to1.vue'
-
-import PopupDetailView from '@/views/PopupDetailView.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -135,38 +128,17 @@ const router = createRouter({
     {
       path: '/other/member',
       name: 'otherMember',
-      beforeEnter: onlyAuthUser,
       component: MemberOtherPage
     },
     {
       path: '/other/admin',
       name: 'otherAdmin',
-      component: AdminOtherPage
+      component: MemberOtherPage
     },
     {
       path: '/report/popup',
       name: 'reportPopup',
       component: ReportPopupStore
-    },
-    {
-      path: '/notice',
-      name: 'notice',
-      component: NoticeList
-    },
-    {
-      path: '/onetoone',
-      name: 'onetoone',
-      component: onetoone
-    },
-    {
-      path: '/FAQ',
-      name: 'FAQ',
-      component: FAQ
-    },
-    {
-      path: '/popup/:popupId',
-      name: 'popupDetail',
-      component: PopupDetailView
     }
   ]
 })
