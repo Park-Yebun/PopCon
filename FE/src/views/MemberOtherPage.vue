@@ -1,9 +1,38 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useMemberStore } from "@/stores/user";
+import {  logout  } from "@/api/user";
+
+const memberStore = useMemberStore();
+const {userInfo} = storeToRefs(memberStore);
+
+const router = useRouter();
+
+const userLogout=function(){
+  logout(
+    ({data})=>{
+      console.log("정상!");
+      localStorage.removeItem("accessToken");
+      router.push({name:"home"});
+    },
+    ({response})=>{
+      console.log("error");
+    }
+  )
+
+}
+
+</script>
+
+
 <template>
   <div class="home-container">
     <br />
     <br />
-    <div class="image-container2" style="background-color: lightcoral;">
-      <h1 class="title">Others</h1>
+    <h1 class="title">Others</h1>
+    <div class="image-container2">
       <img
         src="@/assets/images/alarm.png"
         alt="이미지 설명"
@@ -15,28 +44,31 @@
     <br />
     <!-- 이미지를 감싸는 컨테이너 추가 -->
     <div class="image-container">
-      <img
-        src="@/assets/images/profile.png"
-        alt="이미지 설명"
-        width="20%"
-        height="20%"
-      />
+      <div style="margin: 5%;">
+        <img
+          :src="userInfo.userImagePath" 
+          width="80"
+          height="80"
+          style="display: block; margin: 0 auto; border-radius: 50%;"
+        />
+      </div>
+      <div>
+        <p class="welcome-text" style="font-weight:bold">{{userInfo.userNickname}} 님</p>
+        <p class="small-text">환영합니다!</p>
+      </div>
+      <!-- <span class="welcome-text">POPCON 님</span>
+      <span class="small-text">환영합니다!</span> -->
     </div>
 
     <div class="content">
-      <p class="welcome-text">POPCON 님</p>
-      <p class="small-text">환영합니다!</p>
-      <br />
-      <br />
-
       <!-- 버튼을 감싸는 컨테이너 추가 -->
       <div class="button-container">
-        <button @click="handleButtonClick(1)">마이페이지</button>
-        <button @click="handleButtonClick(2)">체험단</button>
-        <button @click="handleButtonClick(3)">북마크</button>
-        <button @click="handleButtonClick(4)">공지사항</button>
-        <button @click="handleButtonClick(5)">1:1 문의</button>
-        <button @click="handleButtonClick(6)">FAQ</button>
+        <button @click="$router.push('/mypage')">마이페이지</button>
+        <button>체험단</button>
+        <button>북마크</button>
+        <button @click="$router.push('/notice')">공지사항</button>
+        <button @click="$router.push('/onetoone')">1:1 문의</button>
+        <button @click="$router.push('/FAQ')">FAQ</button>
       </div>
 
       <br />
@@ -45,8 +77,8 @@
       <br />
       <br />
       <div class="button-container2">
-        <button @click="handleButtonClick(2)">팝업스토어 제보</button>
-        <button @click="handleButtonClick(3)">로그아웃</button>
+        <button @click="$router.push('/report/popup')">팝업스토어 제보</button>
+        <button @click="userLogout">로그아웃</button>
       </div>
       <br />
       <br />
@@ -56,16 +88,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "HomePage",
-  methods: {
-    handleButtonClick(buttonNumber) {
-      alert(`Button ${buttonNumber} clicked!`);
-    },
-  },
-};
-</script>
 
 <style scoped>
 .title {
@@ -87,9 +109,10 @@ export default {
   margin-top: -30px;
 }
 
-/* 이미지 컨테이너를 가운데 정렬 */
 .image-container {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   line-height: 0;
 }
 
@@ -98,15 +121,16 @@ export default {
 }
 
 .welcome-text {
-  font-size: 22px; /* 원하는 크기로 조절 */
-  line-height: 0; /* 1로 설정하면 폰트 크기와 동일한 줄 간격이 됩니다. 필요에 따라 조절하세요. */
+  font-size: 22px; 
+  line-height: 0;
+  text-align: center;
 }
 
 .small-text {
-  font-size: 13px; /* 원하는 크기로 조절 */
-  /* font-weight를 따로 설정하지 않으면 기본 값인 normal이 적용됩니다. */
-  line-height: 0;
-}
+  font-size: 16px;
+  line-height: 0.5;
+  text-align: center;
+} 
 
 /* 버튼 컨테이너를 가운데 정렬 */
 .button-container {
@@ -114,6 +138,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center; /* 가로 방향 가운데 정렬 */
   gap: 10px;
+  margin:5%;
 }
 
 /* 버튼을 정사각형으로 만들기 위해 높이와 너비를 동일하게 설정 */
