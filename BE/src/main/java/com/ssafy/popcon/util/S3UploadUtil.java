@@ -33,8 +33,7 @@ public class S3UploadUtil {
 
     // s3로 파일 업로드하기
     private String upload(File file, String dirName) {
-//        String fileName = dirName + "/" + file.getName();   // S3에 저장된 파일 이름
-        String fileName = dirName + "/" + UUID.randomUUID()+"_"+file.getName();
+        String fileName = dirName + "/" + UUID.randomUUID()+"_"+file.getName();   // S3에 저장된 파일 이름//
         String uploadImageUrl = putS3(file, fileName); // s3로 업로드
         removeNewFile(file); // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
         return uploadImageUrl; // 업로드된 파일의 S3 URL 주소 반환

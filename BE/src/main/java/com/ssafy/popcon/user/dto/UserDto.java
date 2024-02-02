@@ -22,5 +22,4 @@ public class UserDto {
     private String userBusiness;
     private String userPhone;
     private String userDeleted;
-
 }

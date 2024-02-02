@@ -19,7 +19,7 @@ public class UserModifyService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public int modifyUser(String userId, MultipartFile multipartFile, UserModifyDto userModifyDto, String token) throws Exception {
+    public String modifyUser(String userId, MultipartFile multipartFile, UserModifyDto userModifyDto, String token) throws Exception {
         // userId 저장
         userModifyDto.setUserId(userId);    // 기존 아이디 저장
 
@@ -36,7 +36,11 @@ public class UserModifyService {
         // 패스워드 변경
         userModifyDto.setUserPassword(bCryptPasswordEncoder.encode(userModifyDto.getUserPassword()));
 
-        return userMapper.modifyUser(userModifyDto);
+        if(userMapper.modifyUser(userModifyDto)==1) {
+            return "modify complete";
+        } else {
+            return "modify error";
+        }
 
     }
 }

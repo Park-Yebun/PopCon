@@ -26,13 +26,13 @@ public class UserRegisterService {
 
     // 회원가입
     @Transactional
-    public void addUser(UserDto userDto, MultipartFile file) throws Exception {
+    public void addUser(UserDto userDto) throws Exception {
 
         // 이미지 업로드
-        if(file!=null){
-            String storedUrl= s3UploadUtil.upload(file,"profileImages");
-            userDto.setUserImagePath(storedUrl);
-        }
+//        if(file!=null){
+//            String storedUrl= s3UploadUtil.upload(file,"profileImages");
+//            userDto.setUserImagePath(storedUrl);
+//        }
 
         // 패스워드 암호화
 //        userDto.setUserSalt(PwEncryptUtil.makeSalt());
@@ -44,7 +44,11 @@ public class UserRegisterService {
     }
 
     // 중복 체크
-    public int findDuplicate(Map<String, String> map) throws Exception{
-        return userMapper.findDuplicate(map.get("type"),map.get("value"));
+    public String findDuplicate(Map<String, String> map) throws Exception{
+        if(userMapper.findDuplicate(map.get("type"),map.get("value"))==1) {
+            return "duplication error";
+        } else {
+            return "not duplicate";
+        }
     }
 }
