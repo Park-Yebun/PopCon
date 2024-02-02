@@ -36,7 +36,10 @@ async function findById(userId, success, fail) {  // 아이디로 사용자 정�
   console.log("findById end");
 }
 
+async function deleteUser(userId, success, fail) {
+  await local.delete(`/users/${userId}`).then(success).catch(fail);
+}
 
 export{
-    dupCheck, userJoin, userConfirm, searchIdPwd, userModify, findById
+    dupCheck, userJoin, userConfirm, searchIdPwd, userModify, findById, deleteUser
 };

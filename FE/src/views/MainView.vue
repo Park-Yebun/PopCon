@@ -147,7 +147,7 @@ function getLocaion() {
 }
 </script>
 
-<style>
+<style scoped>
 /* 이미지랑 캐러셀 세로 사이즈 통일(전체 길이의 약 1/3) */
 img {
   height: 279px;

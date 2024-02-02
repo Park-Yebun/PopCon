@@ -2,8 +2,8 @@
   <div class="home-container">
     <br />
     <br />
-    <h1 class="title">Others</h1>
-    <div class="image-container2">
+    <div class="image-container2" style="background-color: lightcoral;">
+      <h1 class="title">Others</h1>
       <img
         src="@/assets/images/alarm.png"
         alt="이미지 설명"
@@ -18,8 +18,8 @@
       <img
         src="@/assets/images/profile.png"
         alt="이미지 설명"
-        width="50"
-        height="50"
+        width="20%"
+        height="20%"
       />
     </div>
 
@@ -118,8 +118,8 @@ export default {
 
 /* 버튼을 정사각형으로 만들기 위해 높이와 너비를 동일하게 설정 */
 .button-container button {
-  width: 100px; /* 필요에 따라 조절하세요 */
-  height: 100px; /* 필요에 따라 조절하세요 */
+  width: 90px; /* 필요에 따라 조절하세요 */
+  height: 90px; /* 필요에 따라 조절하세요 */
   background-color: #ddd; /* 기본 배경색, 필요에 따라 조절하세요 */
   color: #fa5a5a; /* 기본 글자색, 필요에 따라 조절하세요 */
   font-size: 16px;

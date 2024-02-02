@@ -195,7 +195,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .date-title {
     margin-top: 52px;
     margin-left: 40px;

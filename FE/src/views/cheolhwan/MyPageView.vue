@@ -1,22 +1,64 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useMemberStore } from "@/stores/user";
+import {deleteUser} from "@/api/user";
+
+const memberStore = useMemberStore();
+const {userInfo} = storeToRefs(memberStore);
+
+const router = useRouter();
+
+const reviews=ref([]);
+
+// 내 정보 수정 버튼 클릭시 
+const goModifyPage=function(){
+  router.push({name:"editMember"});
+}
+
+const isModalShow=ref(false);
+
+// 탈퇴 버튼 클릭시 
+const removeUser=function(){
+  
+  deleteUser(
+    userInfo.value.userId,
+    ({data})=>{
+      // console.log("정상!");
+      // console.log(data);
+      isModalShow.value=false;
+      // localStorage 에서 토큰 삭제 
+      localStorage.removeItem("accessToken");
+      router.push({name:"login"});
+    },
+    ({response}) => {
+      console.log("error");
+    }
+  )
+}
+
+
+</script>
+
 <template>
 
   <div>
     <i class="bi bi-arrow-left"></i>
   </div>
-  <div class="m-3">
+  <div class="m-3" id="container">
     <div class="mb-3">
       <span style="font-size: 20px;">마이페이지</span>
     </div>
     <div class="d-flex justify-content-center">
       <img
-          src="@/assets/images/profile.png"
-          alt="이미지 설명"
-          style="width: 100px; height: 100px;"
+          :src="userInfo.userImagePath"
+          style="width: 100px; height: 100px; border-radius:50%"
         />
     </div>
-    <div class="d-flex justify-content-center mb-3" style="font-weight: bold;">POPUP STORE MAN <i class="bi bi-pencil-square" style="color:#ff534c;"></i></div>
+    <div class="d-flex justify-content-center mb-3" style="font-weight: bold;">{{userInfo.userId}}<i class="bi bi-pencil-square" style="color:#ff534c;"></i></div>
     <div class="d-flex justify-content-center">
-      <button class="editBtn"><i class="bi bi-pencil-square"></i>회원정보수정</button>
+      <button class="editBtn" @click="goModifyPage"><i class="bi bi-pencil-square"></i>회원정보수정</button>
     </div>
   </div>
 
@@ -24,7 +66,7 @@
     <div class="d-flex justify-content-between m-3">
       <div style="font-weight: bold;">방문한 팝업스토어</div>
       <div>
-        <button type="button" class="btnStyle">더보기</button>
+        <button type="button" class="btnStyle" @click="isModalShow=true">더보기</button>
       </div>
     
     </div>
@@ -73,35 +115,48 @@
       <button type="button" class="btnStyle">더보기</button>
     </div>
     <div class="d-flex justify-content-center">
-      <button class="editBtn">회원탈퇴</button>
+      <button class="editBtn" @click="removeUser">회원탈퇴</button>
     </div>
   </div>
+
+  <div v-if="isModalShow" class="pop-modal">
+    <p>정말로 탈퇴하시겠어요?</p>
+    <div>
+      <button @click="removeUser">탈퇴</button>
+      <button @click="isModalShow = false">닫기</button>
+    </div>
+  </div>
+
   </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        profilePicture: '/path/to/default/profile_picture.jpg',
-        nickname: '사용자 닉네임',
-        visitedPopUpStores: ['/path/to/image1.jpg', '/path/to/image2.jpg', '/path/to/image3.jpg'],
-        reviews: ['리뷰 내용 1', '리뷰 내용 2', '리뷰 내용 3'] // 사용자가 작성한 리뷰 목록
-      };
-    },
-    methods: {
-      editNickname() {
-        // 닉네임 수정 기능을 구현하는 로직을 추가합니다.
-        console.log('닉네임 수정하기');
-      },
-      editMemberInfo() {
-        // 회원 정보 수정 기능을 구현하는 로직을 추가합니다.
-        console.log('회원 정보 수정하기');
-      }
-    }
-  };
-  </script>
+
   
   <style scoped>
+.pop-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.pop-modal div {
+  text-align: center;
+}
+
+.pop-modal button{
+    background-color: #ff534c;
+    border: none;
+    border-radius: 10px;
+    color:white;
+    padding: 5px 20px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
   .editBtn{
     background-color: white;
     border: 2px solid #ff534c;

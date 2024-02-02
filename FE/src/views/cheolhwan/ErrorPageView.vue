@@ -31,7 +31,7 @@ const goMainPage = function() {
 }
 </script>
 
-<style>
+<style scoped>
 .popcon-logo-size{
     width:180px;
     height: 180px;
