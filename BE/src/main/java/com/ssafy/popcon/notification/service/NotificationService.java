@@ -54,8 +54,8 @@ public class NotificationService {
     }
 
     // 토큰 삭제 (회원용) ==> 비회원은 디바이스 토큰 언제 삭제 하지?
-    public void removeToken(String authorization) throws Exception {
-        String userId=jwtUtil.getUsername(authorization.split(" ")[1]);
+    public void removeToken(String token) throws Exception {
+        String userId=jwtUtil.getUsername(token.split(" ")[1]);
         notificationMapper.removeToken(userId);
     }
 
