@@ -12,7 +12,7 @@
     <hr class="divider" />
     <div>
       <img
-        src="@/assets/images/detailoffimg.jpg"
+        src="@/assets/images/detailoffimg.png"
         alt="공식 이미지"
         width="380px"
       />
@@ -44,7 +44,7 @@
     <!--주소 -->
     <div>
       <i class="bi bi-geo-alt-fill"></i>
-    <span>주소 ---------------------- 주소</span>
+      <span>주소 ---------------------- 주소</span>
     </div>
 
       <p>시작하는날짜 - 종료하는 날짜</p>
@@ -143,15 +143,75 @@
         팁2. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
         팁3. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
       </p>
-      <button type="button" class="btn btn-danger">로그인 후 확인하기</button>
+      <button @click="goLogin" type="button" class="btn btn-danger">로그인 후 확인하기</button>
     
+      <hr class="divider">
+      <p @click="goHPage">브랜드 홈페이지 바로가기</p>
 
-
+      <hr class="divider">
+      <p @click="goSNS">공식 SNS 바로가기</p>
+    
     </div>
 
+    <!-- 지도 -->
     <div id="map"></div>
-    <hr>
+  
+    <!-- 방문자 정보 -->
+    <div class="center-text">
+      <p>" 00대 00이 00000 방문했어요! "</p>
+    </div>
 
+    <!-- 해쉬태그 기능 -->
+    <span class="badge text-bg-danger">해쉬태그 내용</span>
+    <!-- %로 witdh 조절 -->
+
+    <!-- 리뷰쓰기 아이콘 -->
+    <div>
+      <i class="bi bi-pencil-square"></i>
+      <p>리뷰 쓰기</p>
+    </div>
+
+    <!-- 방문자 사진 영상  -->
+    <P>방문자 사진 영상</P>
+      <div id="app">
+        <div class="grid-container">
+          <div v-for="index in 9" :key="index" class="grid-item">
+          <!-- 이미지 또는 내용을 여기에 추가 -->
+          <img :src="getImageUrl(index)" alt="Image">
+          </div>
+        </div>
+      </div>
+      <button @click="goVisitor" type="button" class="btn btn-danger">방문자 사진 영상 더보기</button>
+
+    <!-- 방문자 리뷰  -->
+    <p>방문자 리뷰</p>
+    <div class="review-item">
+      <div class="review-content col-8" >
+      1주년 기념 팝업이라 굿즈가 확실히 다양하네요!
+      굿즈 품절될까봐 걱정됐는데 팝콘 꿀팁 덕분에 
+      원하던 굿즈는 모두 겟했습니다🙇‍♀️
+      </div>
+      <div class="review-picture col-4">
+        <div class="square-image-wrapper">
+          <img 
+            src="@/assets/images/팝업후기.jpg" 
+            alt="review-picture">
+        </div>
+      </div>
+      <span class="badge text-bg-danger">선택한 해쉬태그 중 하나</span>
+      <span class="badge text-bg-danger">+ 숫자</span>
+      <span class="badge text-bg-light">❤좋아요수</span>
+      <div class="profile-container">
+        <img
+          src="@/assets/images/profileimg.jpg"
+          alt="profile-picture"
+          class="rounded-profile"
+        />  
+      </div>
+      <p>닉네임</p>
+      <p>작성날짜</p>
+    </div>
+    <button @click="goReview" type="button" class="btn btn-danger">방문자 리뷰 더보기</button>
   </div>
 </template>
 
@@ -179,15 +239,51 @@ export default {
       // 뒤로가기 로직을 추가하세요
       // 예: this.$router.go(-1);
     },
+      goLogin() {
+      // 로그인 창 바로가기 로직 추가 
+    },
+      goHPage() {
+      // 브랜드 공식 페이지 바로가기 로직 추가
+    },
+      goSNS() {
+      // 공식 sns 바로가기 로직 추가 
+    },
+      goVisitor() {
+      // 방문자 사진 동영상 페이지 로직 추가 
+    },
+      goReview() {
+      // 방문자 리뷰 페이지 로직 추가 
+    },
+
       ratingToPercent() {
       // const score = +this.popup.averageScore * 20; 팝업평균별점
       // return score + 1.5;
     },
+      getImageUrl(index) {
+      // 이미지 URL을 동적으로 제공하는 메소드
+      // 예를 들어, `require`를 사용하거나 이미지 경로를 동적으로 생성하는 방법 사용
+      return `path/to/image${index}.jpg`;
+    }
   },
 };
 </script>
 
 <style scoped>
+.profile-container {
+  width: 70px; /* 프로필 이미지의 크기를 조절할 수 있습니다. */
+  height: 70px;
+  overflow: hidden;
+  border-radius: 50%; /* 반지름 50%로 설정하여 원형으로 만듭니다. */
+}
+.rounded-profile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 부모 요소에 맞게 비율을 유지하면서 보이도록 함 */
+}
+.center-text {
+  text-align: center;
+}
+
 .honeytip-content {
   filter: blur(5px);
 }
@@ -264,6 +360,41 @@ export default {
   max-width: 400px;
   text-align: center;
   line-height: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; /* 그리드 아이템 간의 간격을 조절할 수 있습니다. */
+}
+
+.grid-item {
+  width: 100%; /* 그리드 아이템이 부모 그리드 셀에 꽉 차도록 설정 */
+  height: 0;
+  padding-bottom: 100%; /* 정사각형으로 만들기 위해 padding-bottom을 사용합니다. */
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-item img {
+  width: 100%; /* 이미지가 그리드 아이템에 꽉 차도록 설정 */
+  height: 100%;
+  object-fit: cover; /* 이미지가 그리드 아이템에 비율을 유지하면서 맞출 수 있도록 설정 */
+}
+
+.square-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* 1:1 비율을 위한 트릭 */
+  overflow: hidden;
+}
+
+.square-image-wrapper img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 부모 요소에 맞게 비율을 유지하면서 보이도록 함 */
+   border-radius: 10px; /* 둥글게 깎을 정도를 조절할 수 있습니다. */
 }
 
 #map {
