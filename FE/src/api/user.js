@@ -40,11 +40,6 @@ async function deleteUser(userId, success, fail) {
   await local.delete(`/users/${userId}`).then(success).catch(fail);
 }
 
-async function logout(success, fail) {
-  local.defaults.headers["Authorization"]=localStorage.getItem("accessToken");
-  await local.post("/users/logout").then(success).catch(fail);
-}
-
 export{
-    dupCheck, userJoin, userConfirm, searchIdPwd, userModify, findById, deleteUser, logout
+    dupCheck, userJoin, userConfirm, searchIdPwd, userModify, findById, deleteUser
 };
