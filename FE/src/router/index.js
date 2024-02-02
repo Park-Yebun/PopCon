@@ -17,6 +17,9 @@ import SignUpCompanyViewVue from '@/views/cheolhwan/SignUpCompanyView.vue'
 import SignUpMemberViewVue from '@/views/cheolhwan/SignUpMemberView.vue'
 import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
 
+import MemberOtherPage from '@/views/MemberOtherPage.vue'
+import ReportPopupStore from '@/views/ReportPopupStore.vue'
+
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
 
@@ -122,6 +125,21 @@ const router = createRouter({
       component: ReviewView
 
     },
+    {
+      path: '/other/member',
+      name: 'otherMember',
+      component: MemberOtherPage
+    },
+    {
+      path: '/other/admin',
+      name: 'otherAdmin',
+      component: MemberOtherPage
+    },
+    {
+      path: '/report/popup',
+      name: 'reportPopup',
+      component: ReportPopupStore
+    }
   ]
 })
 
