@@ -151,8 +151,8 @@
             review_content, user_id, review_date, review_like, review_quality, review_cost,
             review_type, review_design, review_trendy, review_new, review_kindness, review_area,
             review_car, review_concept, review_clean, review_gift
-        FROM
-            popcon.review
+        FROM popcon.review
+        WHERE popup_id = #{popupId}
         ORDER BY review_date desc;
     </select>
 

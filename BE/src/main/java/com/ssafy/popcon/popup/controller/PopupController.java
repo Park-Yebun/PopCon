@@ -71,6 +71,7 @@ public class PopupController {
                 popupDetails.setReviews(popupReviews);  // 리뷰 정보 설정
                 return ResponseEntity.status(HttpStatus.OK).body(popupDetails);
             } else {
+                logger.error("Error occurred while retrieving popup details");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {

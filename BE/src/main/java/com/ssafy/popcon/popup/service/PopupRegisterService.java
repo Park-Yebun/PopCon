@@ -41,10 +41,8 @@ public class PopupRegisterService {
     // 팝업 하나의 세부 정보를 조회하는 코드
     public PopupDto getPopupDetails(int popupId) {
         try {
-            System.out.println("wkqwldklwkdlwqjdkjfkekfkewfnek");
             return popupMapper.getPopupDetails(popupId);
         } catch (Exception e) {
-            System.out.println("뭔데데데데ㅔ데데데");
             logger.error("Failed to retrieve popup details", e);
             throw new RuntimeException("Failed to retrieve popup details");
         }
