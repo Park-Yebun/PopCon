@@ -1,11 +1,15 @@
 package com.ssafy.popcon.popup.controller;
 
 import com.ssafy.popcon.popup.dto.PopupDto;
+import com.ssafy.popcon.review.dto.ReviewDto;
+import com.ssafy.popcon.review.dto.ReviewImageDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.popup.service.PopupRegisterService;
+import com.ssafy.popcon.review.service.ReviewRegisterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,9 @@ public class PopupController {
 
     @Autowired
     private PopupRegisterService popupRegisterService;
+    @Autowired
+    private ReviewRegisterService reviewRegisterService;
+
 
     //  팝업 전부를 불러오는 코드
     @GetMapping
@@ -35,18 +42,21 @@ public class PopupController {
         }
     }
 
-    // 팝업 등록
+    // 이미지와 함께 팝업 등록하는 엔드포인트
     @PostMapping()
-    public ResponseEntity<String> registerPopup(@ModelAttribute PopupDto popupDto) {
-        try {
-            // Popup 등록 서비스 호출
-            popupRegisterService.registerPopup(popupDto);
+    public ResponseEntity<String> registerPopupWithImages(
+            @RequestPart PopupDto popupDto,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception{
+        String problem = popupRegisterService.registerPopupWithImages(popupDto, images);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Popup registered successfully.");
+        try {
+            if (problem.equals("notExistingPopupUser")) {
+                return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않는 유저이거나, 사용자 타입이 CORP 아닙니다.", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
-            // 예외 처리 로직 추가
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register popup.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지와 함께 팝업 등록에 실패하였습니다.");
         }
+        return ResponseEntity.status(HttpStatus.OK).body("팝업이 이미지와 함께 성공적으로 등록되었습니다.");
     }
 
     // 팝업 세부정보 한 개씩 보는
@@ -54,33 +64,18 @@ public class PopupController {
     public ResponseEntity<PopupDto> getPopupDetails(@PathVariable int popupId) {
         try {
             PopupDto popupDetails = popupRegisterService.getPopupDetails(popupId);
-            System.out.println(popupDetails);
+            List<ReviewDto> popupReviews = reviewRegisterService.getReview(popupId);
+//            List<ReviewImageDto> popupReviewImages = reviewRegisterService.getReviewImage();
+
             if (popupDetails != null) {
-                System.out.println("실행이 된다");
+                popupDetails.setReviews(popupReviews);  // 리뷰 정보 설정
                 return ResponseEntity.status(HttpStatus.OK).body(popupDetails);
             } else {
-                System.out.println("실행이 안된다");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {
             logger.error("Error occurred while retrieving popup details", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    // 팝업 이미지 등록
-    @PostMapping("/{popupId}/images")
-    public ResponseEntity<?> registerPopupImage(
-            @PathVariable int popupId,
-            @RequestPart(value="file", required=false) MultipartFile file) throws Exception {
-        try {
-            System.out.println(file);
-            // 이미지 등록 서비스 호출
-            popupRegisterService.registerPopupImage(popupId, file);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Popup image registered successfully.");
-        } catch (Exception e) {
-            // 예외 처리 로직 추가
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register popup image.");
         }
     }
 
@@ -112,5 +107,38 @@ public class PopupController {
         }
     }
 
+    // 특정 팝업에 좋아요 추가
+    @PostMapping("/{popupId}/like")
+    public ResponseEntity<String> addLikeToPopup(@PathVariable int popupId, @RequestParam String userId) throws Exception {
+        String problemGoods = popupRegisterService.addLikeToPopup(popupId, userId);
+        try {
+            if (problemGoods.equals("notExistingPopupUser")) {
+                return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않은 유저입니다.", HttpStatus.BAD_REQUEST);
+            }
+            else if (problemGoods.equals("alreadyGoods")) {
+                return new ResponseEntity<>("이미 좋아요를 한 상태입니다.", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("좋아요가 추가되었습니다.", HttpStatus.OK);
+    }
+
+    // 특정 팝업에 좋아요 취소
+    @DeleteMapping("/{popupId}/like")
+    public ResponseEntity<String> cancelLikeToPopup(@PathVariable int popupId, @RequestParam String userId) throws Exception{
+        String problem = popupRegisterService.cancelLikeToPopup(popupId, userId);
+        try {
+            if (problem.equals("notExistingPopupUser")) {
+                return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않은 유저입니다.", HttpStatus.BAD_REQUEST);
+            }
+            else if (problem.equals("alreadyCancel")) {
+                return new ResponseEntity<>("이미 좋아요취소를 한 상태입니다.", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("좋아요가 취소되었습니다.", HttpStatus.OK);
+    }
 
 }

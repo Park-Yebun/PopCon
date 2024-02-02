@@ -2,6 +2,8 @@ package com.ssafy.popcon.popup.mapper;
 
 import com.ssafy.popcon.popup.dto.PopupDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
+import com.ssafy.popcon.popup.dto.PopupRecommendDto;
+import com.ssafy.popcon.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,12 +28,23 @@ public interface PopupMapper {
     // 팝업 이미지 등록
     void registerPopupImage(PopupImageDto popupImageDto);
 
-    // 좋아요 추가
-    void addPopupLike(@Param("popupId") int popupId, @Param("userId") String userId);
+    // 팝업 좋아요 추가
+    void addLikeToPopup(int popupId);
 
-    // 좋아요 취소
-    void cancelPopupLike(@Param("popupId") int popupId, @Param("userId") String userId);
+    // 팝업 좋아요 취소
+    void cancelLikeToPopup(int popupId);
 
+    // 팝업 추천 정보 추가
+    void addPopupRecommend(PopupRecommendDto popupRecommendDto);
 
+    // 팝업 추천 정보 삭제
+    void deletePopupRecommend(PopupRecommendDto popupRecommendDto);
 
+    PopupDto getPopupById(@Param("popupId") int popupId);
+
+    UserDto getUserById(String userId);
+
+    int duplicatePopupRecommend(PopupRecommendDto duplicateCheckDto);
+
+    UserDto getUserByIdAndType(String userId);
 }

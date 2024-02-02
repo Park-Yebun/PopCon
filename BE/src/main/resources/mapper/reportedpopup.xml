@@ -3,6 +3,7 @@
 
 <mapper namespace="com.ssafy.popcon.reportedpopup.mapper.ReportedPopupMapper">
 
+    <!-- REPORTED_POPUP TABLE -->
     <resultMap id="reportedPopupResult" type="com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto">
         <result column="reported_popup_id" property="reportedPopupId"/>
         <result column="reported_popup_name" property="reportedPopupName"/>
@@ -15,10 +16,28 @@
         <result column="user_Id" property="userId"/>
     </resultMap>
 
+    <!-- REPORTED_POPUP_IMAGE TABLE -->
     <resultMap id="reportedPopupImageResult" type="com.ssafy.popcon.reportedpopup.dto.ReportedPopupImageDto">
         <result column="reported_popup_img_id" property="reportedPopupImgId"/>
         <result column="reported_popup_img_path" property="reportedPopupImgPath"/>
         <result column="reported_popup_id" property="reportedPopupId"/>
+    </resultMap>
+
+    <!-- USER TABLE -->
+    <resultMap type="com.ssafy.popcon.user.dto.UserDto" id="user">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_image_path" property="userImagePath"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_token" property="userToken"/>
+        <result column="user_business" property="userBusiness"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_deleted" property="userDeleted"/>
     </resultMap>
 
     <!-- 제보된 팝업 조회 -->
@@ -27,7 +46,7 @@
     </select>
 
     <!-- 제보된 팝업 등록 -->
-    <insert id="registerReportedPopup" parameterType="com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto">
+    <insert id="registerReportedPopup" parameterType="com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto" useGeneratedKeys="true" keyProperty="reportedPopupId">
         INSERT INTO popcon.reported_popup (reported_popup_name, reported_popup_source, reported_popup_brand, reported_popup_location, reported_popup_start, reported_popup_end, reported_popup_etc, user_Id)
 
         VALUES (#{reportedPopupName}, #{reportedPopupSource}, #{reportedPopupBrand}, #{reportedPopupLocation},
@@ -54,4 +73,10 @@
     <select id="getReportedPopupImage" parameterType="int" resultType="com.ssafy.popcon.reportedpopup.dto.ReportedPopupImageDto"  resultMap="reportedPopupImageResult">
         SELECT * FROM popcon.reported_popup_image WHERE reported_popup_img_id = #{reportedPopupImgId}
     </select>
+
+    <!-- 유저 테이블에 해당 유저가 존재하는지 SQL -->
+    <select id="getUserById" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT * FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
 </mapper>

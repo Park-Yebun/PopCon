@@ -4,6 +4,7 @@ import com.ssafy.popcon.popup.dto.PopupDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto;
 import com.ssafy.popcon.reportedpopup.dto.ReportedPopupImageDto;
+import com.ssafy.popcon.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +27,7 @@ public interface ReportedPopupMapper {
 
     // 팝업에 속한 모든 이미지 조회
     List<ReportedPopupDto> getReportedPopupImagesByPopupId(@Param("reportedPopupId") int reportedPopupId);
+
+    UserDto getUserById(String userId);
 
 }
