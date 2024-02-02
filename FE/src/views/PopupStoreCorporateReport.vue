@@ -20,72 +20,133 @@
 
       <!-- Registration Form -->
       <form @submit.prevent="submitForm" class="registration-form">
-        <label for="username">브랜드 명:</label>
-        <div class="input-with-icon">
+        <label for="name">팝업 제목:</label>
         <input
           type="text"
-          id="brand"
-          v-model="formData.userbrand"
-          placeholder="Ex : (주) 해피캣"
-          required
-        />
-      </div>
-
-
-        <label for="username">팝업 제목:</label>
-        <input
-          type="text"
-          id="username"
-          v-model="formData.username"
+          id="popup_name"
+          v-model="formData.name"
           placeholder="Ex : 슬램덩크 20주년 팝업스토어"
           required
         />
 
-        <label for="address">주소:</label>
+        <label for="brand">브랜드 명:</label>
+        <div class="input-with-icon">
+          <input
+            type="text"
+            id="popup_brand"
+            v-model="formData.brand"
+            placeholder="Ex : (주) 해피캣"
+            required
+          />
+        </div>
+
+        <label for="content">팝업 내용(소개글):</label>
+        <textarea
+          id="popup_content"
+          v-model="formData.content"
+          placeholder="게시글에 대한 소개글을 작성해주세요."
+          required
+        ></textarea>
+
+        <label for="location">팝업 위치:</label>
         <input
           type="text"
-          id="address"
-          v-model="formData.address"
+          id="popup_location"
+          v-model="formData.location"
+          placeholder="Ex : 주소를 입력해주세요"
+        />
+
+        <label for="start">팝업 시작일:</label>
+        <input type="date" id="popup_start" v-model="formData.start" required />
+
+        <label for="end">팝업 종료일:</label>
+        <input type="date" id="popup_end" v-model="formData.end" required />
+
+        <label for="operating">운영 시간:</label>
+        <textarea
+          id="popup_operating"
+          v-model="formData.operating"
+          placeholder="월~금 운영시간을 입력해주세요"
+          required
+        ></textarea>
+
+        <label for="event">이벤트 및 프로모션:</label>
+        <textarea
+          id="popup_event"
+          v-model="formData.event"
+          placeholder="이벤트 및 프로모션을 입력해주세요"
+          required
+        ></textarea>
+
+        <!-- 추가: 주차 여부 -->
+        <label for="car">주차 여부:</label>
+        <input type="checkbox" id="popup_car" v-model="formData.car" />
+        <label for="car">주차 가능</label>
+
+        <!-- 추가: 입장료 여부 -->
+        <label for="entryfee">입장료:</label>
+        <input
+          type="checkbox"
+          id="popup_entryfee"
+          v-model="formData.entryfee"
+        />
+        <label for="entryfee">입장료 있음</label>
+
+        <!-- 추가: 와이파이 여부 -->
+        <label for="wifi">와이파이:</label>
+        <input type="checkbox" id="popup_wifi" v-model="formData.wifi" />
+        <label for="wifi">와이파이 제공</label>
+
+        <!-- 추가: 식음료 여부 -->
+        <label for="eat">식음료 판매:</label>
+        <input
+          type="checkbox"
+          id="popup_eat"
+          v-model="formData.eat"
+        />
+        <label for="eat">식음료 판매</label>
+
+        <label for="site">브랜드 공식사이트:</label>
+        <input
+          type="text"
+          id="popup_site"
+          v-model="formData.site"
           placeholder="Ex : www.yourwebsite.com"
         />
 
+        <label for="instar">브랜드 공식인스타그램:</label>
+        <input
+          type="text"
+          id="popup_instar"
+          v-model="formData.instar"
+          placeholder="Ex : https://www.instagram.com"
+        />
+
+        <label for="notice">추가 공지사항:</label>
+        <textarea
+          id="popup_notice"
+          v-model="formData.notice"
+          placeholder="추가 공지사항을 입력해주세요"
+          required
+        ></textarea>
+
         <!-- Contact Information -->
-        <label for="contact">연락처:</label>
+        <label for="phone">담당자 연락처:</label>
         <input
           type="tel"
-          id="contact"
-          v-model="formData.contact"
+          id="popup_phone"
+          v-model="formData.phone"
           placeholder="연락처"
           required
         />
 
-        <label for="birthdate">생년월일:</label>
-        <input
-          type="date"
-          id="birthdate"
-          v-model="formData.birthdate"
+        <label for="honey">꿀팁:</label>
+        <textarea
+          id="popup_honey"
+          v-model="formData.honey"
+          placeholder="꿀팁을 입력해주세요"
           required
-        />
-
-        <label for="startDate">가입 가능 시작일:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="formData.startDate"
-          required
-        />
-
-        <label for="endDate">가입 가능 종료일:</label>
-        <input type="date" id="endDate" v-model="formData.endDate" required />
-
-        <label for="gender">성별:</label>
-        <select id="gender" v-model="formData.gender" required>
-          <option value="other">선택</option>
-          <option value="male">남성</option>
-          <option value="female">여성</option>
-        </select>
-
-        <br />
+        ></textarea>
 
         <button type="submit">제출하기</button>
       </form>
@@ -96,18 +157,27 @@
 
 <script>
 export default {
-  name: "HomeView",
+  name: "PopupStoreCorporateReport",
   data() {
     return {
       formData: {
-        brand: "",
-        username: "",
-        contact: "",
-        address: "",
-        birthdate: "",
-        startDate: "",
-        endDate: "",
-        gender: "other",
+        popup_name: "",
+        popup_brand: "",
+        popup_content: "",
+        popup_location: "",
+        popup_start: "",
+        popup_end: "",
+        popup_operating: "",
+        popup_event: "",
+        popup_car: "",
+        popup_entryfee: "",
+        popup_wifi: "",
+        popup_eat: "",
+        popup_site: "",
+        popup_instar: "",
+        popup_notice: "",
+        popup_phone: "",
+        popup_honey: "",
       },
     };
   },
@@ -210,4 +280,3 @@ export default {
   background-color: #45a049;
 }
 </style>
-
