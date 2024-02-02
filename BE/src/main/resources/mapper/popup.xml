@@ -4,7 +4,7 @@
 <mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
     
     
-    <!--팝업 전부를 불러오는 SQL 코드-->
+    <!-- POPUP TABLE -->
     <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
         <result column="popup_id" property="popupId"/>
         <result column="popup_name" property="popupName"/>
@@ -29,18 +29,44 @@
         <result column="user_Id" property="userId"/>
     </resultMap>
 
+    <!-- POPUP_IMAGE TABLE -->
     <resultMap id="popupImageResultMap" type="com.ssafy.popcon.popup.dto.PopupImageDto">
         <result column="popup_image_id" property="popupImageId"/>
         <result column="popup_id" property="popupId"/>
         <result column="popup_image_path" property="popupImagePath"/>
     </resultMap>
 
+    <!-- POPUP_RECOMMEND TABLE -->
+    <resultMap id="popupRecommendResultMap" type="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        <result column="popup_recommend_id" property="popupRecommendId"/>
+        <result column="popup_id" property="popupId"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <!-- POPUP_USER_TABLE -->
+    <resultMap type="com.ssafy.popcon.user.dto.UserDto" id="user">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_image_path" property="userImagePath"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_token" property="userToken"/>
+        <result column="user_business" property="userBusiness"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_deleted" property="userDeleted"/>
+    </resultMap>
+
+    <!-- 모든 팝업 정보를 가져오는 SQL문 -->
     <select id="getPopup" resultMap="popupResultMap">
         SELECT * FROM popcon.popup
     </select>
     
-    <!--팝업 등록을 하는 SQL 코드-->
-    <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto">
+    <!-- 팝업 등록을 하는 SQL문 -->
+    <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto" useGeneratedKeys="true" keyProperty="popupId">
         INSERT INTO popcon.popup (popup_name, popup_brand, popup_content, popup_location,popup_start, popup_end, popup_operating, popup_event,popup_view, popup_car, popup_entryfee, popup_wifi,popup_eat, popup_site, popup_instar, popup_notice,popup_phone, popup_honey, popup_like, user_id)
 
         VALUES (#{popupName}, #{popupBrand}, #{popupContent}, #{popupLocation},
@@ -70,6 +96,46 @@
         SELECT * FROM popcon.popup_image WHERE popup_image_id = #{popupImageId}
     </select>
 
+    <!-- 좋아요 추가 -->
+    <update id="addLikeToPopup" parameterType="int">
+        UPDATE popcon.popup SET popup_like = popup_like + 1 WHERE popup_id = #{popupId}
+    </update>
 
+    <!-- 좋아요 취소 -->
+    <update id="cancelLikeToPopup" parameterType="int">
+        UPDATE popcon.popup SET popup_like = popup_like - 1 WHERE popup_id = #{popupId}
+    </update>
+
+    <!-- 팝업 추천 정보 추가 -->
+    <insert id="addPopupRecommend" parameterType="PopupRecommendDto">
+        INSERT INTO popcon.popup_recommend (popup_id, user_id) VALUES (#{popupId}, #{userId})
+    </insert>
+
+    <!-- 팝업 추천 정보 삭제 -->
+    <delete id="deletePopupRecommend" parameterType="PopupRecommendDto">
+        DELETE FROM popcon.popup_recommend WHERE popup_id = #{popupId} AND user_id = #{userId}
+    </delete>
+
+    <!-- 팝업 테이블에 해당 팝업이 존재하는지 SQL -->
+    <select id="getPopupById" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupDto" resultMap="popupResultMap">
+        SELECT * FROM popcon.popup WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 유저 테이블에 해당 유저가 존재하는지 SQL -->
+    <select id="getUserById" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT * FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
+    <!-- 팝업 추천 테이블에 해당 팝업 및 유저가 중복인지 확인하는 SQL -->
+    <select id="duplicatePopupRecommend" resultType="java.lang.Integer" parameterType="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        SELECT COUNT(*)
+        FROM popcon.popup_recommend
+        WHERE popup_id = #{popupId, jdbcType=INTEGER} AND user_id = #{userId}
+    </select>
+
+    <!-- 유저 테이블에 해당 유저의 user_type을 요청 -->
+    <select id="getUserByIdAndType" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT user_id, user_type FROM popcon.user WHERE user_id = #{userId}
+    </select>
 
 </mapper>

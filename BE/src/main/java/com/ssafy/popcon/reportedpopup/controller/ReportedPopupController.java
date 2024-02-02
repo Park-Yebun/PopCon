@@ -1,8 +1,5 @@
 package com.ssafy.popcon.reportedpopup.controller;
 
-import com.ssafy.popcon.popup.controller.PopupController;
-import com.ssafy.popcon.popup.dto.PopupDto;
-import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.reportedpopup.dto.ReportedPopupDto;
 import com.ssafy.popcon.reportedpopup.dto.ReportedPopupImageDto;
 import com.ssafy.popcon.reportedpopup.service.ReportedPopupRegisterService;
@@ -25,6 +22,7 @@ public class ReportedPopupController {
     @Autowired
     private ReportedPopupRegisterService reportedPopupRegisterService;
 
+    // 제보 받은 팝업 전부 불러옴
     @GetMapping
     public ResponseEntity<List<ReportedPopupDto>> getReportedPopup() {
         try {
@@ -36,19 +34,25 @@ public class ReportedPopupController {
         }
     }
 
+    // 제보받은 팝업 이미지와 같이 등록
     @PostMapping()
-    public ResponseEntity<String> registerReportedPopup(@ModelAttribute ReportedPopupDto reportedPopupDto) {
+    public ResponseEntity<String> registerReportedPopupWithImages(
+            @RequestPart ReportedPopupDto reportedPopupDto,
+            @RequestPart(value = "images", required = false) List<MultipartFile> imageFiles) {
+        String problem = reportedPopupRegisterService.registerReportedPopupWithImages(reportedPopupDto, imageFiles);
         try {
-            reportedPopupRegisterService.reportedRegisterPopup(reportedPopupDto);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("제보된 팝업 등록 성공");
+            if (problem.equals("notExistingPopupUser")) {
+                return new ResponseEntity<>("존재하지 않은 유저입니다.", HttpStatus.BAD_REQUEST);
+            }
+            // 서비스 메서드 호출
         } catch (Exception e) {
-            System.out.println("jwdjwjawkfkaekengksn");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("제보된 팝업 등록 실패");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("제보된 팝업 및 이미지 등록 실패");
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body("제보된 팝업 및 이미지 등록 성공");
+
     }
 
-    // 팝업 세부정보 한 개씩 보는
+    // 제보된 팝업 세부정보 한 개씩 보는
     @GetMapping("/{reportedPopupId}")
     public ResponseEntity<ReportedPopupDto> getReportedPopupDetails(@PathVariable int reportedPopupId) {
         try {
@@ -64,23 +68,7 @@ public class ReportedPopupController {
         }
     }
 
-    // 팝업 이미지 등록
-    @PostMapping("/{reportedPopupId}/images")
-    public ResponseEntity<?> registerReportedPopupImage(
-            @PathVariable int reportedPopupId,
-            @RequestPart(value="file", required=false) MultipartFile file) throws Exception {
-        try {
-            System.out.println(file);
-            // 이미지 등록 서비스 호출
-            reportedPopupRegisterService.registerReportedPopupImage(reportedPopupId, file);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Popup image registered successfully.");
-        } catch (Exception e) {
-            // 예외 처리 로직 추가
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register popup image.");
-        }
-    }
-
-    // 팝업에 속한 모든 이미지 조회
+    // 제보된 팝업에 속한 모든 이미지 조회
     @GetMapping("/{reportedPopupId}/images")
     public ResponseEntity<List<ReportedPopupDto>> getPopupImages(@PathVariable int reportedPopupId) {
         try {
@@ -92,7 +80,7 @@ public class ReportedPopupController {
         }
     }
 
-    // 특정 팝업 이미지 조회
+    // 제보된 특정 팝업 이미지 조회
     @GetMapping("{reportedPopupId}/images/{reportedPopupImgId}")
     public ResponseEntity<ReportedPopupImageDto> getPopupImage(@PathVariable int reportedPopupId, @PathVariable int reportedPopupImgId) {
         try {
