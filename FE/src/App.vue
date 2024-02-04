@@ -1,7 +1,7 @@
 
 <template>
   <div class="container">
-    <RouterView/>
+    <RouterView class="router-view"/>
     <nav class="navbar">
       <div class="container-fluid">
         <div class="nav-item">
@@ -31,7 +31,11 @@
 <style scoped>
 .container {
   max-width: 360px;
+  position:relative;
+  margin-bottom: 88px; /* navbar의 높이만큼 margin-bottom 추가 */
 }
+
+
 .navbar {
   width: 360px;
   height: 88px;
@@ -41,6 +45,7 @@
   width: 100%;
   bottom: 0;
   left: 0;
+  z-index: 1000;
 }
 
 .container-fluid {

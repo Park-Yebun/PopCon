@@ -14,7 +14,7 @@ const reviews=ref([]);
 
 // 내 정보 수정 버튼 클릭시 
 const goModifyPage=function(){
-  router.push({name:"editMember"});
+  router.push({name:"edit-member"});
 }
 
 const isModalShow=ref(false);
@@ -30,7 +30,7 @@ const removeUser=function(){
       isModalShow.value=false;
       // localStorage 에서 토큰 삭제 
       localStorage.removeItem("accessToken");
-      router.push({name:"login"});
+      router.push({name:"user-login"});
     },
     ({response}) => {
       console.log("error");

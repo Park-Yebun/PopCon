@@ -52,7 +52,7 @@ const modify=function(){
       // modifyUser.value,
     ({data})=>{
       console.log(data);
-      router.push({ name: "mypage" });
+      router.push({ name: "user-mypage" });
     },
     ({ response }) => {
       console.log(response);
@@ -170,7 +170,7 @@ const getFileName = async (file) => {
     color : white;
   }
 
-  .btn-upload {
+.btn-upload {
   margin-top:10%;
   width: 100px;
   height: 30px;

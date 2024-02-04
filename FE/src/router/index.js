@@ -3,13 +3,13 @@ import MainView from '@/views/MainView.vue'
 import SearchView from '@/views/SearchView.vue'
 import ReviewView from '@/views/ReviewView.vue'
 
-// 철환페이지 import
 import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
 import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
 import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
+import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
 import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
 import SearchPasswordViewVue from '@/views/cheolhwan/SearchPasswordView.vue'
 import SignUpCheckViewVue from '@/views/cheolhwan/SignUpCheckView.vue'
@@ -20,10 +20,12 @@ import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
 import MemberOtherPage from '@/views/MemberOtherPage.vue'
 import ReportPopupStore from '@/views/ReportPopupStore.vue'
 import AdminOtherPage from '@/views/AdminOtherPage.vue'
+import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
 
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
+
 
 import PopupDetailView from '@/views/PopupDetailView.vue'
 
@@ -43,7 +45,7 @@ const onlyAuthUser = async (to, from, next) => {
     await getUserInfo(token);
     next();
   } else {  // 없으면 로그인 시키기 
-    next({name:"login"});
+    next({name:"user-login"});
   }
 
 };
@@ -57,96 +59,130 @@ const router = createRouter({
       component: MainView
     },
     {
-      path: '/search',
-      name: 'search',
-      component: SearchView
-    },
-
-    //철환 라우터 리스트
-    {
       path: '/error',
       name: 'error',
       component: ErrorPageViewVue
     },
     {
-      path: '/edit/member',
-      name: 'editMember',
-      beforeEnter: onlyAuthUser,
-      component: EditMemberPageVue
-    },
-    {
-      path: '/edit/company',
-      name: 'editCompany',
-      beforeEnter: onlyAuthUser,
-      component: EditCompanyPageVue
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginPageViewVue
-    },
-    {
-      path: '/mypage',
-      name: 'mypage',
-      beforeEnter: onlyAuthUser,
-      component: MyPageViewVue
-    },
-    {
+      path: '/join',
+      name: 'join',
+      component: SignUpCheckViewVue // 개인, 기업 회원 가입 선택 페이지 
+    },    
+    { // 추천 페이지 
       path: '/recommend',
       name: 'recommend',
       component: RecommendPageViewVue
     },
+
+    // 유저 기능 라우터 
     {
-      path: '/reportreview',
+      path:"/user",
+      name:"user",
+      redirect: {name:"user-login"},
+      children:[
+        {
+          path: 'login',
+          name: 'user-login',
+          component: LoginPageViewVue
+        },
+        {
+          path: 'searchId',
+          name: 'user-search-Id',
+          component: SearchIdViewVue
+        },
+        {
+          path: 'searchPassword',
+          name: 'user-search-password',
+          component: SearchPasswordViewVue
+        },
+        {
+          path: 'company/join',
+          name: 'company-join',
+          component: SignUpCompanyViewVue
+        },
+        {
+          path: 'join',
+          name: 'user-join',
+          component: SignUpMemberViewVue
+        },
+        { 
+          path: 'edit',
+          name: 'edit-member',
+          beforeEnter: onlyAuthUser,
+          component: EditMemberPageVue
+        },
+        {
+          path: 'edit/company',
+          name: 'edit-company',
+          beforeEnter: onlyAuthUser,
+          component: EditCompanyPageVue
+        },
+        {
+          path: 'mypage',
+          name: 'user-mypage',
+          beforeEnter: onlyAuthUser,
+          component: MyPageViewVue
+        },
+        {
+          path: 'other',
+          name: 'other-member',
+          beforeEnter: onlyAuthUser,
+          component: MemberOtherPage
+        },
+        {
+          path: 'other/admin',
+          name: 'other-admin',
+          component: AdminOtherPage
+        },
+        {
+          path: 'other/corporate',
+          name: 'other-corporate',
+          component: BusinessOtherPage
+        }
+      ]
+    },
+    
+    // 팝업 기능 라우터
+    {
+      path:"/popup",
+      name:"popup",
+      redirect: {name:"popup-search"},
+      children:[
+        { // 검색 
+          path: 'search',
+          name: 'popup-search',
+          component: SearchView
+        },
+        {   // 제보 ; 회원만 접근 가능 
+          path: 'report',
+          name: 'popup-report',
+          component: ReportPopupStore,
+          beforeEnter : onlyAuthUser
+        },
+        {   // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
+          path: 'register',
+          name: 'popup-register',
+          component: PopupStoreCorporateReport,
+          beforeEnter : onlyAuthUser
+        },
+        { // 상세보기 
+          path:":popupId",
+          name: 'popup-detail',
+          component: PopupDetailView
+        },
+      ]
+    },
+
+    {
+      path: '/reportreview',  // 댓글 신고 
       name: 'reportreview',
       component: ReportReviewPageViewVue
     },
-    {
-      path: '/searchId',
-      name: 'searchId',
-      component: SearchIdViewVue
-    },
-    {
-      path: '/searchPassword',
-      name: 'searchPassword',
-      component: SearchPasswordViewVue
-    },
-    {
-      path: '/signUp',
-      name: 'signUp',
-      component: SignUpCheckViewVue
-    },
-    {
-      path: '/signUp/Company',
-      name: 'signUpCompany',
-      component: SignUpCompanyViewVue
-    },
-    {
-      path: '/signUp/Member',
-      name: 'signUpMember',
-      component: SignUpMemberViewVue
-    },
+
     {
       path: '/review',
       name: 'review',
       component: ReviewView
-
-    },
-    {
-      path: '/other/member',
-      name: 'otherMember',
-      beforeEnter: onlyAuthUser,
-      component: MemberOtherPage
-    },
-    {
-      path: '/other/admin',
-      name: 'otherAdmin',
-      component: AdminOtherPage
-    },
-    {
-      path: '/report/popup',
-      name: 'reportPopup',
-      component: ReportPopupStore
     },
     {
       path: '/notice',
@@ -163,11 +199,7 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
-    {
-      path: '/popup/:popupId',
-      name: 'popupDetail',
-      component: PopupDetailView
-    }
+
   ]
 })
 
