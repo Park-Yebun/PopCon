@@ -24,10 +24,7 @@ public class PopupController {
 
     private static final Logger logger = LoggerFactory.getLogger(PopupController.class);
 
-    @Autowired
-    private PopupRegisterService popupRegisterService;
-    @Autowired
-    private ReviewRegisterService reviewRegisterService;
+    @Autowired private PopupRegisterService popupRegisterService;
 
 
     //  팝업 전부를 불러오는 코드
@@ -47,8 +44,13 @@ public class PopupController {
     public ResponseEntity<String> registerPopupWithImages(
             @RequestPart PopupDto popupDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception{
-        String problem = popupRegisterService.registerPopupWithImages(popupDto, images);
+//        System.out.println("controller!!!!!!!!!!!!!!!!");
+//        System.out.println(popupDto);
+//        System.out.println(popupDto.getPopupCategory());
+//        System.out.println(popupDto.getPopupCategory().get(0));
 
+        String problem = popupRegisterService.registerPopupWithImages(popupDto, images);
+//        System.out.println("이미지:"+images.size());
         try {
             if (problem.equals("notExistingPopupUser")) {
                 return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않는 유저이거나, 사용자 타입이 CORP 아닙니다.", HttpStatus.BAD_REQUEST);
@@ -63,12 +65,12 @@ public class PopupController {
     @GetMapping("/{popupId}")
     public ResponseEntity<PopupDto> getPopupDetails(@PathVariable int popupId) {
         try {
-            PopupDto popupDetails = popupRegisterService.getPopupDetails(popupId);
-            List<ReviewDto> popupReviews = reviewRegisterService.getReview(popupId);
+            PopupDto popupDetails = popupRegisterService.getPopupDetailsWithCount(popupId);
+//            List<ReviewDto> popupReviews = reviewRegisterService.getReview(popupId);
 //            List<ReviewImageDto> popupReviewImages = reviewRegisterService.getReviewImage();
 
             if (popupDetails != null) {
-                popupDetails.setReviews(popupReviews);  // 리뷰 정보 설정
+//                popupDetails.setReviews(popupReviews);  // 리뷰 정보 설정
                 return ResponseEntity.status(HttpStatus.OK).body(popupDetails);
             } else {
                 logger.error("Error occurred while retrieving popup details");
@@ -80,33 +82,42 @@ public class PopupController {
         }
     }
 
-    // 팝업에 속한 모든 이미지 조회
-    @GetMapping("/{popupId}/images")
-    public ResponseEntity<List<PopupDto>> getPopupImages(@PathVariable int popupId) {
-        try {
-            List<PopupDto> popupImages = popupRegisterService.getPopupImagesByPopupId(popupId);
-            return ResponseEntity.status(HttpStatus.OK).body(popupImages);
-        } catch (Exception e) {
-            logger.error("Error occurred while retrieving popup images", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+    // 특정 팝업의 리뷰 조회 (9개만 반환)
+    @GetMapping("/{popupId}/reviews")
+    public ResponseEntity<?> getPopupReviews(@PathVariable int popupId) throws Exception {
+        List<ReviewDto> reviewDtos=popupRegisterService.getReviewTop9(popupId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewDtos);
     }
 
+    // 팝업에 속한 모든 이미지 조회
+//    @GetMapping("/{popupId}/images")
+//    public ResponseEntity<List<PopupDto>> getPopupImages(@PathVariable int popupId) {
+//        try {
+//            List<PopupDto> popupImages = popupRegisterService.getPopupImagesByPopupId(popupId);
+//            return ResponseEntity.status(HttpStatus.OK).body(popupImages);
+//        } catch (Exception e) {
+//            logger.error("Error occurred while retrieving popup images", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
     // 특정 팝업 이미지 조회
-    @GetMapping("/{popupId}/images/{imageId}")
-    public ResponseEntity<PopupImageDto> getPopupImage(@PathVariable int popupId, @PathVariable int imageId) {
-        try {
-            PopupImageDto popupImage = popupRegisterService.getPopupImage(imageId);
-            if (popupImage != null && popupImage.getPopupId() == popupId) {
-                return ResponseEntity.status(HttpStatus.OK).body(popupImage);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            logger.error("Error occurred while retrieving popup image", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/{popupId}/images/{imageId}")
+//    public ResponseEntity<PopupImageDto> getPopupImage(@PathVariable int popupId, @PathVariable int imageId) {
+//        try {
+//            PopupImageDto popupImage = popupRegisterService.getPopupImage(imageId);
+//            if (popupImage != null && popupImage.getPopupId() == popupId) {
+//                return ResponseEntity.status(HttpStatus.OK).body(popupImage);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//            }
+//        } catch (Exception e) {
+//            logger.error("Error occurred while retrieving popup image", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
     // 특정 팝업에 좋아요 추가
     @PostMapping("/{popupId}/like")

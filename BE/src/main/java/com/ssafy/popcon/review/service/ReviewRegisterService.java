@@ -78,16 +78,7 @@ public class ReviewRegisterService {
         return "noProblem";
         }
 
-    // 해당 팝업 리뷰 조회
-    public List<ReviewDto> getReview(int popupId) {
-        try {
-            // 팝업 번호에 맞춰 리뷰 조회하는 MyBatis 매퍼 메서드 호출
-            return reviewMapper.getReview(popupId);
-        } catch (Exception e) {
-            logger.error("Error occurred while retrieving all popups", e);
-            throw new RuntimeException("Failed to retrieve popups");
-        }
-    }
+
 
 
     // 리뷰 수정

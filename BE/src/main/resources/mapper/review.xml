@@ -22,10 +22,9 @@
         <result column="review_clean" property="reviewClean"/>
         <result column="review_gift" property="reviewGift"/>
         <result column="review_date" property="reviewDate"/>
-        <result column="review_li   ke" property="reviewLike"/>
+        <result column="review_like   ke" property="reviewLike"/>
         <result column="user_id" property="userId"/>
         <result column="review_parent_id" property="reviewParentId"/>
-
     </resultMap>
 
     <!-- REVIEW_IMAGE TABLE -->
@@ -66,7 +65,7 @@
         <result column="user_email" property="userEmail"/>
         <result column="user_image_path" property="userImagePath"/>
         <result column="user_password" property="userPassword"/>
-        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_platform" property="userPlatform"/>
         <result column="user_nickname" property="userNickname"/>
         <result column="user_birth" property="userBirth"/>
         <result column="user_sex" property="userSex"/>
@@ -86,7 +85,7 @@
         VALUES (#{popupId}, #{reviewContent}, #{reviewScore}, #{reviewQuality},
                 #{reviewCost}, #{reviewType}, #{reviewDesign}, #{reviewTrendy},
                 #{reviewNew}, #{reviewKindness}, #{reviewArea}, #{reviewCar},
-                #{reviewConcept}, #{reviewClean}, #{reviewGift}, #{reviewDate},
+                #{reviewConcept}, #{reviewClean}, #{reviewGift}, DATE_FORMAT(NOW(), '%Y-%m-%d'),
                 #{reviewLike}, #{userId}, #{reviewParentId})
     </insert>
 
@@ -145,15 +144,35 @@
         SELECT * FROM popcon.user WHERE user_id = #{userId}
     </select>
 
-    <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 -->
-    <select id="getReview" resultType="com.ssafy.popcon.review.dto.ReviewDto" resultMap="reviewResult">
+    <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 (이미지 링크까지) -->
+    <select id="getReview" parameterType="int" resultMap="reviewResult">
         SELECT
-            review_content, user_id, review_date, review_like, review_quality, review_cost,
+            review_content, popup_id,review.user_id, review_date, review_like, review_quality, review_cost,
             review_type, review_design, review_trendy, review_new, review_kindness, review_area,
-            review_car, review_concept, review_clean, review_gift
-        FROM popcon.review
+            review_car, review_concept, review_clean, review_gift, review_image.review_image_path as reviewImagePath,
+            user.user_image_path as userImatePath,
+            user.user_nickname as userNickname
+        FROM review
+                 inner join review_image on review.review_id=review_image.review_id
+                 inner join user on review.user_id=user.user_id
         WHERE popup_id = #{popupId}
         ORDER BY review_date desc;
+    </select>
+
+    <!-- 해당 팝업의 모든 리뷰를 9개만 불러오는 코드 (이미지 링크까지) -->
+    <select id="getReviewTop9" parameterType="int" resultMap="reviewResult">
+        SELECT
+            review.review_content, review.popup_id,review.user_id, review.review_date, review.review_like, review.review_quality, review.review_cost,
+            review.review_type, review.review_design, review.review_trendy, review.review_new, review.review_kindness, review.review_area,
+            review.review_car, review.review_concept, review.review_clean, review.review_gift, review_image.review_image_path as reviewImagePath,
+            user.user_image_path as userImagePath,
+            user.user_nickname as userNickname
+        FROM review
+                 inner join review_image on review.review_id=review_image.review_id
+                 inner join user on review.user_id=user.user_id
+        WHERE popup_id = #{popupId}
+        ORDER BY review.review_id desc
+        limit 9;
     </select>
 
 

@@ -3,9 +3,13 @@ package com.ssafy.popcon.popup.service;
 import com.ssafy.popcon.popup.dto.PopupDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.popup.dto.PopupRecommendDto;
+import com.ssafy.popcon.popup.dto.PopupTotalDto;
 import com.ssafy.popcon.popup.mapper.PopupMapper;
+import com.ssafy.popcon.review.dto.ReviewDto;
+import com.ssafy.popcon.review.mapper.ReviewMapper;
 import com.ssafy.popcon.user.dto.UserDto;
 import com.ssafy.popcon.util.S3UploadUtil;
+import com.ssafy.popcon.util.StatisticsUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.popcon.util.JWTUtil;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +27,11 @@ public class PopupRegisterService {
 
     private final PopupMapper popupMapper;
     private final JWTUtil jwtUtil;
-
+    private final ReviewMapper reviewMapper;
     private final S3UploadUtil s3UploadUtil;
+    private final StatisticsUtil statisticsUtil;
     private static final Logger logger = LoggerFactory.getLogger(PopupRegisterService.class);
+
 
     // 모든 팝업을 조회하는 코드
     public List<PopupDto> getPopup() {
@@ -38,10 +45,50 @@ public class PopupRegisterService {
         }
     }
 
+    @Transactional
     // 팝업 하나의 세부 정보를 조회하는 코드
     public PopupDto getPopupDetails(int popupId) {
         try {
-            return popupMapper.getPopupDetails(popupId);
+            PopupDto popupDto=popupMapper.getPopupDetails(popupId);
+
+            popupDto.setPopupCategory(popupMapper.getPopupCategory(popupId));
+            popupDto.setPopupImages(popupMapper.getPopupImagesByPopupId(popupId));
+
+            PopupTotalDto etc=popupMapper.getPopupTotal(popupId);
+            popupDto.setPopupStar(etc.getPopupStar());
+            popupDto.setPopupReviewAge(etc.getPopupReviewAge());
+            popupDto.setPopupReviewSex(etc.getPopupReviewSex());
+
+            // 리뷰 태그들 통계 어떻게 가져오지 ..
+
+            return popupDto;
+        } catch (Exception e) {
+            logger.error("Failed to retrieve popup details", e);
+            throw new RuntimeException("Failed to retrieve popup details");
+        }
+    }
+
+    @Transactional
+    // 팝업 하나의 세부 정보를 조회하고 조회수를 증가하는 코드
+    public PopupDto getPopupDetailsWithCount(int popupId) {
+        try {
+            popupMapper.addViewsToPopup(popupId);   // 조회수 증가
+            PopupDto popupDto=popupMapper.getPopupDetails(popupId); // 팝업 스토어 정보 조회
+
+            popupDto.setPopupCategory(popupMapper.getPopupCategory(popupId));   // 카테고리 조회
+            popupDto.setPopupImages(popupMapper.getPopupImagesByPopupId(popupId));      // 이미지 조회
+
+            PopupTotalDto etc=popupMapper.getPopupTotal(popupId);       // 리뷰 요약 (나잇대, 성별)
+            popupDto.setPopupStar(etc.getPopupStar());
+            popupDto.setPopupReviewAge(etc.getPopupReviewAge());
+            popupDto.setPopupReviewSex(etc.getPopupReviewSex());
+
+            // 리뷰 태그들의 통계 //
+            Map<String,BigDecimal> reviewTags=popupMapper.getPopupReviewTags(popupId);
+            Map<String,Integer> top3Tags=statisticsUtil.countTop3Tags(reviewTags);
+            popupDto.getReviewTagSummary().put("reviewSummary",top3Tags);
+
+            return popupDto;
         } catch (Exception e) {
             logger.error("Failed to retrieve popup details", e);
             throw new RuntimeException("Failed to retrieve popup details");
@@ -64,10 +111,22 @@ public class PopupRegisterService {
 
             // 여기서 필요에 따라 팝업 데이터의 유효성 검사 등을 수행할 수 있습니다.
             // 팝업 등록을 위해 Mapper의 메서드 호출
-            popupMapper.registerPopup(popupDto);
+
+            popupMapper.registerPopup(popupDto);    // 팝업스토어 등록
+            int popupId=popupDto.getPopupId();
+//            popupDto.setPopupId(popupId);
+
+            Map<String,Object> category=new HashMap<>();    // 카테고리 등록
+            category.put("popupId",popupId);
+            category.put("categoryName","");
+
+            for(int i=0;i<popupDto.getPopupCategory().size();i++){
+                category.replace("categoryName",popupDto.getPopupCategory().get(i));
+                popupMapper.registerPopupCategory(category);
+            }
 
             // 등록된 팝업의 ID를 가져오기
-            int popupId = popupDto.getPopupId();
+//            int popupId = popupDto.getPopupId();
             System.out.println(popupId);
 
             logger.info("Popup registered successfully: {}", popupDto);
@@ -99,7 +158,7 @@ public class PopupRegisterService {
     }
 
     // 팝업에 속한 모든 이미지 조회
-    public List<PopupDto> getPopupImagesByPopupId(int popupId) {
+    public List<String> getPopupImagesByPopupId(int popupId) {
         try {
             return popupMapper.getPopupImagesByPopupId(popupId);
         } catch (Exception e) {
@@ -108,17 +167,38 @@ public class PopupRegisterService {
         }
     }
 
-    // 팝업 이미지 조회
-    @Transactional(readOnly = true)
-    public PopupImageDto getPopupImage(int popupImageId) {
+    // 해당 팝업 리뷰 조회
+    public List<ReviewDto> getReview(int popupId) {
         try {
-            // 이미지 조회를 위해 Mapper의 메서드 호출
-            return popupMapper.getPopupImage(popupImageId);
+            // 팝업 번호에 맞춰 리뷰 조회하는 MyBatis 매퍼 메서드 호출
+            return reviewMapper.getReview(popupId);
         } catch (Exception e) {
-            logger.error("Failed to get popup image", e);
-            throw new RuntimeException("Failed to get popup image", e);
+            throw new RuntimeException("Failed to retrieve popups");
         }
     }
+
+    public List<ReviewDto> getReviewTop9(int popupId) { // 팝업 상세 페이지 진입시
+        try {
+            // 팝업 번호에 맞춰 리뷰 조회하는 MyBatis 매퍼 메서드 호출
+            return reviewMapper.getReviewTop9(popupId);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve popups");
+        }
+    }
+
+
+    // 팝업 이미지 조회
+//    @Transactional(readOnly = true)
+//    public String getPopupImage(int popupImageId) {
+//        try {
+//            // 이미지 조회를 위해 Mapper의 메서드 호출
+//            return popupMapper.getPopupImage(popupImageId);
+//        } catch (Exception e) {
+//            logger.error("Failed to get popup image", e);
+//            throw new RuntimeException("Failed to get popup image", e);
+//        }
+//    }
 
     // 특정 팝업에 좋아요 추가
     public String addLikeToPopup(int popupId, String userId) throws Exception {

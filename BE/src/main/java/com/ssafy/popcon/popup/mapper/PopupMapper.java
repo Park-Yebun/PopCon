@@ -3,11 +3,14 @@ package com.ssafy.popcon.popup.mapper;
 import com.ssafy.popcon.popup.dto.PopupDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
 import com.ssafy.popcon.popup.dto.PopupRecommendDto;
+import com.ssafy.popcon.popup.dto.PopupTotalDto;
 import com.ssafy.popcon.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface PopupMapper {
@@ -16,14 +19,18 @@ public interface PopupMapper {
 
     void registerPopup(PopupDto popupDto);
 
+    void registerPopupCategory(Map<String,Object> category); // 팝업 카테고리 등록
+
 //    PopupDto getPopupDetails(@Param("popupId") int popupId) throws Exception;
     PopupDto getPopupDetails(@Param("popupId") int popupId);
+
+    List<String> getPopupCategory(int popupId);
 
     // 특정 팝업 이미지 조회
     PopupImageDto getPopupImage(@Param("popupImageId") int popupImageId);
 
     // 팝업에 속한 모든 이미지 조회
-    List<PopupDto> getPopupImagesByPopupId(@Param("popupId") int popupId);
+    List<String> getPopupImagesByPopupId(@Param("popupId") int popupId);
 
     // 팝업 이미지 등록
     void registerPopupImage(PopupImageDto popupImageDto);
@@ -47,4 +54,10 @@ public interface PopupMapper {
     int duplicatePopupRecommend(PopupRecommendDto duplicateCheckDto);
 
     UserDto getUserByIdAndType(String userId);
+
+    PopupTotalDto getPopupTotal(int popupId);
+
+    void addViewsToPopup(int popupId);  // 조회수 증가
+
+    Map<String, BigDecimal> getPopupReviewTags(int popupId);   // 팝업 아이디를 기반으로 리뷰 태그들의 개수 가져오기
 }
