@@ -34,6 +34,8 @@ public interface ReviewMapper {
 
     List<ReviewDto> getReview(int popupId);
 
+    List<ReviewDto> getReviewTop9(int popupId); // 상세보기 페이지 에서는 리뷰 9개만 주면 됨
+
     void addRecommend(ReviewRecommendDto reviewRecommendDto);
 
     void removeRecommend(ReviewRecommendDto reviewRecommendDto);

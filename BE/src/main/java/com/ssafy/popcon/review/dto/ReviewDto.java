@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,9 +26,11 @@ public class ReviewDto {
     private String reviewConcept;
     private String reviewClean;
     private String reviewGift;
-    private Date reviewDate;
-    private String reviewLike;
+    private String reviewDate;
+    private int reviewLike;
     private String userId;
     private int reviewParentId;
-
+    private String reviewImagePath;
+    private String userImagePath;
+    private String userNickname;
 }

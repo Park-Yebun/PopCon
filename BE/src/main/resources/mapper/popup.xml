@@ -60,13 +60,29 @@
         <result column="user_deleted" property="userDeleted"/>
     </resultMap>
 
+    <resultMap id="reviewTag" type="java.util.HashMap">
+        <result property="reviewQuality" column="reviewQuality"/>
+        <result property="reviewCost" column="reviewCost" />
+        <result property="reviewType" column="reviewType"/>
+        <result property="reviewDesign" column="reviewDesign"/>
+        <result property="reviewTrendy" column="reviewTrendy"/>
+        <result property="reviewNew" column="reviewNew" />
+        <result property="reviewKindness" column="reviewKindness"/>
+        <result property="reviewArea" column="reviewArea" />
+        <result property="reviewCar" column="reviewCar" />
+        <result property="reviewConcept" column="reviewConcept"/>
+        <result property="reviewClean" column="reviewClean"/>
+        <result property="reviewGift" column="reviewGift" />
+    </resultMap>
+
+
     <!-- 모든 팝업 정보를 가져오는 SQL문 -->
     <select id="getPopup" resultMap="popupResultMap">
         SELECT * FROM popcon.popup
     </select>
     
     <!-- 팝업 등록을 하는 SQL문 -->
-    <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto" useGeneratedKeys="true" keyProperty="popupId">
+    <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto"  useGeneratedKeys="true" keyProperty="popupId">
         INSERT INTO popcon.popup (popup_name, popup_brand, popup_content, popup_location,popup_start, popup_end, popup_operating, popup_event,popup_view, popup_car, popup_entryfee, popup_wifi,popup_eat, popup_site, popup_instar, popup_notice,popup_phone, popup_honey, popup_like, user_id)
 
         VALUES (#{popupName}, #{popupBrand}, #{popupContent}, #{popupLocation},
@@ -76,9 +92,18 @@
                 #{popupPhone}, #{popupHoney}, #{popupLike}, #{userId})
     </insert>
 
+    <insert id="registerPopupCategory" parameterType="map">
+        insert into popup_category (popup_id, category_name) values (#{popupId},#{categoryName})
+    </insert>
+
     <!-- 팝업 세부정보 한 개씩 보는-->
     <select id="getPopupDetails" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupDto" resultMap="popupResultMap">
         SELECT * FROM popcon.popup WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 팝업 카테고리 조회 -->
+    <select id="getPopupCategory" parameterType="int" resultType="string">
+        select category_name from popup_category where popup_id=#{popupId}
     </select>
 
     <!-- 팝업 이미지 등록 -->
@@ -87,12 +112,12 @@
     </insert>
 
     <!-- 팝업에 속한 모든 이미지 조회 -->
-    <select id="getPopupImagesByPopupId" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupImageDto" resultMap="popupImageResultMap">
-        SELECT * FROM popcon.popup_image WHERE popup_id = #{popupId}
+    <select id="getPopupImagesByPopupId" parameterType="int" resultType="string">
+        SELECT popup_image_path FROM popcon.popup_image WHERE popup_id = #{popupId}
     </select>
 
     <!-- 특정 팝업 이미지 조회 -->
-    <select id="getPopupImage" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupImageDto"  resultMap="popupImageResultMap">
+    <select id="getPopupImage" parameterType="int" resultType="string">
         SELECT * FROM popcon.popup_image WHERE popup_image_id = #{popupImageId}
     </select>
 
@@ -136,6 +161,71 @@
     <!-- 유저 테이블에 해당 유저의 user_type을 요청 -->
     <select id="getUserByIdAndType" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
         SELECT user_id, user_type FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
+    <select id="getPopupTotal" parameterType="int" resultType="PopupTotalDto">
+        SELECT
+            TRUNCATE(AVG(review.review_score), 1) AS popupStar,
+            CASE MAX(user.user_sex)
+                WHEN 'M' THEN '남성이'
+                WHEN 'F' THEN '여성이'
+                ELSE '남녀가'
+                END AS popupReviewSex,
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            CASE
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 20 AND 29 THEN '20대'
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 30 AND 39 THEN '30대'
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 40 AND 49 THEN '40대'
+                                ELSE '50대이상'
+                                END AS reviewAge
+                        FROM
+                            popup
+                                JOIN
+                            review ON popup.popup_id = review.popup_id
+                                JOIN
+                            user ON review.user_id = user.user_id
+                        WHERE
+                            popup.popup_id = #{popupId}
+                    ) AS substituted_values
+                GROUP BY reviewAge
+                ORDER BY COUNT(*) DESC
+                LIMIT 1
+            ) AS popupReviewAge
+        FROM
+            popup
+                JOIN
+            review ON popup.popup_id = review.popup_id
+                JOIN
+            user ON review.user_id = user.user_id
+        WHERE
+            popup.popup_id = #{popupId};
+    </select>
+
+    <update id="addViewsToPopup" parameterType="int">
+        update popup set popup_view=popup_view+1
+        where popup_id=#{popupId};
+    </update>
+
+    <select id="getPopupReviewTags" parameterType="int" resultType="java.util.HashMap">
+        SELECT
+            SUM(CASE WHEN review_quality = 'Y' THEN 1 ELSE 0 END) AS reviewQuality,
+            SUM(CASE WHEN review_cost = 'Y' THEN 1 ELSE 0 END) AS reviewCost,
+            SUM(CASE WHEN review_type = 'Y' THEN 1 ELSE 0 END) AS reviewType,
+            SUM(CASE WHEN review_design = 'Y' THEN 1 ELSE 0 END) AS reviewDesign,
+            SUM(CASE WHEN review_trendy = 'Y' THEN 1 ELSE 0 END) AS reviewTrendy,
+            SUM(CASE WHEN review_new = 'Y' THEN 1 ELSE 0 END) AS reviewNew,
+            SUM(CASE WHEN review_kindness = 'Y' THEN 1 ELSE 0 END) AS reviewKindness,
+            SUM(CASE WHEN review_area = 'Y' THEN 1 ELSE 0 END) AS reviewArea,
+            SUM(CASE WHEN review_car = 'Y' THEN 1 ELSE 0 END) AS reviewCar,
+            SUM(CASE WHEN review_concept = 'Y' THEN 1 ELSE 0 END) AS reviewConcept,
+            SUM(CASE WHEN review_clean = 'Y' THEN 1 ELSE 0 END) AS reviewClean,
+            SUM(CASE WHEN review_gift = 'Y' THEN 1 ELSE 0 END) AS reviewGift
+        FROM review WHERE popup_id=#{popupId};
     </select>
 
 </mapper>

@@ -18,7 +18,7 @@ import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("/popups")
+@RequestMapping("/reviews")
 public class ReviewController {
 
     private static final Logger logger = LoggerFactory.getLogger(PopupController.class);
@@ -30,12 +30,15 @@ public class ReviewController {
 
     JWTUtil jwtUtil;
 
+
     // 리뷰 등록
     @PostMapping("/{popupId}")
     public ResponseEntity<String> registerPopupWithImages(
             @PathVariable("popupId") int popupId,
             @RequestPart ReviewDto reviewDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception{
+        System.out.println("controller!!!!!!!!!");
+        System.out.println(reviewDto);
         String problem = reviewRegisterService.registerReviewWithImages(reviewDto, images);
 
         try {
@@ -72,7 +75,9 @@ public class ReviewController {
         }
     }
 
-            // 리뷰 삭제
+
+
+    // 리뷰 삭제
     @DeleteMapping("/{popupId}/{reviewId}")
     public ResponseEntity<String> deletePopupWithImages(
             @PathVariable("popupId") int popupId,
