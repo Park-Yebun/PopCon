@@ -63,7 +63,7 @@ const userLogout=function(){
     <div class="content">
       <!-- 버튼을 감싸는 컨테이너 추가 -->
       <div class="button-container">
-        <button @click="$router.push('/mypage')">마이페이지</button>
+        <button @click="$router.push('/user/mypage')">마이페이지</button>
         <button>체험단</button>
         <button>북마크</button>
         <button @click="$router.push('/notice')">공지사항</button>

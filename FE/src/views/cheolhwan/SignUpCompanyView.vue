@@ -16,7 +16,7 @@ const joinUser = ref({
     "userEmail":"",
     "userPlatform":"default",  // 기본은 default, 카카오는 kakao, 구글은 google
     "userNickname":"",
-    "userBirth":"", // 0000-11-11
+    "userBirth":"?", // 0000-11-11
     "userSex":"N", // 여성의 경우 "F", 남성은 "M", 미선택은 "N"
     "userType":"CORP", 
     "userToken":"", 

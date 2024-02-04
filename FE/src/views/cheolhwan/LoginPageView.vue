@@ -11,13 +11,13 @@ const { userLogin, getUserInfo } = memberStore;
 const { isLogin } = storeToRefs(memberStore);
 
 const goIdSearch = function() {
-  router.push({ name: 'searchId'})
+  router.push({ name: 'user-search-id'})
 }
 const goPasswordSearch = function() {
-  router.push({ name: 'searchPassword'})
+  router.push({ name: 'user-search-password'})
 }
 const goSignUp = function() {
-  router.push({ name: 'signUp'})
+  router.push({ name: 'user-join'})
 }
 
 const loginUser = ref({
