@@ -8,6 +8,7 @@ import com.ssafy.popcon.popup.mapper.PopupMapper;
 import com.ssafy.popcon.review.dto.ReviewDto;
 import com.ssafy.popcon.review.mapper.ReviewMapper;
 import com.ssafy.popcon.user.dto.UserDto;
+import com.ssafy.popcon.util.KakaoGeocodingUtil;
 import com.ssafy.popcon.util.S3UploadUtil;
 import com.ssafy.popcon.util.StatisticsUtil;
 import lombok.RequiredArgsConstructor;
@@ -114,24 +115,31 @@ public class PopupRegisterService {
                 return "notExistingPopupUser";
             }
 
-            // 여기서 필요에 따라 팝업 데이터의 유효성 검사 등을 수행할 수 있습니다.
-            // 팝업 등록을 위해 Mapper의 메서드 호출
 
-            popupMapper.registerPopup(popupDto);    // 팝업스토어 등록
-            int popupId=popupDto.getPopupId();
-//            popupDto.setPopupId(popupId);
-
-            Map<String,Object> category=new HashMap<>();    // 카테고리 등록
-            category.put("popupId",popupId);
-            category.put("categoryName","");
-
-            for(int i=0;i<popupDto.getPopupCategory().size();i++){
-                category.replace("categoryName",popupDto.getPopupCategory().get(i));
-                popupMapper.registerPopupCategory(category);
+            // 팝업 위치를 기반으로 위도와 경도 계산
+            if (popupDto.getPopupLocation() != null && !popupDto.getPopupLocation().isEmpty()) {
+                try {
+                    double[] coordinates = KakaoGeocodingUtil.getCoordinates(popupDto.getPopupLocation());
+                    System.out.println(coordinates[0]);
+                    System.out.println(coordinates[1]);
+                    popupDto.setPopupLatitude(new BigDecimal(coordinates[0]));
+                    popupDto.setPopupLongitude(new BigDecimal(coordinates[1]));
+                } catch (Exception e) {
+                    logger.error("Failed to geocode popup location", e);
+                    throw new RuntimeException("Failed to geocode popup location");
+                }
+            } else {
+                // 기본값 설정
+                popupDto.setPopupLatitude(BigDecimal.ZERO);
+                popupDto.setPopupLongitude(BigDecimal.ZERO);
             }
 
+            // 여기서 필요에 따라 팝업 데이터의 유효성 검사 등을 수행할 수 있습니다.
+            // 팝업 등록을 위해 Mapper의 메서드 호출
+            popupMapper.registerPopup(popupDto);
+
             // 등록된 팝업의 ID를 가져오기
-//            int popupId = popupDto.getPopupId();
+            int popupId = popupDto.getPopupId();
             System.out.println(popupId);
 
             logger.info("Popup registered successfully: {}", popupDto);

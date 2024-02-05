@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/home")
@@ -22,30 +24,21 @@ public class MainController {
     @Autowired
     private MainService mainService;
 
-//    @GetMapping
-//    public ResponseEntity<?> getMainPage() throws Exception {
-//        List<String,Object>
-//    }
-
     // 좋아요가 가장 많은 3개 슬라이드, 마감 임박 리스트
-    @GetMapping
-    public ResponseEntity<List<PopupDto>> getPopupImageGood3() {
+    @GetMapping()
+    public ResponseEntity<Map<String, List<PopupDto>>> getHomePopupData() {
         try {
-            List<PopupDto> popups = mainService.getPopupImageGood3();
-            return ResponseEntity.status(HttpStatus.OK).body(popups);
-        } catch (Exception e) {
-            logger.error("Error occurred while retrieving all popups", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+            Map<String, List<PopupDto>> result = new HashMap<>();
 
-    @GetMapping("/end")
-    public ResponseEntity<List<PopupDto>> getPopupEnd() {
-        try {
-            List<PopupDto> popups = mainService.getPopupEnd();
-            return ResponseEntity.status(HttpStatus.OK).body(popups);
+            List<PopupDto> popupgood = mainService.getPopupImageGood3();
+            List<PopupDto> popupend = mainService.getPopupEnd();
+
+            result.put("popupgood", popupgood);
+            result.put("popupend", popupend);
+
+            return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
-            logger.error("Error occurred while retrieving all popups", e);
+            logger.error("Error occurred while retrieving home popup data", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

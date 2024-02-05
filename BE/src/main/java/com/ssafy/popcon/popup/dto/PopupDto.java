@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,8 @@ public class PopupDto {
     private String popupPhone;
     private String popupHoney;
     private int popupLike;
+    private BigDecimal popupLatitude;
+    private BigDecimal popupLongitude;
     private String userId;
 
 
@@ -51,6 +54,7 @@ public class PopupDto {
 
     private List<ReviewDto> reviews;
     private List<String> popupCategory=new ArrayList<>();
+
 
     // 생성자, 게터, 세터 등 필요한 부분...
 
