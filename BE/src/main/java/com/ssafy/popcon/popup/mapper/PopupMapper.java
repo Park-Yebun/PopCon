@@ -1,9 +1,6 @@
 package com.ssafy.popcon.popup.mapper;
 
-import com.ssafy.popcon.popup.dto.PopupDto;
-import com.ssafy.popcon.popup.dto.PopupImageDto;
-import com.ssafy.popcon.popup.dto.PopupRecommendDto;
-import com.ssafy.popcon.popup.dto.PopupTotalDto;
+import com.ssafy.popcon.popup.dto.*;
 import com.ssafy.popcon.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -61,7 +58,7 @@ public interface PopupMapper {
 
     Map<String, BigDecimal> getPopupReviewTags(int popupId);   // 팝업 아이디를 기반으로 리뷰 태그들의 개수 가져오기
 
-    List<PopupDto> getPopupByCategory(String category); // 카테고리 기반 팝업 가져오기
+    List<PopupSearchDto> getPopupByFilter(Map<String,String> filter); // 필터 기반 팝업 가져오기 (검색)
 
     List<PopupDto> getPopupImageGood3();
 

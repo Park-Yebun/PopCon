@@ -3,7 +3,6 @@
 
 <mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
 
-
     <!-- POPUP TABLE -->
     <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
         <result column="popup_id" property="popupId"/>
@@ -76,6 +75,15 @@
         <result property="reviewConcept" column="reviewConcept"/>
         <result property="reviewClean" column="reviewClean"/>
         <result property="reviewGift" column="reviewGift" />
+    </resultMap>
+
+    <resultMap id="popupSearchDto" type="PopupSearchDto">
+        <result property="popupId" column="popup_id" />
+        <result property="previewImagePath" column="preview_image_path"/>
+        <result property="popupName" column="popup_name"/>
+        <result property="popupStart" column="popup_start"/>
+        <result property="popupEnd" column="popup_end" />
+        <result property="popupLocation" column="popup_location" />
     </resultMap>
 
     <!-- 모든 팝업 정보를 가져오는 SQL문 -->
@@ -241,6 +249,37 @@
         where c.category_name=#{category};
     </select>
 
+    <select id="getPopupByFilter" parameterType="map" resultMap="popupSearchDto">
+        select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
+               p.popup_start as popup_start, p.popup_end as popup_end,
+               (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+                order by popup_image.popup_image_id limit 1) as preview_image_path
+        from popup p join popup_category c on p.popup_id=c.popup_id
+        <where>
+        <if test="startDate != '' and startDate != null">
+           and p.popup_end between #{startDate} and #{endDate}
+        </if>
+        <if test="area != '전체' and area!='' and area!=null">
+           and p.popup_location like concat('%',#{area},'%')
+        </if>
+        <if test="status !='' and status!=null">
+            and
+            <if test="status=='진행중'">
+                curdate() between p.popup_start and p.popup_end
+            </if>
+            <if test="status=='종료'">
+                p.popup_end <![CDATA[<]]> curdate()
+            </if>
+            <if test="status=='오픈예정'">
+                p.popup_start <![CDATA[>]]> curdate()
+            </if>
+        </if>
+        <if test="category != '전체' and category!='' and category!=null">
+            and c.category_name=#{category}
+        </if>
+        </where>
+    </select>
+
     <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->
     <select id="getPopupImageGood3" resultMap="popupImageResultMap">
         <![CDATA[
@@ -259,21 +298,21 @@
     <!-- 마감일자가 얼마 안남은 이미지, 이름, 마감일을 가져오는 SQL -->
     <select id="getPopupEnd" resultMap="popupResultMap">
         <![CDATA[
-        SELECT
-            pt.popup_name,
-            MAX(pt.popup_end) AS popup_end,
-            pt.popup_id,
-            MAX(pi.popup_image_path) AS preview_image_path
-        FROM
-            popcon.popup pt
-                JOIN
-            popcon.popup_image pi ON pt.popup_id = pi.popup_id
-        WHERE
-            pt.popup_end <= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-        GROUP BY
-            pt.popup_id
-        ORDER BY
-            pt.popup_id;
+            SELECT
+                pt.popup_name,
+                pt.popup_end AS popup_end,
+                pt.popup_id,
+                pi.popup_image_path AS preview_image_path
+            FROM
+                popcon.popup pt
+                    JOIN
+                popcon.popup_image pi ON pt.popup_id = pi.popup_id
+            WHERE
+                pt.popup_end between curdate() and DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+            GROUP BY
+                pt.popup_id
+            ORDER BY
+                pt.popup_id;
         ]]>
     </select>
 
