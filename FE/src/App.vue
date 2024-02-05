@@ -2,6 +2,10 @@
 <template>
   <div class="container">
     <RouterView class="router-view"/>
+    <div title="알림검색 상단바" class="topbar">
+      <img @click="goSearch" class="search-button" src="@/assets/images/searchbutton.png" alt="검색버튼">
+      <img class="notification-button" src="@/assets/images/notification_false.png" alt="알림버튼">
+    </div>
     <nav class="navbar">
       <div class="container-fluid">
         <div class="nav-item">
@@ -74,11 +78,28 @@
   height: 46px;
   filter: drop-shadow(0px 8px 20px rgba(74, 67, 236, 0.25));
 }
+
+/* 검색알람버튼 */
+.topbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  margin-right: 13.51px;
+  margin-top: 5px;
+}
+
+.search-button {
+  margin-right: 5px;
+}
 </style>
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 onMounted(()=>{
 
@@ -92,4 +113,10 @@ onMounted(()=>{
           console.error("Unable to register service worker.", err);
         });
 })
+
+// 버튼 클릭하면 통합검색 링크 바로가기
+// 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
+const goSearch = function() {
+  router.push({ name: 'search'})
+}
 </script>
