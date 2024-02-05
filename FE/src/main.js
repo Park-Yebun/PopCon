@@ -19,7 +19,15 @@ import { getMessaging, getToken, onMessage  } from "firebase/messaging";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
+  // navigator.serviceWorker
+  // .register("registerSW.js")
+  // .then(function (registration) {
+  //   console.log("Service worker successfully registered.");
+  //   return registration;
+  // })
+  // .catch(function (err) {
+  //   console.error("Unable to register service worker.", err);
+  // });
 
   navigator.serviceWorker
       .register("firebase-messaging-sw.js")
