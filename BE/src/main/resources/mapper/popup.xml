@@ -3,7 +3,6 @@
 
 <mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
 
-
     <!-- POPUP TABLE -->
     <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
         <result column="popup_id" property="popupId"/>
@@ -259,21 +258,21 @@
     <!-- 마감일자가 얼마 안남은 이미지, 이름, 마감일을 가져오는 SQL -->
     <select id="getPopupEnd" resultMap="popupResultMap">
         <![CDATA[
-        SELECT
-            pt.popup_name,
-            MAX(pt.popup_end) AS popup_end,
-            pt.popup_id,
-            MAX(pi.popup_image_path) AS preview_image_path
-        FROM
-            popcon.popup pt
-                JOIN
-            popcon.popup_image pi ON pt.popup_id = pi.popup_id
-        WHERE
-            pt.popup_end <= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-        GROUP BY
-            pt.popup_id
-        ORDER BY
-            pt.popup_id;
+            SELECT
+                pt.popup_name,
+                pt.popup_end AS popup_end,
+                pt.popup_id,
+                pi.popup_image_path AS preview_image_path
+            FROM
+                popcon.popup pt
+                    JOIN
+                popcon.popup_image pi ON pt.popup_id = pi.popup_id
+            WHERE
+                pt.popup_end between curdate() and DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+            GROUP BY
+                pt.popup_id
+            ORDER BY
+                pt.popup_id;
         ]]>
     </select>
 

@@ -87,8 +87,6 @@ public class PopupRegisterService {
             // 리뷰 태그들의 통계 //
             Map<String,BigDecimal> reviewTags=popupMapper.getPopupReviewTags(popupId);
 
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
             if(reviewTags!=null){
                 Map<String,Integer> top3Tags=statisticsUtil.countTop3Tags(reviewTags);
                 popupDto.getReviewTagSummary().put("reviewSummary",top3Tags);

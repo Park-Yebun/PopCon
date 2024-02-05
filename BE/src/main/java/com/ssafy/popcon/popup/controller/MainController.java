@@ -33,8 +33,8 @@ public class MainController {
             List<PopupDto> popupgood = mainService.getPopupImageGood3();
             List<PopupDto> popupend = mainService.getPopupEnd();
 
-            result.put("popupgood", popupgood);
-            result.put("popupend", popupend);
+            result.put("popupgood", popupgood); // 좋아요 목록
+            result.put("popupend", popupend);   // 마감임박 목록
 
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
