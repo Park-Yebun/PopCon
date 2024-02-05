@@ -130,7 +130,7 @@ const router = useRouter()
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
 const goSearch = function(categoryName) {
-  router.push({ name: 'search', params: categoryName})
+  router.push({ name: 'popup-search-category', params: {category: 'categoryName'}})
 }
 const lat = ref(0)
 const lng = ref(0)
