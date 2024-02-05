@@ -1,9 +1,6 @@
 package com.ssafy.popcon.popup.service;
 
-import com.ssafy.popcon.popup.dto.PopupDto;
-import com.ssafy.popcon.popup.dto.PopupImageDto;
-import com.ssafy.popcon.popup.dto.PopupRecommendDto;
-import com.ssafy.popcon.popup.dto.PopupTotalDto;
+import com.ssafy.popcon.popup.dto.*;
 import com.ssafy.popcon.popup.mapper.PopupMapper;
 import com.ssafy.popcon.review.dto.ReviewDto;
 import com.ssafy.popcon.review.mapper.ReviewMapper;
@@ -86,8 +83,6 @@ public class PopupRegisterService {
 
             // 리뷰 태그들의 통계 //
             Map<String,BigDecimal> reviewTags=popupMapper.getPopupReviewTags(popupId);
-
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             if(reviewTags!=null){
                 Map<String,Integer> top3Tags=statisticsUtil.countTop3Tags(reviewTags);
@@ -303,8 +298,8 @@ public class PopupRegisterService {
         return "noProblem";
     }
 
-    // 카테고리로 팝업 조회
-    public List<PopupDto> getPopupByCategory(String category) throws Exception {
-        return popupMapper.getPopupByCategory(category);
+    // 여러가지 조건들로 팝업 조회
+    public List<PopupSearchDto> getPopupByFilter(Map<String,String> filter) throws Exception {
+        return popupMapper.getPopupByFilter(filter);
     }
 }

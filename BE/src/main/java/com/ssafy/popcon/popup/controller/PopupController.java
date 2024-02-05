@@ -1,6 +1,7 @@
 package com.ssafy.popcon.popup.controller;
 
 import com.ssafy.popcon.popup.dto.PopupDto;
+import com.ssafy.popcon.popup.dto.PopupSearchDto;
 import com.ssafy.popcon.review.dto.ReviewDto;
 import com.ssafy.popcon.review.dto.ReviewImageDto;
 import com.ssafy.popcon.popup.dto.PopupImageDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -148,14 +150,16 @@ public class PopupController {
         return new ResponseEntity<>("좋아요가 취소되었습니다.", HttpStatus.OK);
     }
 
-    // 카테고리에 맞는 팝업 조회
+    // 팝업 검색
     @GetMapping("/search")
-    public ResponseEntity<List<PopupDto>> getPopupByCategory(@RequestParam String category) throws Exception{
-        List<PopupDto> popupDtos=popupRegisterService.getPopupByCategory(category);
+    public ResponseEntity<List<PopupSearchDto>> getPopupByCategory(@RequestParam Map<String,String> parameter) throws Exception{
+
+        // startDate , endDate, area, status, category
+        List<PopupSearchDto> popupSearchDtos=popupRegisterService.getPopupByFilter(parameter);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(popupDtos);
+                .body(popupSearchDtos);
     }
 
 }
