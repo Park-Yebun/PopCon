@@ -149,9 +149,17 @@ const router = createRouter({
       redirect: {name:"popup-search"},
       children:[
         { // 검색 
-          path: 'search',
+          path: '/popup/search',
           name: 'popup-search',
-          component: SearchView
+          component: SearchView,
+          children: [
+            {
+              path: '/popup/search/:category',
+              name: 'popup-search-category',
+              component: SearchView
+            }
+          ]
+
         },
         {   // 제보 ; 회원만 접근 가능 
           path: 'report',
