@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
+    
+    
+    <!-- POPUP TABLE -->
+    <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
+        <result column="popup_id" property="popupId"/>
+        <result column="popup_name" property="popupName"/>
+        <result column="popup_brand" property="popupBrand"/>
+        <result column="popup_content" property="popupContent"/>
+        <result column="popup_location" property="popupLocation"/>
+        <result column="popup_start" property="popupStart"/>
+        <result column="popup_end" property="popupEnd"/>
+        <result column="popup_operating" property="popupOperating"/>
+        <result column="popup_event" property="popupEvent"/>
+        <result column="popup_view" property="popupView"/>
+        <result column="popup_car" property="popupCar"/>
+        <result column="popup_entryfee" property="popupEntryFee"/>
+        <result column="popup_wifi" property="popupWifi"/>
+        <result column="popup_eat" property="popupEat"/>
+        <result column="popup_site" property="popupSite"/>
+        <result column="popup_instar" property="popupInstar"/>
+        <result column="popup_notice" property="popupNotice"/>
+        <result column="popup_phone" property="popupPhone"/>
+        <result column="popup_honey" property="popupHoney"/>
+        <result column="popup_like" property="popupLike"/>
+        <result column="user_Id" property="userId"/>
+        <result column="preview_image_path" property="previewImagePath"/>
+    </resultMap>
+
+    <!-- POPUP_IMAGE TABLE -->
+    <resultMap id="popupImageResultMap" type="com.ssafy.popcon.popup.dto.PopupImageDto">
+        <result column="popup_image_id" property="popupImageId"/>
+        <result column="popup_id" property="popupId"/>
+        <result column="popup_image_path" property="popupImagePath"/>
+    </resultMap>
+
+    <!-- POPUP_RECOMMEND TABLE -->
+    <resultMap id="popupRecommendResultMap" type="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        <result column="popup_recommend_id" property="popupRecommendId"/>
+        <result column="popup_id" property="popupId"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <!-- POPUP_USER_TABLE -->
+    <resultMap type="com.ssafy.popcon.user.dto.UserDto" id="user">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_image_path" property="userImagePath"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_token" property="userToken"/>
+        <result column="user_business" property="userBusiness"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_deleted" property="userDeleted"/>
+    </resultMap>
+
+    <resultMap id="reviewTag" type="java.util.HashMap">
+        <result property="reviewQuality" column="reviewQuality"/>
+        <result property="reviewCost" column="reviewCost" />
+        <result property="reviewType" column="reviewType"/>
+        <result property="reviewDesign" column="reviewDesign"/>
+        <result property="reviewTrendy" column="reviewTrendy"/>
+        <result property="reviewNew" column="reviewNew" />
+        <result property="reviewKindness" column="reviewKindness"/>
+        <result property="reviewArea" column="reviewArea" />
+        <result property="reviewCar" column="reviewCar" />
+        <result property="reviewConcept" column="reviewConcept"/>
+        <result property="reviewClean" column="reviewClean"/>
+        <result property="reviewGift" column="reviewGift" />
+    </resultMap>
+
+
+    <!-- 모든 팝업 정보를 가져오는 SQL문 -->
+    <select id="getPopup" resultMap="popupResultMap">
+        SELECT * FROM popcon.popup
+    </select>
+    
+    <!-- 팝업 등록을 하는 SQL문 -->
+    <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto"  useGeneratedKeys="true" keyProperty="popupId">
+        INSERT INTO popcon.popup (popup_name, popup_brand, popup_content, popup_location,popup_start, popup_end, popup_operating, popup_event,popup_view, popup_car, popup_entryfee, popup_wifi,popup_eat, popup_site, popup_instar, popup_notice,popup_phone, popup_honey, popup_like, user_id)
+
+        VALUES (#{popupName}, #{popupBrand}, #{popupContent}, #{popupLocation},
+                #{popupStart}, #{popupEnd}, #{popupOperating}, #{popupEvent},
+                #{popupView}, #{popupCar}, #{popupEntryFee}, #{popupWifi},
+                #{popupEat}, #{popupSite}, #{popupInstar}, #{popupNotice},
+                #{popupPhone}, #{popupHoney}, #{popupLike}, #{userId})
+    </insert>
+
+    <insert id="registerPopupCategory" parameterType="map">
+        insert into popup_category (popup_id, category_name) values (#{popupId},#{categoryName})
+    </insert>
+
+    <!-- 팝업 세부정보 한 개씩 보는-->
+    <select id="getPopupDetails" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupDto" resultMap="popupResultMap">
+        SELECT * FROM popcon.popup WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 팝업 카테고리 조회 -->
+    <select id="getPopupCategory" parameterType="int" resultType="string">
+        select category_name from popup_category where popup_id=#{popupId}
+    </select>
+
+    <!-- 팝업 이미지 등록 -->
+    <insert id="registerPopupImage" parameterType="com.ssafy.popcon.popup.dto.PopupImageDto">
+        INSERT INTO popcon.popup_image (popup_id, popup_image_path) VALUES (#{popupId}, #{popupImagePath})
+    </insert>
+
+    <!-- 팝업에 속한 모든 이미지 조회 -->
+    <select id="getPopupImagesByPopupId" parameterType="int" resultType="string">
+        SELECT popup_image_path FROM popcon.popup_image WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 특정 팝업 이미지 조회 -->
+    <select id="getPopupImage" parameterType="int" resultType="string">
+        SELECT * FROM popcon.popup_image WHERE popup_image_id = #{popupImageId}
+    </select>
+
+    <!-- 좋아요 추가 -->
+    <update id="addLikeToPopup" parameterType="int">
+        UPDATE popcon.popup SET popup_like = popup_like + 1 WHERE popup_id = #{popupId}
+    </update>
+
+    <!-- 좋아요 취소 -->
+    <update id="cancelLikeToPopup" parameterType="int">
+        UPDATE popcon.popup SET popup_like = popup_like - 1 WHERE popup_id = #{popupId}
+    </update>
+
+    <!-- 팝업 추천 정보 추가 -->
+    <insert id="addPopupRecommend" parameterType="PopupRecommendDto">
+        INSERT INTO popcon.popup_recommend (popup_id, user_id) VALUES (#{popupId}, #{userId})
+    </insert>
+
+    <!-- 팝업 추천 정보 삭제 -->
+    <delete id="deletePopupRecommend" parameterType="PopupRecommendDto">
+        DELETE FROM popcon.popup_recommend WHERE popup_id = #{popupId} AND user_id = #{userId}
+    </delete>
+
+    <!-- 팝업 테이블에 해당 팝업이 존재하는지 SQL -->
+    <select id="getPopupById" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupDto" resultMap="popupResultMap">
+        SELECT * FROM popcon.popup WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 유저 테이블에 해당 유저가 존재하는지 SQL -->
+    <select id="getUserById" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT * FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
+    <!-- 팝업 추천 테이블에 해당 팝업 및 유저가 중복인지 확인하는 SQL -->
+    <select id="duplicatePopupRecommend" resultType="java.lang.Integer" parameterType="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        SELECT COUNT(*)
+        FROM popcon.popup_recommend
+        WHERE popup_id = #{popupId, jdbcType=INTEGER} AND user_id = #{userId}
+    </select>
+
+    <!-- 유저 테이블에 해당 유저의 user_type을 요청 -->
+    <select id="getUserByIdAndType" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT user_id, user_type FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
+    <!-- 00대 00이 많이 방문했어요 값 가져오기  -->
+    <select id="getPopupTotal" parameterType="int" resultType="PopupTotalDto">
+        SELECT
+            TRUNCATE(AVG(review.review_score), 1) AS popupStar,
+            CASE MAX(user.user_sex)
+                WHEN 'M' THEN '남성이'
+                WHEN 'F' THEN '여성이'
+                ELSE '남녀가'
+                END AS popupReviewSex,
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+                            CASE
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 20 AND 29 THEN '20대'
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 30 AND 39 THEN '30대'
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 40 AND 49 THEN '40대'
+                                ELSE '50대이상'
+                                END AS reviewAge
+                        FROM
+                            popup
+                                JOIN
+                            review ON popup.popup_id = review.popup_id
+                                JOIN
+                            user ON review.user_id = user.user_id
+                        WHERE
+                            popup.popup_id = #{popupId}
+                    ) AS substituted_values
+                GROUP BY reviewAge
+                ORDER BY COUNT(*) DESC
+                LIMIT 1
+            ) AS popupReviewAge
+        FROM
+            popup
+                JOIN
+            review ON popup.popup_id = review.popup_id
+                JOIN
+            user ON review.user_id = user.user_id
+        WHERE
+            popup.popup_id = #{popupId};
+    </select>
+
+
+    <update id="addViewsToPopup" parameterType="int">
+        update popup set popup_view=popup_view+1
+        where popup_id=#{popupId};
+    </update>
+
+    <select id="getPopupReviewTags" parameterType="int" resultType="java.util.HashMap">
+        SELECT
+            SUM(CASE WHEN review_quality = 'Y' THEN 1 ELSE 0 END) AS reviewQuality,
+            SUM(CASE WHEN review_cost = 'Y' THEN 1 ELSE 0 END) AS reviewCost,
+            SUM(CASE WHEN review_type = 'Y' THEN 1 ELSE 0 END) AS reviewType,
+            SUM(CASE WHEN review_design = 'Y' THEN 1 ELSE 0 END) AS reviewDesign,
+            SUM(CASE WHEN review_trendy = 'Y' THEN 1 ELSE 0 END) AS reviewTrendy,
+            SUM(CASE WHEN review_new = 'Y' THEN 1 ELSE 0 END) AS reviewNew,
+            SUM(CASE WHEN review_kindness = 'Y' THEN 1 ELSE 0 END) AS reviewKindness,
+            SUM(CASE WHEN review_area = 'Y' THEN 1 ELSE 0 END) AS reviewArea,
+            SUM(CASE WHEN review_car = 'Y' THEN 1 ELSE 0 END) AS reviewCar,
+            SUM(CASE WHEN review_concept = 'Y' THEN 1 ELSE 0 END) AS reviewConcept,
+            SUM(CASE WHEN review_clean = 'Y' THEN 1 ELSE 0 END) AS reviewClean,
+            SUM(CASE WHEN review_gift = 'Y' THEN 1 ELSE 0 END) AS reviewGift
+        FROM review WHERE popup_id=#{popupId};
+    </select>
+
+    <select id="getPopupByCategory" parameterType="String" resultMap="popupResultMap">
+        select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
+               (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+                order by popup_image.popup_image_id limit 1)
+        as preview_image_path
+        from popup p join popup_category c on p.popup_id=c.popup_id
+        where c.category_name=#{category};
+    </select>
+
+    <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->
+    <select id="getPopupImageGood3" resultMap="popupResultMap">
+        <![CDATA[
+        SELECT popup_image_path, popup_id
+        FROM (
+                 SELECT pi.popup_image_path, p.popup_id, ROW_NUMBER() OVER (ORDER BY p.popup_like DESC) as row_num
+                 FROM popcon.popup p
+                          JOIN popcon.popup_image pi ON p.popup_id = pi.popup_id
+             ) AS ranked
+        WHERE row_num <= 3
+        LIMIT 1;
+        ]]>
+    </select>
+
+    <!-- 마감일자가 얼마 안남은 이미지, 이름, 마감일을 가져오는 SQL -->
+    <select id="getPopupEnd" resultMap="popupResultMap, popupImageResultMap">
+        <![CDATA[
+        SELECT pi.popup_image_path, p.popup_name, p.popup_end, p.popup_id
+        FROM popcon.popup p JOIN popcon.popup_image pi ON p.popup_id = pi.popup_id
+        WHERE STR_TO_DATE(p.popup_end, '%Y-%m-%d') >= CURDATE() AND STR_TO_DATE(p.popup_end, '%Y-%m-%d') <= CURDATE() + INTERVAL 3 DAY
+        order by pi.popup_image_id limit 1;
+        ]]>
+    </select>
+
+</mapper>
