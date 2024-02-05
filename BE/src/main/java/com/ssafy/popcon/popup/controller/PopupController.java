@@ -153,4 +153,14 @@ public class PopupController {
         return new ResponseEntity<>("좋아요가 취소되었습니다.", HttpStatus.OK);
     }
 
+    // 카테고리에 맞는 팝업 조회
+    @GetMapping("/search")
+    public ResponseEntity<List<PopupDto>> getPopupByCategory(@RequestParam String category) throws Exception{
+        List<PopupDto> popupDtos=popupRegisterService.getPopupByCategory(category);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupDtos);
+    }
+
 }

@@ -29,6 +29,7 @@ public class AmazonS3Config {
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(region)
+                .enablePathStyleAccess()
                 .build();
     }
 }
