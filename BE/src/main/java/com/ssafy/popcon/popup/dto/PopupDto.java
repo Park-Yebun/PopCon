@@ -38,6 +38,8 @@ public class PopupDto {
     private int popupLike;
     private String userId;
 
+
+    private String previewImagePath;    // 미리보기 이미지의 경로
     private List<String> popupImages=new ArrayList<>();
 
     private double popupStar; // 별점

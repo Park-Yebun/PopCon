@@ -85,8 +85,13 @@ public class PopupRegisterService {
 
             // 리뷰 태그들의 통계 //
             Map<String,BigDecimal> reviewTags=popupMapper.getPopupReviewTags(popupId);
-            Map<String,Integer> top3Tags=statisticsUtil.countTop3Tags(reviewTags);
-            popupDto.getReviewTagSummary().put("reviewSummary",top3Tags);
+
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            if(reviewTags!=null){
+                Map<String,Integer> top3Tags=statisticsUtil.countTop3Tags(reviewTags);
+                popupDto.getReviewTagSummary().put("reviewSummary",top3Tags);
+            }
 
             return popupDto;
         } catch (Exception e) {
@@ -134,7 +139,7 @@ public class PopupRegisterService {
             // 이미지 업로드 및 등록
             if (imageFiles != null && !imageFiles.isEmpty()) {
                 for (MultipartFile file : imageFiles) {
-                    String imagePath = s3UploadUtil.upload(file, "popupImagedir");
+                    String imagePath = s3UploadUtil.upload(file, "popupImagesdir");
 
                     // 이미지 업로드 후에 파일 경로를 가지고 PopupImageDto 객체 생성
                     PopupImageDto popupImageDto = new PopupImageDto();
@@ -288,5 +293,10 @@ public class PopupRegisterService {
             throw new Exception("중복된 좋아요 취소는 할 수 없습니다.");
         }
         return "noProblem";
+    }
+
+    // 카테고리로 팝업 조회
+    public List<PopupDto> getPopupByCategory(String category) throws Exception {
+        return popupMapper.getPopupByCategory(category);
     }
 }

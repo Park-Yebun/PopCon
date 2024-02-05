@@ -27,6 +27,7 @@
         <result column="popup_honey" property="popupHoney"/>
         <result column="popup_like" property="popupLike"/>
         <result column="user_Id" property="userId"/>
+        <result column="preview_image_path" property="previewImagePath"/>
     </resultMap>
 
     <!-- POPUP_IMAGE TABLE -->
@@ -163,6 +164,7 @@
         SELECT user_id, user_type FROM popcon.user WHERE user_id = #{userId}
     </select>
 
+    <!-- 00대 00이 많이 방문했어요 값 가져오기  -->
     <select id="getPopupTotal" parameterType="int" resultType="PopupTotalDto">
         SELECT
             TRUNCATE(AVG(review.review_score), 1) AS popupStar,
@@ -206,6 +208,7 @@
             popup.popup_id = #{popupId};
     </select>
 
+
     <update id="addViewsToPopup" parameterType="int">
         update popup set popup_view=popup_view+1
         where popup_id=#{popupId};
@@ -226,6 +229,39 @@
             SUM(CASE WHEN review_clean = 'Y' THEN 1 ELSE 0 END) AS reviewClean,
             SUM(CASE WHEN review_gift = 'Y' THEN 1 ELSE 0 END) AS reviewGift
         FROM review WHERE popup_id=#{popupId};
+    </select>
+
+    <select id="getPopupByCategory" parameterType="String" resultMap="popupResultMap">
+        select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
+               (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+                order by popup_image.popup_image_id limit 1)
+        as preview_image_path
+        from popup p join popup_category c on p.popup_id=c.popup_id
+        where c.category_name=#{category};
+    </select>
+
+    <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->
+    <select id="getPopupImageGood3" resultMap="popupResultMap">
+        <![CDATA[
+        SELECT popup_image_path, popup_id
+        FROM (
+                 SELECT pi.popup_image_path, p.popup_id, ROW_NUMBER() OVER (ORDER BY p.popup_like DESC) as row_num
+                 FROM popcon.popup p
+                          JOIN popcon.popup_image pi ON p.popup_id = pi.popup_id
+             ) AS ranked
+        WHERE row_num <= 3
+        LIMIT 1;
+        ]]>
+    </select>
+
+    <!-- 마감일자가 얼마 안남은 이미지, 이름, 마감일을 가져오는 SQL -->
+    <select id="getPopupEnd" resultMap="popupResultMap, popupImageResultMap">
+        <![CDATA[
+        SELECT pi.popup_image_path, p.popup_name, p.popup_end, p.popup_id
+        FROM popcon.popup p JOIN popcon.popup_image pi ON p.popup_id = pi.popup_id
+        WHERE STR_TO_DATE(p.popup_end, '%Y-%m-%d') >= CURDATE() AND STR_TO_DATE(p.popup_end, '%Y-%m-%d') <= CURDATE() + INTERVAL 3 DAY
+        order by pi.popup_image_id limit 1;
+        ]]>
     </select>
 
 </mapper>

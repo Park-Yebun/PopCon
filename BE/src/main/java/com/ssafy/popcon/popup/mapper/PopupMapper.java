@@ -60,4 +60,10 @@ public interface PopupMapper {
     void addViewsToPopup(int popupId);  // 조회수 증가
 
     Map<String, BigDecimal> getPopupReviewTags(int popupId);   // 팝업 아이디를 기반으로 리뷰 태그들의 개수 가져오기
+
+    List<PopupDto> getPopupByCategory(String category); // 카테고리 기반 팝업 가져오기
+
+    List<PopupDto> getPopupImageGood3();
+
+    List<PopupDto> getPopupEnd();
 }
