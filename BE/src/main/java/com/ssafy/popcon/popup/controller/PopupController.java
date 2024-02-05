@@ -44,13 +44,8 @@ public class PopupController {
     public ResponseEntity<String> registerPopupWithImages(
             @RequestPart PopupDto popupDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) throws Exception{
-//        System.out.println("controller!!!!!!!!!!!!!!!!");
-//        System.out.println(popupDto);
-//        System.out.println(popupDto.getPopupCategory());
-//        System.out.println(popupDto.getPopupCategory().get(0));
-
         String problem = popupRegisterService.registerPopupWithImages(popupDto, images);
-//        System.out.println("이미지:"+images.size());
+
         try {
             if (problem.equals("notExistingPopupUser")) {
                 return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않는 유저이거나, 사용자 타입이 CORP 아닙니다.", HttpStatus.BAD_REQUEST);
