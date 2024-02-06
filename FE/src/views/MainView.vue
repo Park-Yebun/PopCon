@@ -78,6 +78,8 @@
 </div>
 
 <!-- 본문 -->
+<button @click="openCamera">카메라 열기</button>
+<button @click="openGallery">갤러리 열기</button>
 <div>
   <a @click="goSearch">검색 버튼</a>
   <a href="#">알람 버튼</a>
@@ -145,6 +147,44 @@ function getLocaion() {
     })
   }
 }
+
+function openCamera(){
+  navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          const video = document.createElement('video');
+          video.srcObject = stream;
+          video.autoplay = true;
+          video.onloadedmetadata = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0);
+          this.imageUrl = canvas.toDataURL('image/png');
+          stream.getTracks().forEach(track => track.stop());
+          };
+        })
+        .catch(error => {
+          console.error('카메라 액세스 거부:', error);
+        });
+}
+
+function openGallery(){
+  const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imageUrl = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+      input.click();
+    }
+  
 </script>
 
 <style>
