@@ -67,7 +67,7 @@
 
 </script>
 
-<style>
+<style scoped>
 /* X 버튼 */
 .btn-close {
     margin-top: 75px;

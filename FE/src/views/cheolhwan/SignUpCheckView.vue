@@ -30,11 +30,11 @@ const router = useRouter()
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
 const goSignupMember = function() {
-    router.push({ name: 'signUpCompany'})
+    router.push({ name: 'user-join'})
 }
 //철환 라우터
 const goSignupCompany = function() {
-    router.push({ name: 'signUpMember'})
+    router.push({ name: 'company-join'})
 }
 
 </script>

@@ -4,6 +4,7 @@
           <div class="date-title">날짜</div>
             <div class="button-group">
                 <button type="button" class="btn btn-outline-secondary"
+                        data-bs-toggle="button"
                         style="padding-inline: 1.5rem;
                         --bs-btn-padding-y: 0.5rem;
                         --bs-btn-line-height: 28.5px;
@@ -192,10 +193,15 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
+const category = route.params.category
+
 
 </script>
 
-<style>
+<style scoped>
 .date-title {
     margin-top: 52px;
     margin-left: 40px;

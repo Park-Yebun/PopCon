@@ -77,12 +77,8 @@
   </div>
 </div>
 
-<!-- 본문 -->
-<button @click="openCamera">카메라 열기</button>
-<button @click="openGallery">갤러리 열기</button>
+<!-- 임시버튼 -->
 <div>
-  <a @click="goSearch">검색 버튼</a>
-  <a href="#">알람 버튼</a>
   <button @click="getLocaion()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
 </div>
 
@@ -90,36 +86,36 @@
 <div title="main-category">
   <div class="main-category-container">
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_beauty.png" alt="패션/뷰티 아이콘">패션/뷰티
+      <img @click="goSearch('패션뷰티')" class="main-category-logo" src="@/assets/images/category_beauty.png" alt="패션/뷰티 아이콘">패션/뷰티
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_foods.png" alt="식음료 아이콘">식음료
+      <img @click="goSearch('식음료')" class="main-category-logo" src="@/assets/images/category_foods.png" alt="식음료 아이콘">식음료
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
+      <img @click="goSearch('콘텐츠')" class="main-category-logo" src="@/assets/images/category_content.png" alt="콘텐츠 아이콘">콘텐츠
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
+      <img @click="goSearch('취미여가')" class="main-category-logo" src="@/assets/images/category_hobby.png" alt="취미/여가 아이콘">취미/여가
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
+      <img @click="goSearch('금융')" class="main-category-logo" src="@/assets/images/category_finance.png" alt="금융 아이콘">금융
     </div>
   </div>
   <div class="main-category-container">
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
+      <img @click="goSearch('연예')" class="main-category-logo" src="@/assets/images/category_entertain.png" alt="연예 아이콘">연예
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
+      <img @click="goSearch('가전/디지털')" class="main-category-logo" src="@/assets/images/category_digital.png" alt="가전/디지털 아이콘">가전/디지털
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
+      <img @click="goSearch('리빙')" class="main-category-logo" src="@/assets/images/category_living.png" alt="리빙 아이콘">리빙
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
+      <img @click="goSearch('게임')" class="main-category-logo" src="@/assets/images/category_game.png" alt="게임 아이콘">게임
     </div>
     <div class="main-category-text">
-      <img class="main-category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
+      <img @click="goSearch('캐릭터')" class="main-category-logo" src="@/assets/images/category_character.png" alt="캐릭터 아이콘">캐릭터
     </div>
   </div>
 </div>
@@ -133,8 +129,8 @@ const router = useRouter()
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
-const goSearch = function(category) {
-  router.push({ name: 'search', params: category})
+const goSearch = function(categoryName) {
+  router.push({ name: 'popup-search-category', params: {category: 'categoryName'}})
 }
 const lat = ref(0)
 const lng = ref(0)
@@ -187,7 +183,7 @@ function openGallery(){
   
 </script>
 
-<style>
+<style scoped>
 /* 이미지랑 캐러셀 세로 사이즈 통일(전체 길이의 약 1/3) */
 img {
   height: 279px;

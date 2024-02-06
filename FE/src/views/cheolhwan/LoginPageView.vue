@@ -1,3 +1,46 @@
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+
+const router = useRouter()
+
+const memberStore = useMemberStore();
+const { userLogin, getUserInfo } = memberStore;
+const { isLogin } = storeToRefs(memberStore);
+
+const goIdSearch = function() {
+  router.push({ name: 'user-search-id'})
+}
+const goPasswordSearch = function() {
+  router.push({ name: 'user-search-password'})
+}
+const goSignUp = function() {
+  router.push({ name: 'user-join'})
+}
+
+const loginUser = ref({
+  "userId":"",
+	"userPassword":""
+});
+
+const isValidBoolean=ref(false);
+const isValid=ref('');
+
+const login = async() => {
+  await userLogin(loginUser.value); // 로그인을 pinia 에서 
+  if(isLogin.value){
+    router.push({name:"home"});
+  } else {
+    isValid.value="아이디 또는 비밀번호를 다시 확인해주세요.";
+    isValidBoolean.value=true;
+  }
+}
+
+
+</script>
+
 <template>
   <div class="m-3">
     <div class="row mb-3">
@@ -13,13 +56,14 @@
         <h5>로그인</h5>
       </div>
       <div class="form-floating mb-3">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput"><i class="bi bi-envelope"></i> 메일주소</label>
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="loginUser.userId">
+        <label for="floatingInput"><i class="bi bi-envelope"></i>아이디</label>
       </div>
       <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword"><i class="bi bi-key"></i> 비밀번호</label>
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="loginUser.userPassword">
+        <label for="floatingPassword"><i class="bi bi-key"></i>비밀번호</label>
       </div>
+      <p style="color:red;" v-show="isValidBoolean">{{ isValid }}</p>
       <div class="container text-center">
         <div class="row mb-3">
           <div class="col-5 form-check form-switch small-text">
@@ -41,7 +85,7 @@
       <div class="col-2"></div>
       <div class="col-8">
         <div class="row">
-          <button type="button" class="btn BtnStyle2 d-flex col-12 mx-auto mb-3 justify-content-around">
+          <button type="button" class="btn BtnStyle2 d-flex col-12 mx-auto mb-3 justify-content-around" @click="login">
               <p></p>
               <p>로그인</p>
               <div><i class="bi bi-arrow-right-circle-fill" style="color: #FFCC00"></i></div>
@@ -73,26 +117,6 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter()
-
-const goIdSearch = function() {
-  router.push({ name: 'searchId'})
-}
-const goPasswordSearch = function() {
-  router.push({ name: 'searchPassword'})
-}
-const goSignUp = function() {
-  router.push({ name: 'signUp'})
-}
-
-const emailaddress = ref('');
-const password = ref('');
-
-</script>
 
 <style scoped>
 .small-text {
