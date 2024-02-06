@@ -1,6 +1,6 @@
 package com.ssafy.popcon.recommend.popbti.controller;
 
-import com.ssafy.popcon.recommend.popbti.dto.PopbtiDto;
+import com.ssafy.popcon.recommend.dto.RecommendDto;
 import com.ssafy.popcon.recommend.popbti.service.PopbtiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class PopbtiController {
 
     @GetMapping
     public ResponseEntity<?> resultList(@RequestParam int code) throws Exception {
-        List<PopbtiDto> popbtiDtos=popbtiService.findPopbti(code);
+        List<RecommendDto> popbtiDtos=popbtiService.findPopbti(code);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popbtiDtos);

@@ -1,6 +1,6 @@
 package com.ssafy.popcon.recommend.popbti.service;
 
-import com.ssafy.popcon.recommend.popbti.dto.PopbtiDto;
+import com.ssafy.popcon.recommend.dto.RecommendDto;
 import com.ssafy.popcon.recommend.popbti.mapper.PopbtiMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ public class PopbtiService {
 
     private final PopbtiMapper popbtiMapper;
 
-    public List<PopbtiDto> findPopbti(int code) throws Exception {
+    public List<RecommendDto> findPopbti(int code) throws Exception {
         return popbtiMapper.findPopbti(code);
     }
 }

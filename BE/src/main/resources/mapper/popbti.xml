@@ -3,14 +3,13 @@
 
 <mapper namespace="com.ssafy.popcon.recommend.popbti.mapper.PopbtiMapper">
 
-    <resultMap id="popbti" type="PopbtiDto">
+    <resultMap id="popbti" type="RecommendDto">
         <result column="popup_id" property="popupId"/>
         <result column="popup_name" property="popupName"/>
         <result column="preview_image" property="previewImage" /></resultMap>
 
 
     <select id="findPopbti" resultMap="popbti">
-
         select pb.popup_id, p.popup_name,
                (select popup_image_path from popup_image pi
                 where pi.popup_id=pb.popup_id order by pi.popup_image_id limit 1)
@@ -18,7 +17,6 @@
         from popbti pb join popup p on pb.popup_id=p.popup_id
         where mbti_no=#{code};
     </select>
-
 
 
 </mapper>
