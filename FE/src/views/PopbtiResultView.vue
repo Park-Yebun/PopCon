@@ -1,114 +1,35 @@
 <template>
-  <div class="container">
-    <section v-show="showMain" id="main" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-out': !showMain }">
-      <h3 class="pt-5">✨POPBTI로 알아보는 나의 팝업 취향✨</h3>
-      <div class="col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-        <img src="@/assets/images/pop-up-store.png" alt="mainImage" class="img-fluid">
-      </div>
-      <p>
-       POPBTI로 당신의 취향 저격 팝업을 찾아보세요!
-      </p>
-      <button @click="begin" type="button" class="mt-2 btn btn-outline-danger">시작하기</button>
-    </section>
-
-
-    <section v-show="showQna" id="qna" :class="{ 'fade-in': showQna, 'fade-out': !showQna }" >
-      <div class="status mx-auto mt-5">
-        <div class="statusBar">
-        </div>
-      </div>
-        <div class="qBox my-5 py-3 mx-auto">
-
-        </div>
-        <div class="answerBox">
-
-        </div>
-    </section>
-
-
-    <section v-show="showResult" id="result" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
+  <div>
+    <div class="container">
+    <section v-show="showResult" id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
       <h3 class="pt-5">당신의 결과는?!</h3>
       <div class="resultname">
-
+        <p> {{ infoList[mbtitype].name }}</p>
       </div>
       <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-       
+        <!-- <img src="@/assets/images/popbti-img/popbti-img-{{mbtitype}}.svg" alt="{{mbtitype}}" class="img-fluid"> -->
       </div>
       <div class="resultDesc">
-
+        <P>{{ infoList[mbtitype].desc }}</P>
       </div>
-      <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3">공유하기</button>
+      <button @click="moveHome" type="button" class="gohome mt-3 py-2 px-3">나도 참여하기</button>
     </section>
+
+  </div>
 
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter()
-
-const showMain = ref(true);
-const showQna = ref(false);
-const showResult = ref(false);
-const endPoint = 4;
-const select = [];
-// endPoint는 질문의 개수
-
-
-// meta tag
-const name = 'MyComponent';
-const metaInfo = {
-  title: 'My Page Title',
-  meta: [
-    { charset: 'utf-8'},
-    { name: 'viewport', content: 'width=device-width, initial-sacle=1'},
-    { name: 'author', content: 'wiese0630'},
-    { name: 'keywords', content: 'POPBTI'},
-    { name: 'description', content: 'POPBTI'},
-    
-    // SNS share
-    { property: 'og:url', content: 'https://popcon.netlify.app'},
-    { property: 'og:title', content: 'POPBTI 테스트'},
-    { property: 'og:type', content: 'website'},
-    { property: 'og:image', content: 'img/share.png'},
-    { property: 'og:description', content: 'POPBTI 테스트로 알아보는 팝업 취향'},
-  ],
-};
-
-
-
-const qnaList = [
-  {
-    q: '1. 핫하다는 팝업은 다 모여있는 성수에 가려는 당신, 누구와 같이 갈까??',
-    a: [
-      { answer: 'a. 같이는 무슨~ 내 취향저격 팝업만 골라서 갈래!! 혼자 가는게 편해!!', type: ['I'] },
-      { answer: 'b. 함께하면 행복이 N배! 다같이 모여서 인생네컷 찍고 맛집 뿌시자!!', type: ['E'] },
-    ]
-  },
-  {
-    q: '2. 약속 시간이 얼마 남지 않은 당신! 남은 시간 안에 둘 중 한군데만 방문할 수 있다면?? ',
-    a: [
-      { answer: 'a. 남는 건 사진뿐이야~ 사진이 잘 나오는 포토스팟이 많은 팝업!!', type: ['N'] },
-      { answer: 'b. 실용적인게 최고! 특이한 경험을 하거나 굿즈를 받을 수 있는 팝업!!', type: ['S'] },
-    ]
-  },
-  {
-    q: '3. 갖고싶었던 굿즈가 있어 N시간 줄 섰는데 내 눈앞에서 품절됐다!! 이때 당신의 반응은??',
-    a: [
-      { answer: 'a. 내가이것때문에새벽같이일어나서N시간동안줄서서기다렸는데품절이라니말도안돼내세상이무너졌어... 절망한다.', type: ['F'] },
-      { answer: 'b. 이거 재입고 되나요? 언제 되나요? 하루에 몇 개씩 입고되나요? 언제쯤 줄 서야 살 수 있어요? 질문한다.', type: ['T'] },
-    ]
-  },
-  {
-    q: '4. 가고 싶은 팝업이 예약 마감되어버리고 말았다. 남은 방법은 현장대기뿐! 당신의 선택은??',
-    a: [
-      { answer: 'a. 입장할 수 있을지 불확실하네 ㅠㅠ 그냥 다른 데 찾아보자! ', type: ['J'] },
-      { answer: 'b. 기다려보고 못들어가면 그때 가서 생각하지 뭐~ 일단 가보자고! ', type: ['P' ] },
-    ]
-  },
-]
+const moveHome = () => {
+  window.location.href = '/popbti';
+}
+const mbtitype = 0
+const mbtimatch = {'ISTJ':0, 'ISTP':1, 'ISFJ':2, 'ISFP':3,
+                    'INTJ':4, 'INTP':5, 'INFJ':6, 'INFP':7,
+                    'ESTJ':8, 'ESTP':9, 'ESFJ':10, 'ESFP':11,
+                    'ENTJ':12,'ENTP':13,'ENFJ':14, 'ENFP':15}
 
 const infoList = [
   {
@@ -177,142 +98,11 @@ const infoList = [
   },
 ]
 
-const setResult = () => {
-  let point = calResult();
-  const resultName = document.querySelector('.resultname');
-  resultName.innerHTML = infoList[point].name;
-
-  var resultImg = document.createElement('img');
-  const imgDiv = document.querySelector('#resultImg');
-  var imgURL = '@/assets/images/popbti-img/popbti-img-' + point + '.svg';
-  
-  console.log(imgURL)
-  resultImg.src = imgURL;
-  resultImg.alt = point;
-  resultImg.classList.add('img-fluid');
-  imgDiv.appendChild(resultImg);
-
-
-  const resultDesc = document.querySelector('.resultDesc');
-  resultDesc.innerHTML = infoList[point].desc;
-
-
-
-}
-
-const calResult = () => {
-  const mbti = [{0:'I', 1:'E'}, {0:'N', 1:'S'}, {0:'F', 1:'T'}, {0:'J', 1:'P'}]
-  var result = ''
-  result = mbti[0][select[0]] + mbti[1][select[1]] + mbti[2][select[2]] + mbti[3][select[3]]
-  // console.log(result)
-  // result 값으로 mbti 타입 나옴 ok
-  const mbtimatch = {'ISTJ':0, 'ISTP':1, 'ISFJ':2, 'ISFP':3,
-                    'INTJ':4, 'INTP':5, 'INFJ':6, 'INFP':7,
-                    'ESTJ':8, 'ESTP':9, 'ESFJ':10, 'ESFP':11,
-                    'ENTJ':12,'ENTP':13,'ENFJ':14, 'ENFP':15}
-  return mbtimatch[result];  
-}
-
-const goResult = () => {
-  showQna.value = false;
-  showResult.value = true;
-  // console.log(select);
-  setResult();
-
-}
- 
-const addAnswer = (answerText, qIdx, idx) => {
-  var a = document.querySelector('.answerBox');
-  var answer = document.createElement('button');
-  answer.classList.add('my-3');
-  answer.classList.add('py-3');
-  answer.classList.add('mx-auto');
-  answer.classList.add('answerList');
-  answer.classList.add('fade-in');
-
-  a.appendChild(answer);
-  answer.innerHTML = answerText;
-  answer.addEventListener("click", function(){
-    var children = document.querySelectorAll('.answerList');
-    for(let i = 0; i < children.length; i++){
-      children[i].disabled = true;
-      children[i].style.WebkitAnimation = "fadeOut 0.5s";
-      children[i].style.animation = "fadeOut 0.5s";
-    }
-    setTimeout(() => {
-      select[qIdx] = idx;
-      for(let i = 0; i < children.length; i++){
-        children[i].style.display = 'none';
-      }
-      goNext(++qIdx);
-    },450)
-  }, false);
-}
-
-const goNext = (qIdx) => {
-  if(qIdx === endPoint){
-    goResult();
-    calResult();
-    return;
-  }
-
-  var q = document.querySelector('.qBox');
-  q.innerHTML = qnaList[qIdx].q;
-  for(let i in qnaList[qIdx].a){
-    addAnswer(qnaList[qIdx].a[i].answer, qIdx, i);
-  }
-  var status = document.querySelector('.statusBar');
-  status.style.width = (100/endPoint) * (qIdx+1) + '%';
-}
-
-const begin = () => {
-  showMain.value = false;
-  showQna.value = true;
-  let qIdx = 0;
-  goNext(qIdx);
-};
-
-const url = 'https://popcon.netlify.app'
-
-const setShare = () => {
-  var resultImg = document.querySelector('#resultImg');
-  var resultAlt = resultImg.firstElementChild.alt;
-  const shareTitle = 'POPBTI 테스트 결과'
-  const shareDes = infoList[resultAlt].name;
-  const shareImage = url + 'img/image-' + resultAlt + '.png';
-  const shareURL = url + 'page/result-' + resultAlt + '.html';
-  Kakao.Share.sendDefault({
-    objectType: 'feed',
-    content: {
-      title: shareTitle,
-      description: shareDes,
-      imageUrl: shareImage, 
-      link: {
-        mobileWebUrl: shareURL,
-        webUrl: shareURL,
-      },
-    },
-    buttons: [
-      {
-        title: '결과확인하기',
-        link: {
-          mobileWebUrl: shareURL,
-          webUrl: shareURL,
-        },
-      },
-    ]
-  });
-}
-
 
 </script>
 
 <style scoped>
-.container {
-  background-color: pink;
-}
-
-#main {
+#shareResult {
   background-color: whitesmoke;
   width: 80%;
   text-align: center;
@@ -320,102 +110,17 @@ const setShare = () => {
   opacity: 1;
 }
 
-#result {
-  background-color: whitesmoke;
-  width: 80%;
-  text-align: center;
-  border-radius: 20px;
-  opacity: 1;
-}
-.resultname{
-  font-size: 26px;
-}
-.resultDesc{
-  font-size: 20px;
-}
-.kakao{
+.goHome{
   color: white;
-  background-color: #FEE500;
+  background-color: pink;
   font-size: 20px;
   border: 0px;
   border-radius: 20px;
 
 }
 
-.kakao:hover, .kakao:focus{
+.goHome:hover, .goHome:focus{
   background-color: whitesmoke;
-  color: #FEE500;
-  width: 80%;
-
+  color: pink;
 }
-.fade-in {
-  animation: fadeIn 0.5s;
-  
-}
-
-.fade-out {
-  animation: fadeOut 0.5s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0;}
-  to { opacity: 1;}
-}
-
-@keyframes fadeOut {
-  from { opacity: 1;}
-  to { opacity: 0;}
-}
-
-@-webkit-keyframes fadeIn {
-  from { opacity: 0;}
-  to { opacity: 1;}
-}
-
-@-webkit-keyframes fadeOut {
-  from { opacity: 1;}
-  to { opacity: 0;}
-}
-
-
-.qBox{
-  background-color: whitesmoke;
-  text-align: center;
-  border-radius: 20px;
-  width: 80%;
-}
-
-.answerList{
-  background-color: whitesmoke;
-  border-radius: 20px;
-  display: block;
-  width: 100%;
-  border: 0px;
-  width: 80%;
-}
-
-.answerList:hover, .answerList:focus{
-  background-color: pink;
-  color: whitesmoke;
-  width: 80%;
-
-}
-
-.status{
-  height: 20px;
-  width: 80%;
-  background-color: white;
-  border-radius: 20px;
-}
-
-.statusBar{
-  height: 100%;
-  border-radius: 20px;
-  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#febbbb+0,fe9090+45,ff5c5c+100 */
-  background: linear-gradient(to bottom,  #febbbb 0%,#fe9090 45%,#ff5c5c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
-}
-
-
-
 </style>

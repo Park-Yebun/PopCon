@@ -186,7 +186,31 @@ const router = createRouter({
       name: 'reportreview',
       component: ReportReviewPageViewVue
     },
-
+    {
+      path: '/searchId',
+      name: 'searchId',
+      component: SearchIdViewVue
+    },
+    {
+      path: '/searchPassword',
+      name: 'searchPassword',
+      component: SearchPasswordViewVue
+    },
+    {
+      path: '/signUp',
+      name: 'signUp',
+      component: SignUpCheckViewVue
+    },
+    {
+      path: '/signUpCompany',
+      name: 'signUpCompany',
+      component: SignUpCompanyViewVue
+    },
+    {
+      path: '/signUpMember',
+      name: 'signUpMember',
+      component: SignUpMemberViewVue
+    },
     {
       path: '/review',
       name: 'review',
