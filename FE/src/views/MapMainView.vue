@@ -172,7 +172,6 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import 'vue3-colorpicker/style.css'
 import { ref } from 'vue'
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import "@webzlodimir/vue-bottom-sheet/dist/style.css";
@@ -263,9 +262,8 @@ export default {
 .scroll--element + .scroll--element {margin-left:15px;}
 
 .map {
-  width: 100vh;
-  height: 100vh;
-  margin: 0;
+  width: 360px;
+  height: 800px;
   z-index: 0;
 }
 .category-btn,
