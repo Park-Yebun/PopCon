@@ -278,6 +278,7 @@
             and c.category_name=#{category}
         </if>
         </where>
+        group by p.popup_id
     </select>
 
     <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->
