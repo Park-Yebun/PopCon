@@ -44,7 +44,9 @@ onMounted(async () => {
       popup.value=data;
       popup.value.popupOperating = popup.value.popupOperating.replace(/\n/g, '<br>');
       popup.value.popupContent = popup.value.popupContent.replace(/\n/g, '<br>');
-      popup.value.popupNotice=popup.value.popupNotice.replace(/\n/g, '<br>');
+      if(popup.value.popupNotice != null) {
+        popup.value.popupNotice=popup.value.popupNotice.replace(/\n/g, '<br>');
+      }
       reviewSummary.value=popup.value.reviewTagSummary.reviewSummary;
       
       // 리뷰 데이터 최신순 9개만 가져오기 가져오기 
