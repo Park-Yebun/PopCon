@@ -1,30 +1,59 @@
 
 <template>
   <div class="container">
-    <RouterView class="router-view"/>
+    <RouterView class="router-view" />
     <div title="알림검색 상단바" class="topbar">
-      <img @click="goSearch" class="search-button" src="@/assets/images/searchbutton.png" alt="검색버튼">
-      <img class="notification-button" src="@/assets/images/notification_false.png" alt="알림버튼">
+      <img
+        @click="goSearch"
+        class="search-button"
+        src="@/assets/images/searchbutton.png"
+        alt="검색버튼"
+      />
+      <img
+        class="notification-button"
+        src="@/assets/images/notification_false.png"
+        alt="알림버튼"
+      />
     </div>
     <nav class="navbar">
       <div class="container-fluid">
         <div class="nav-item">
-          <img class="nav-icon" src="@/assets/images/nav_home.png" alt="홈 아이콘">
+          <img
+            class="nav-icon"
+            src="@/assets/images/nav_home.png"
+            alt="홈 아이콘"
+          />
           <div class="nav-text">Home</div>
         </div>
         <div class="nav-item">
-          <img class="nav-icon" src="@/assets/images/nav_map.png" alt="지도 아이콘">
+          <img
+            class="nav-icon"
+            src="@/assets/images/nav_map.png"
+            alt="지도 아이콘"
+          />
           <div class="nav-text">Map</div>
         </div>
         <div class="nav-item">
-          <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
+          <img
+            class="nav-icon-camera"
+            src="@/assets/images/nav_camera.png"
+            alt="카메라 아이콘"
+          />
         </div>
         <div class="nav-item">
-          <img class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
+          <img
+            class="nav-icon"
+            src="@/assets/images/nav_rec.png"
+            alt="추천 아이콘"
+          />
           <div class="nav-text">Rec</div>
         </div>
         <div class="nav-item">
-          <img class="nav-icon" src="@/assets/images/nav_others.png" alt="더보기 아이콘">
+          <img
+            class="nav-icon"
+            src="@/assets/images/nav_others.png"
+            alt="더보기 아이콘"
+          />
           <div class="nav-text">Others</div>
         </div>
       </div>
@@ -35,10 +64,9 @@
 <style scoped>
 .container {
   max-width: 360px;
-  position:relative;
+  position: relative;
   margin-bottom: 88px; /* navbar의 높이만큼 margin-bottom 추가 */
 }
-
 
 .navbar {
   width: 360px;
@@ -61,7 +89,7 @@
   justify-content: center;
 }
 .nav-text {
-  color: #2C3550;
+  color: #2c3550;
   text-align: center;
   font-family: ABeeZee;
   font-size: 12px;
@@ -95,28 +123,27 @@
 </style>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { RouterLink, RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
-onMounted(()=>{
-
+onMounted(() => {
   navigator.serviceWorker
-        .register("registerSW.js")
-        .then(function (registration) {
-          console.log("Service worker successfully registered.");
-          return registration;
-        })
-        .catch(function (err) {
-          console.error("Unable to register service worker.", err);
-        });
-})
+    .register("registerSW.js")
+    .then(function (registration) {
+      console.log("Service worker successfully registered.");
+      return registration;
+    })
+    .catch(function (err) {
+      console.error("Unable to register service worker.", err);
+    });
+});
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
-const goSearch = function() {
-  router.push({ name: 'search'})
-}
+const goSearch = function () {
+  router.push({ name: "search" });
+};
 </script>
