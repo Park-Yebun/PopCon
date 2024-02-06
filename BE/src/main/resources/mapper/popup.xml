@@ -175,13 +175,15 @@
 
     <!-- 00대 00이 많이 방문했어요 값 가져오기  -->
     <select id="getPopupTotal" parameterType="int" resultType="PopupTotalDto">
-        SELECT
-            TRUNCATE(AVG(review.review_score), 1) AS popupStar,
-            CASE MAX(user.user_sex)
-                WHEN 'M' THEN '남성이'
-                WHEN 'F' THEN '여성이'
-                ELSE '남녀가'
-                END AS popupReviewSex,
+        select
+            truncate(avg(review.review_score), 1) as popupStar,
+            case
+                when (count(case when user.user_sex='F' then 1 end) <![CDATA[>]]> count(case when user.user_sex='M' then 1 end))
+                    then '여성이'
+                when (count(case when user.user_sex='F' then 1 end) <![CDATA[<]]> count(case when user.user_sex='M' then 1 end))
+                    then '남성이'
+                else '남녀가' end
+            as popupReviewSex,
             (
                 SELECT
                     *
@@ -189,19 +191,16 @@
                     (
                         SELECT
                             CASE
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 10 AND 10 THEN '10대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 20 AND 29 THEN '20대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 30 AND 39 THEN '30대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 40 AND 49 THEN '40대'
-                                ELSE '50대이상'
-                                END AS reviewAge
-                        FROM
-                            popup
-                                JOIN
-                            review ON popup.popup_id = review.popup_id
-                                JOIN
-                            user ON review.user_id = user.user_id
-                        WHERE
-                            popup.popup_id = #{popupId}
+                                ELSE ''
+                            END AS reviewAge
+                        FROM popup
+                            JOIN review ON popup.popup_id = review.popup_id
+                            JOIN user ON review.user_id = user.user_id
+                        WHERE popup.popup_id = #{popupId}
                     ) AS substituted_values
                 GROUP BY reviewAge
                 ORDER BY COUNT(*) DESC
