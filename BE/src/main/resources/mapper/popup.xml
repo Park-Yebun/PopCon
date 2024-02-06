@@ -282,38 +282,30 @@
 
     <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->
     <select id="getPopupImageGood3" resultMap="popupImageResultMap">
-        <![CDATA[
-        SELECT pi.popup_image_path, pi.popup_id
-        FROM (
-                 SELECT pt.popup_id, pt.popup_like
-                 FROM popup pt
-                 ORDER BY pt.popup_like DESC
-                 LIMIT 3
-             ) top_popups
-                 JOIN popup_image pi ON top_popups.popup_id = pi.popup_id
-        ORDER BY top_popups.popup_like desc;
-        ]]>
+        select p.popup_id,
+               (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+                order by popup_image.popup_image_id limit 1) as popup_image_path
+        from popup p order by p.popup_like desc limit 3;
     </select>
 
     <!-- 마감일자가 얼마 안남은 이미지, 이름, 마감일을 가져오는 SQL -->
     <select id="getPopupEnd" resultMap="popupResultMap">
-        <![CDATA[
-            SELECT
-                pt.popup_name,
-                pt.popup_end AS popup_end,
-                pt.popup_id,
-                pi.popup_image_path AS preview_image_path
-            FROM
-                popcon.popup pt
-                    JOIN
-                popcon.popup_image pi ON pt.popup_id = pi.popup_id
-            WHERE
-                pt.popup_end between curdate() and DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-            GROUP BY
-                pt.popup_id
-            ORDER BY
-                pt.popup_id;
-        ]]>
+        SELECT
+            pt.popup_name,
+            pt.popup_end AS popup_end,
+            pt.popup_id,
+            (select popup_image_path from popup_image where popup_image.popup_id=pt.popup_id
+             order by popup_image.popup_image_id limit 1) as preview_image_path
+        FROM
+            popup pt
+            JOIN
+            popup_image pi ON pt.popup_id = pi.popup_id
+        WHERE
+            pt.popup_end between curdate() and DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+        GROUP BY
+            pt.popup_id
+        ORDER BY
+            pt.popup_id;
     </select>
 
 </mapper>
