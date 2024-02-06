@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.recommend.ai.mapper.AiMapper">
+
+    <resultMap id="ai" type="RecommendDto">
+        <result column="popup_id" property="popupId"/>
+        <result column="popup_name" property="popupName"/>
+        <result column="preview_image" property="previewImage" /></resultMap>
+
+    <select id="findAi" parameterType="string" resultMap="ai">
+        select ai.popup_id, p.popup_name,
+               (select popup_image_path from popup_image pi
+                where pi.popup_id=ai.popup_id order by pi.popup_image_id limit 1)
+                   as preview_image
+        from ai_popup ai join popup p on ai.popup_id=p.popup_id
+        where ai_class_name=#{className};
+    </select>
+
+    <insert id="saveAiResult" parameterType="String">
+        insert into ai_result
+        (user_id,ai_class_name) values (#{userId},#{className});
+    </insert>
+
+    <select id="findUserAiResult" parameterType="String" resultMap="ai">
+        select p.popup_id, p.popup_name, (
+            select popup_image_path from popup_image pi
+            where pi.popup_id=p.popup_id order by pi.popup_image_id limit 1
+        ) as preview_image from popup p
+        where p.popup_id in (
+            select popup_id from ai_popup
+            where ai_class_name = (
+                select ai_class_name from ai_result
+                where user_id=#{userId}
+            )
+        )
+    </select>
+
+
+
+</mapper>
