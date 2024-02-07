@@ -1,10 +1,8 @@
 package com.ssafy.popcon.map.controller;
 
 
-import com.ssafy.popcon.map.dto.TempMapDto;
+import com.ssafy.popcon.map.dto.MapDto;
 import com.ssafy.popcon.map.service.MapNearbySearchService;
-import com.ssafy.popcon.popup.dto.PopupDto;
-import com.ssafy.popcon.user.controller.UserController;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +24,8 @@ public class MapController {
     @GetMapping("/nearby")
     public ResponseEntity<?> mapNearbyList(@RequestParam("lat") double latitude, @RequestParam("lng") double longitude) throws Exception{
 
-        List<TempMapDto> popups=mapNearbySearchService.findNearbyPopups(latitude,longitude);
-
+        List<MapDto> popups=mapNearbySearchService.findNearbyPopups(latitude,longitude);
+        System.out.println(popups.get(0));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popups);
