@@ -20,11 +20,16 @@ function getPopupReviewsTop9(popupId, success, fail) {
     local.get(`${url}/${popupId}/reviews`).then(success).catch(fail)
 }
 
+// 통합 검색 팝업 조회 
+function getSearchedPopup(params, success,fail) {
+    local.get(`${url}/popups/search`, params).then(success).catch(fail)
+}
+
 // 홈
 function home(success, fail) {
     local.get('/home').then(success).catch(fail);
 }
 
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, home
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home
 };

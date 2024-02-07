@@ -14,6 +14,7 @@ import 'vue3-geolocation/dist/vue3-geolocation.js'
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage  } from "firebase/messaging";
+import axios from 'axios'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -55,6 +56,8 @@ import { getMessaging, getToken, onMessage  } from "firebase/messaging";
   const analytics = getAnalytics(app1);
   
   const messaging = getMessaging();
+
+  axios.defaults.baseURL = "http://localhost:8080"
   
   onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);

@@ -1,143 +1,48 @@
 <template>
     <div>
         <div title="날짜 옵션">
-          <div class="date-title">날짜</div>
-            <div class="button-group">
-                <button type="button" class="btn btn-outline-secondary"
-                        data-bs-toggle="button"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">오늘</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">+7일</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">+2주</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">직접 선택</button>
-            </div>
+          <div class="date title">날짜
+            <ul class="button-group">
+                <li class="">오늘</li>
+                <li id="date" class="">+7일</li>
+                <li id="date" class="">+2주</li>
+                <li id="date" class="">직접 선택</li>
+            </ul>
+          </div>
         </div>
         <div title="지역 옵션">
-            <div class="region-title">지역</div>
-            <div class="button-group">
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">전체</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">서울특별시</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">경기도</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">광주광역시</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">인천광역시</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">강원도</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">부산광역시</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">대전광역시</button>
+            <div class="region title">지역
+                <ul class="button-group">
+                    <li class="region select">전체</li>
+                    <li class="region">서울특별시</li>
+                    <li class="region">광주광역시</li>
+                    <li class="region">경기도</li>
+                    <li class="region">대구광역시</li>
+                </ul>
             </div>
         </div>
         <div title="운영상태 옵션">
-            <div class="status-title">운영상태</div>
-            <div class="button-group">
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">진행중</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">오픈 예정</button>
-                <button type="button" class="btn btn-outline-secondary"
-                        style="padding-inline: 1.5rem;
-                        --bs-btn-padding-y: 0.5rem;
-                        --bs-btn-line-height: 28.5px;
-                        border-radius: 10px;">종료</button>
+            <div class="status title">운영상태
+                <ul class="button-group">
+                    <li class="">진행중</li>
+                    <li class="">오픈 예정</li>
+                    <li class="">종료</li>
+                </ul>
             </div>
         </div>
         <div title="카테고리 옵션">
             <div class="search-category-title">카테고리</div>
-            <div class="button-group">
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_beauty.png" alt="패션/뷰티 아이콘">
-                    <div class="search-category-text">패션/뷰티</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_foods.png" alt="식음료 아이콘">
-                    <div class="search-category-text">식음료</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_content.png" alt="콘텐츠 아이콘">
-                    <div class="search-category-text">콘텐츠</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_hobby.png" alt="취미/여가 아이콘">
-                    <div class="search-category-text">취미/여가</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_finance.png" alt="금융 아이콘">
-                    <div class="search-category-text">금융</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_entertain.png" alt="연예 아이콘">
-                    <div class="search-category-text">연예</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_digital.png" alt="가전/디지털 아이콘">
-                    <div class="search-category-text">가전/디지털</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_living.png" alt="리빙 아이콘">
-                    <div class="search-category-text">리빙</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_game.png" alt="게임 아이콘">
-                    <div class="search-category-text">게임</div>
-                </div>
-                <div class="search-category-option">
-                    <img class="search-category-img" src="@/assets/images/option_character.png" alt="캐릭터 아이콘">
-                    <div class="search-category-text">캐릭터</div>
-                </div>
-            </div>
+                <ul class="button-group">
+                    <div v-for="(key, value) in categoryGroup" class="search-category-option">
+                        <img v-if="category !== ''" @click="selectCategory(key)" class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, key) + '_a.png'" :alt="value + ' 아이콘'">
+                        <img v-if="category == key" @click="selectCategory(key)" class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, key) + '_a.png'" :alt="value + ' 아이콘'">
+                        <img v-else class="search-category-img" :src="'/src/assets/images/option_' + value + '.png'" :alt="key + ' 아이콘'">
+                        <div class="search-category-text">{{ key }}</div>
+                    </div>
+                </ul>
         </div>
         <div title="팝업스토어 정렬">
-            <div class="dropdown-button">
+            <div class="dropdown-li">
                 <select name="" id="">
                     <option value="">최신순</option>
                     <option value="">리뷰 많은순</option>
@@ -147,44 +52,12 @@
                 </select>
             </div>
             <div class="search-popup-group">
-                <div class="search-popup">
-                    <img class="search-popup-img" src="@/assets/images/popup_01.png" alt="정렬된 팝업 목록">
+                <div v-for="popup in popupList" :key="popup" class="search-popup">
+                    <img class="search-popup-img" :src= popup.previewImagePath alt="정렬된 팝업 목록">
                     <div class="search-popup-info">
-                        <div class="search-popup-info-title">도구리 생일파티 in 성수</div>
-                        <div class="search-popup-info-content">23.11.03 - 24.02.11</div>
-                        <div class="search-popup-info-content">서울특별시 성동구 서울숲2길 19-8 1층</div>
-                    </div>
-                </div>
-                <div class="search-popup">
-                    <img class="search-popup-img" src="@/assets/images/popup_01.png" alt="정렬된 팝업 목록">
-                    <div class="search-popup-info">
-                        <div class="search-popup-info-title">도구리 생일파티 in 성수</div>
-                        <div class="search-popup-info-content">23.11.03 - 24.02.11</div>
-                        <div class="search-popup-info-content">서울특별시 성동구 서울숲2길 19-8 1층</div>
-                    </div>
-                </div>
-                <div class="search-popup">
-                    <img class="search-popup-img" src="@/assets/images/popup_01.png" alt="정렬된 팝업 목록">
-                    <div class="search-popup-info">
-                        <div class="search-popup-info-title">도구리 생일파티 in 성수</div>
-                        <div class="search-popup-info-content">23.11.03 - 24.02.11</div>
-                        <div class="search-popup-info-content">서울특별시 성동구 서울숲2길 19-8 1층</div>
-                    </div>
-                </div>
-                <div class="search-popup">
-                    <img class="search-popup-img" src="@/assets/images/popup_01.png" alt="정렬된 팝업 목록">
-                    <div class="search-popup-info">
-                        <div class="search-popup-info-title">도구리 생일파티 in 성수</div>
-                        <div class="search-popup-info-content">23.11.03 - 24.02.11</div>
-                        <div class="search-popup-info-content">서울특별시 성동구 서울숲2길 19-8 1층</div>
-                    </div>
-                </div>
-                <div class="search-popup">
-                    <img class="search-popup-img" src="@/assets/images/popup_01.png" alt="정렬된 팝업 목록">
-                    <div class="search-popup-info">
-                        <div class="search-popup-info-title">도구리 생일파티 in 성수</div>
-                        <div class="search-popup-info-content">23.11.03 - 24.02.11</div>
-                        <div class="search-popup-info-content">서울특별시 성동구 서울숲2길 19-8 1층</div>
+                        <div class="search-popup-info-title">{{ popup.popupName}}</div>
+                        <div class="search-popup-info-content">{{ popup.startDate }} ~ {{ popup.endDate }}</div>
+                        <div class="search-popup-info-content">{{ popup.popupLocation }}</div>
                     </div>
                 </div>
             </div>
@@ -194,11 +67,90 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-
+import { ref, onMounted } from 'vue';
+import { getSearchedPopup } from '@/api/popup';
+import { useCounterStore } from '@/stores/counter';
+import axios from 'axios';
+// import { onMounted } from 'vue';
 const route = useRoute()
+const store = useCounterStore()
+
+
+// 쿼리 매개변수로 리스트 가져오기 //
+
+//매개변수
+const startDate = ref(null)
+const endDate = ref(null)
+const area = ref(null)
+const status = ref(null)
+
+// 메인에서 클릭한 카테고리 옵션 값 변수에 저장하기
 const category = route.params.category
 
+// 팝업 리스트 담아둘 변수
+const popupList = ref({})
 
+
+// 카테고리 버튼 //
+const categoryGroup = ref({
+    'beauty': '패션뷰티',
+    'foods': '식음료', 
+    'content': '콘텐츠', 
+    'hobby': '취미여가',
+    'finance': '금융',
+    'entertain': '연예',
+    'digital': '가전/디지털',
+    'living': '리빙',
+    'game': '게임',
+    'character': '캐릭터'})
+
+// 클릭한 옵션값 감시
+const selectedRegion = document.getElementsByClassName('region')
+console.log(selectedRegion)
+
+for (let i = 0; i < selectedRegion.length; i++) {
+    selectedRegion[i].addEventListener('click', function(event) {
+        // 이전에 선택된 요소의 스타일 초기화
+        const previouslySelected = document.querySelector('.select');
+        if (previouslySelected) {
+            previouslySelected.classList.remove('select');
+        }
+        // 현재 클릭한 요소를 선택 상태로 변경
+        console.log(this)
+        this.classList.add('select');
+        })
+    }
+
+const selectCategory = function(key) {
+    if (category === key) {
+        category == ''
+    }
+    category = key
+}
+
+const getKeyByValue = function(obj, value) {
+      return Object.keys(obj).find(key => obj[key] === value)
+    }
+
+
+onMounted(async () => {
+    await axios.get('/popups/search',{params : {
+        startDate: startDate.value,
+        endDate: endDate.value,
+        area: area.value,
+        status: status.value,
+        category
+    }})
+        .then((response) => {
+          popupList.value = response.data
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    
+    
+
+})
 </script>
 
 <style scoped>
@@ -248,36 +200,49 @@ const category = route.params.category
 
 
 .button-group {
+    list-style: none;
     margin-top: 5px;
     margin-left: 28px;
     margin-right: 28px;
 
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: flex-start;
+    border-bottom: 1px solid #212121;
+    word-break: keep-all;
 
     /* 가로 스크롤 설정 */
     overflow-x: scroll;
     white-space: nowrap;
 }
 
-button {
-    font-size: 15px;
-    font-family: Inter;
-    font-weight: 400;
-    line-height: 25px;
-    word-wrap: break-word;
+.title>ul>li {
+    width: 100%;
+    white-space: nowrap;
+    border: 1px solid #E6E6E6;
+    border-radius: 18px;
+    padding: 8px 22px;
+    padding-inline: 1.5rem;
+    background: none;
+    font-size: 14px;
+    color: #807A7A;
 }
 
-button + button {
+li + li {
     margin-left: 12px;
 }
 
+.select {
+    background: var(--4, #616266);
+    color: #FFF;
+}
+
 /* 스크롤 안보이게 숨기기 */
-.button-group{
+.button-group {
    -ms-overflow-style: none;
 }
-.button-group::-webkit-scrollbar{
-  display:none;
+.button-group::-webkit-scrollbar {
+  display: none;
 }
 /*  */
 
@@ -306,7 +271,7 @@ button + button {
 
 
 /* 정렬 결과 */
-.dropdown-button {
+.dropdown-li {
     margin-top: 48.97px;
     margin-left: 36px;
 }

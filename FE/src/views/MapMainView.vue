@@ -179,8 +179,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { ref } from 'vue'
-import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import "@webzlodimir/vue-bottom-sheet/dist/style.css";
+// import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
+// import "@webzlodimir/vue-bottom-sheet/dist/style.css";
 
 const overlay = ref(true)
 const maxWidth = ref(360)

@@ -17,20 +17,12 @@
     </div>
     <nav class="navbar">
       <div class="container-fluid">
-        <div class="nav-item">
-          <img
-            class="nav-icon"
-            src="@/assets/images/nav_home.png"
-            alt="홈 아이콘"
-          />
+        <div @click="goHome" class="nav-item">
+          <img class="nav-icon" src="@/assets/images/nav_home.png" alt="홈 아이콘">
           <div class="nav-text">Home</div>
         </div>
-        <div class="nav-item">
-          <img
-            class="nav-icon"
-            src="@/assets/images/nav_map.png"
-            alt="지도 아이콘"
-          />
+        <div @click="goMap" class="nav-item">
+          <img class="nav-icon" src="@/assets/images/nav_map.png" alt="지도 아이콘">
           <div class="nav-text">Map</div>
         </div>
         <div class="nav-item">
@@ -40,20 +32,12 @@
             alt="카메라 아이콘"
           />
         </div>
-        <div class="nav-item">
-          <img
-            class="nav-icon"
-            src="@/assets/images/nav_rec.png"
-            alt="추천 아이콘"
-          />
+        <div @click="goRec" class="nav-item">
+          <img class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
           <div class="nav-text">Rec</div>
         </div>
-        <div class="nav-item">
-          <img
-            class="nav-icon"
-            src="@/assets/images/nav_others.png"
-            alt="더보기 아이콘"
-          />
+        <div @click="goOthers" class="nav-item">
+          <img class="nav-icon" src="@/assets/images/nav_others.png" alt="더보기 아이콘">
           <div class="nav-text">Others</div>
         </div>
       </div>
@@ -123,11 +107,13 @@
 </style>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink, RouterView } from 'vue-router'
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCounterStore } from '@/stores/counter'
 
-const router = useRouter();
+const router = useRouter()
+const store = useCounterStore()
 
 onMounted(() => {
   navigator.serviceWorker
@@ -143,7 +129,35 @@ onMounted(() => {
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
-const goSearch = function () {
-  router.push({ name: "search" });
-};
+const goSearch = function() {
+  router.push({ name: 'search', params: {'category': undefined}})
+}
+
+const goHome = function() {
+  router.push({name : 'home'})
+}
+
+const goMap = function() {
+  router.push({name : 'map'})
+}
+
+const goRec = function() {
+  router.push({name : 'recommend'})
+}
+
+const goOthers = function() {
+  // // 만약 현재 로그인한 유저가 개인회원이라면
+  // if (store.modifyUser.userType == "GENERAL") {
+  //   router.push({name : 'other-member'})
+  // }
+  // // 만약 현재 로그인한 유저가 기업회원이라면
+  // else if (store.modifyUser.userType == "CORP") {
+  //   router.push({name : 'other-corporate'})
+  // }
+  // // 만약 현재 로그인한 유저가 비회원이라면
+  // else {
+    
+  // }
+  router.push({name : 'other-member'})
+}
 </script>

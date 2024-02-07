@@ -137,35 +137,29 @@ function openGallery() {
       </div>
     </div>
   </div>
-  <!-- 마감임박 팝업스토어 리스트 -->
-  <div class="deadline-container">
-    <div class="deadline-text-group">
-      <h5
-        style="
-          opacity: 0.84;
-          font-size: 16px;
-          font-weight: 800;
-          line-height: 30px;
-          word-wrap: break-word;
-        "
-      >
-        마감임박
-      </h5>
-      <!-- <div
-        href="#"
-        style="
-          width: 100%;
-          height: 100%;
-          text-align: right;
-          color: #747688;
-          font-size: 13px;
-          font-weight: 400;
-          line-height: 23px;
-          word-wrap: break-word;
-        "
-      >
-        더보기
-      </div> -->
+<!-- 마감임박 팝업스토어 리스트 -->
+<div class="deadline-container">
+  <div class="deadline-text-group">
+    <h5 style="opacity: 0.84;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 30px;
+        word-break: keep-all;">마감임박</h5>
+    <div href="#"
+        style="width: 100%;
+        height: 100%;
+        text-align:right;
+        color: #747688;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 23px;
+        word-wrap: break-word">더보기</div>
+  </div>
+  <div title="마감임박 팝업리스트" class="deadline-popup-group">
+    <div v-for="popup in popupend" class="deadline-popup">
+      <img :src= "popup.previewImagePath" class="deadline-popup-img" :alt="popup.popupName + '사진'">
+      <h5 class="deadline-popup-titdeadline-popuple">{{ popup.popupName }}</h5>
+
     </div>
     <div title="마감임박 팝업리스트" class="deadline-popup-group">
       <template v-for="(popup, key) in popupend">
@@ -182,12 +176,6 @@ function openGallery() {
         </div>
       </template>
     </div>
-  </div>
-
-  <!-- 임시버튼 -->
-  <div>
-    <button @click="getLocaion()" id="find-me">내 위치 보기</button> {{ lat }},
-    {{ lng }}
   </div>
 
   <!-- 카테고리 -->
@@ -278,6 +266,68 @@ function openGallery() {
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { compileScript } from 'vue/compiler-sfc';
+
+const router = useRouter()
+
+const popupend = ref({})
+
+// 버튼 클릭하면 통합검색 링크 바로가기
+// 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
+const goSearch = function(categoryName) {
+  router.push({ name: 'search', params: {'category': categoryName}})
+}
+
+onMounted(async () => {
+  // axios({
+  //   method: 'get',
+  //   url: `http://localhost:8080/popups/search?startDa&endDate=~~&area=~~&status=~~&category=~ `,
+  //   data: {
+  //     title: threadTitle.value,
+  //     content: threadContent.value,
+  //     user: store.userId,
+  //     review: reviewId.value
+  //   }
+  // })
+  // .then((response) => {
+  //   console.log('타래 작성 완료')
+  //   router.push({ name: 'ThreadListPage', params: { reviewId: reviewId.value } })
+  // })
+  // .catch((error) => {
+  //   console.log('타래 작성 실패!')
+  // })
+
+  // 마감임박 리스트 가져오기
+  // 3일 뒤 날짜를 가져오는 코드
+  const date = new Date()
+  date.setDate(date.getDate() + 3)
+  const year = date.getFullYear()
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const day = ('0' + (date.getDate())).slice(-2)
+  const endDate = `${year}-${month}-${day}`
+  console.log(endDate)
+
+  axios.get('/popups/search',{params : {
+        startDate: null,
+        endDate: endDate,
+        area: null,
+        status: "진행중",
+        category: null,
+    }})
+        .then((response) => {
+          popupend.value = response.data
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+
+})
+</script>
 
 <style scoped>
 /* 이미지랑 캐러셀 세로 사이즈 통일(전체 길이의 약 1/3) */
