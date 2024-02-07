@@ -3,7 +3,6 @@
 
 <mapper namespace="com.ssafy.popcon.popup.mapper.PopupMapper">
 
-
     <!-- POPUP TABLE -->
     <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
         <result column="popup_id" property="popupId"/>
@@ -17,7 +16,7 @@
         <result column="popup_event" property="popupEvent"/>
         <result column="popup_view" property="popupView"/>
         <result column="popup_car" property="popupCar"/>
-        <result column="popup_entryfee" property="popupEntryfee"/>
+        <result column="popup_entryfee" property="popupEntryFee"/>
         <result column="popup_wifi" property="popupWifi"/>
         <result column="popup_eat" property="popupEat"/>
         <result column="popup_site" property="popupSite"/>
@@ -78,6 +77,15 @@
         <result property="reviewGift" column="reviewGift" />
     </resultMap>
 
+    <resultMap id="popupSearchDto" type="PopupSearchDto">
+        <result property="popupId" column="popup_id" />
+        <result property="previewImagePath" column="preview_image_path"/>
+        <result property="popupName" column="popup_name"/>
+        <result property="popupStart" column="popup_start"/>
+        <result property="popupEnd" column="popup_end" />
+        <result property="popupLocation" column="popup_location" />
+    </resultMap>
+
     <!-- 모든 팝업 정보를 가져오는 SQL문 -->
     <select id="getPopup" resultMap="popupResultMap">
         SELECT * FROM popcon.popup
@@ -89,7 +97,7 @@
 
         VALUES (#{popupName}, #{popupBrand}, #{popupContent}, #{popupLocation},
                 #{popupStart}, #{popupEnd}, #{popupOperating}, #{popupEvent},
-                #{popupView}, #{popupCar}, #{popupEntryfee}, #{popupWifi},
+                #{popupView}, #{popupCar}, #{popupEntryFee}, #{popupWifi},
                 #{popupEat}, #{popupSite}, #{popupInstar}, #{popupNotice},
                 #{popupPhone}, #{popupHoney}, #{popupLike}, #{popupLatitude}, #{popupLongitude}, #{userId})
     </insert>
@@ -167,13 +175,15 @@
 
     <!-- 00대 00이 많이 방문했어요 값 가져오기  -->
     <select id="getPopupTotal" parameterType="int" resultType="PopupTotalDto">
-        SELECT
-            TRUNCATE(AVG(review.review_score), 1) AS popupStar,
-            CASE MAX(user.user_sex)
-                WHEN 'M' THEN '남성이'
-                WHEN 'F' THEN '여성이'
-                ELSE '남녀가'
-                END AS popupReviewSex,
+        select
+            truncate(avg(review.review_score), 1) as popupStar,
+            case
+                when (count(case when user.user_sex='F' then 1 end) <![CDATA[>]]> count(case when user.user_sex='M' then 1 end))
+                    then '여성이'
+                when (count(case when user.user_sex='F' then 1 end) <![CDATA[<]]> count(case when user.user_sex='M' then 1 end))
+                    then '남성이'
+                else '남녀가' end
+            as popupReviewSex,
             (
                 SELECT
                     *
@@ -181,19 +191,16 @@
                     (
                         SELECT
                             CASE
+                                WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 10 AND 10 THEN '10대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 20 AND 29 THEN '20대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 30 AND 39 THEN '30대'
                                 WHEN FLOOR(DATEDIFF(CURDATE(), user.user_birth) / 365.25 / 10) * 10 BETWEEN 40 AND 49 THEN '40대'
-                                ELSE '50대이상'
-                                END AS reviewAge
-                        FROM
-                            popup
-                                JOIN
-                            review ON popup.popup_id = review.popup_id
-                                JOIN
-                            user ON review.user_id = user.user_id
-                        WHERE
-                            popup.popup_id = #{popupId}
+                                ELSE ''
+                            END AS reviewAge
+                        FROM popup
+                            JOIN review ON popup.popup_id = review.popup_id
+                            JOIN user ON review.user_id = user.user_id
+                        WHERE popup.popup_id = #{popupId}
                     ) AS substituted_values
                 GROUP BY reviewAge
                 ORDER BY COUNT(*) DESC
@@ -236,9 +243,41 @@
         select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
                (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
                 order by popup_image.popup_image_id limit 1)
-                          as preview_image_path
+        as preview_image_path
         from popup p join popup_category c on p.popup_id=c.popup_id
         where c.category_name=#{category};
+    </select>
+
+    <select id="getPopupByFilter" parameterType="map" resultMap="popupSearchDto">
+        select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
+               p.popup_start as popup_start, p.popup_end as popup_end,
+               (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+                order by popup_image.popup_image_id limit 1) as preview_image_path
+        from popup p join popup_category c on p.popup_id=c.popup_id
+        <where>
+        <if test="startDate != '' and startDate != null">
+           and p.popup_end between #{startDate} and #{endDate}
+        </if>
+        <if test="area != '전체' and area!='' and area!=null">
+           and p.popup_location like concat('%',#{area},'%')
+        </if>
+        <if test="status !='' and status!=null">
+            and
+            <if test="status=='진행중'">
+                curdate() between p.popup_start and p.popup_end
+            </if>
+            <if test="status=='종료'">
+                p.popup_end <![CDATA[<]]> curdate()
+            </if>
+            <if test="status=='오픈예정'">
+                p.popup_start <![CDATA[>]]> curdate()
+            </if>
+        </if>
+        <if test="category != '전체' and category!='' and category!=null">
+            and c.category_name=#{category}
+        </if>
+        </where>
+        group by p.popup_id
     </select>
 
     <!-- 좋아요가 가장 높은 3개의 이미지 경로를 가져오는 SQL-->

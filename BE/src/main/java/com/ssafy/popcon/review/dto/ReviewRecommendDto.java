@@ -11,5 +11,4 @@ public class ReviewRecommendDto {
     private int reviewId;
     private String userId;
 
-    private int popupId;
 }
