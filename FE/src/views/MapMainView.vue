@@ -61,6 +61,10 @@
       </div>
     </div>   
     
+      <!-- 임시버튼 -->
+      <div>
+      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
+      </div> 
     
     <div class="container pt-5 pb-5">
     
@@ -156,7 +160,9 @@
           <p class="likes" style="position: absolute; top: 0; right: 0;">❤ +좋아요수</p> 
           <!-- 우측 상단 like수 -->
         </div>
-       
+
+
+
         
 
 
@@ -183,6 +189,21 @@ const clickToClose = ref(true)
 const overlayColorSelect = ref('#0000004D')
 const canSwipe = ref(true)
 const myBottomSheet = ref(null)
+const lat = ref(0)
+const lng = ref(0)
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      lat.value = position.coords.latitude
+      lng.value = position.coords.longitude
+    })
+  }
+}
+
+function goMapSearch() {
+  window.location.href = '/map/search';
+}
 
 const open = () => {
   myBottomSheet.value.open()
@@ -195,36 +216,72 @@ const close = () => {
 
 
 <script>
-export default {
-  mounted() {
-    // 네이버 지도 API 로드
-    const script = document.createElement("script");
-    script.src =
-      "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+import { ref } from 'vue';
 
-    script.onload = () => {
-      // 네이버 지도 생성
-      new window.naver.maps.Map("map", {
-        center: new window.naver.maps.LatLng(35.2047570, 126.810786),
-        zoom: 15
-      });
-    };
+export default {
+  async mounted() {
+    const lat = ref(0);
+    const lng = ref(0);
+
+    if (navigator.geolocation) {
+      await this.getLocation(lat, lng);
+      this.loadMap(lat.value, lng.value);
+    }
   },
   methods: {
-    myLocation() {
-    //  gps 이용 내위치 찾는 로직 구현
+    getLocation(lat, lng) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lat.value = position.coords.latitude;
+          lng.value = position.coords.longitude;
+          resolve();
+        }, reject);
+      });
     },
-    goMapSearch() {
-    // 지도 서치 페이지로 이동
+    loadMap(lat, lng) {
+      const script = document.createElement("script");
+      script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => {
+        const mapRef = new window.naver.maps.Map("map", {
+          center: new window.naver.maps.LatLng(lat, lng),
+          zoom: 13
+        });
+
+        new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(lat, lng),
+          map: mapRef,
+          icon: {
+            url: "/src/assets/images/my-location.png",
+            size: new window.naver.maps.Size(43, 43),
+            scaledSize: new window.naver.maps.Size(43, 43),
+          },
+          zIndex: 999,
+        });
+
+        // 내 현재 위치에서 가장 가까운 100개만 마커 생성
+        const markers = [];
+        for (let i = 1; i < 100; i++) {
+          const marker = new window.naver.maps.Marker({
+            map: mapRef,
+            position: new window.naver.maps.LatLng(sortedToiletData[i].Y_WGS84, sortedToiletData[i].X_WGS84),
+            icon: {
+              url: `${aroundToilet}`,
+              size: new window.naver.maps.Size(35, 35),
+              scaledSize: new window.naver.maps.Size(35, 35),
+            },
+          });
+
+          markers.push(marker);
+        }
+      };
+
+      document.head.appendChild(script);
     }
-
   }
-}
-
-
+};
 </script>
 
 <style scoped>
@@ -282,6 +339,7 @@ export default {
   background: #fff;
   transition: all 0.3s ease;
   font-size: 12px;
+  width: 280px;
 }
 .search-btn-content {
   display: flex; 

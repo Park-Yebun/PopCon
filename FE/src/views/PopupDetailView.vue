@@ -44,8 +44,8 @@ onMounted(async () => {
       popup.value=data;
       popup.value.popupOperating = popup.value.popupOperating.replace(/\n/g, '<br>');
       popup.value.popupContent = popup.value.popupContent.replace(/\n/g, '<br>');
-      if(popup.value.popupNotice != null) {
-        popup.value.popupNotice=popup.value.popupNotice.replace(/\n/g, '<br>');
+      if(popup.value.popupNotice!=null){
+        popup.value.popupNotice=popup.value.popupNotice.replace(/\n/g, '<br>');      
       }
       reviewSummary.value=popup.value.reviewTagSummary.reviewSummary;
       
@@ -152,16 +152,16 @@ const goCheck=function(){
 
     <!-- 별점 + 숫자  -->
     <div class="star-ratings">
-	    <div 
+       <div 
         class="star-ratings-fill space-x-2 text-lg"
         :style="{ width: ratingToPercent(popup.popupStar)}"
-	      >
-		    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-	    </div>
-	    <div class="star-ratings-base space-x-2 text-lg">
-		    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+         >
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+       </div>
+       <div class="star-ratings-base space-x-2 text-lg">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
         <span>{{ popup.popupStar }}</span>
-	    </div>
+       </div>
     </div>
 
     <!--주소 -->
@@ -297,10 +297,10 @@ const goCheck=function(){
     <div v-for="(value,key) in reviewSummary" style="max-width: 100%;">
       <div id="hashtagComment"
         :style="{ width: value+'%'}" 
-	      >
-	    </div>
-	    <div style=" background-color: #eae7e7;"> {{ key }}
-	    </div>
+         >
+       </div>
+       <div style=" background-color: #eae7e7;"> {{ key }}
+       </div>
 <!-- 
       <span v-if="value>0" class="badge text-bg-danger" :style="{ width: value+'%'}"></span>
       <span style="width: 100%; color: lightgray;" >{{key}}</span> -->
