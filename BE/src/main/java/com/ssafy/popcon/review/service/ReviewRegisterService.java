@@ -1,6 +1,7 @@
 package com.ssafy.popcon.review.service;
 
 import com.ssafy.popcon.popup.dto.PopupDto;
+import com.ssafy.popcon.popup.dto.PopupRecommendDto;
 import com.ssafy.popcon.popup.mapper.PopupMapper;
 import com.ssafy.popcon.popup.service.PopupRegisterService;
 import com.ssafy.popcon.review.dto.ReviewDto;
@@ -76,7 +77,7 @@ public class ReviewRegisterService {
             throw new RuntimeException("Failed to register popup with images", e);
         }
         return "noProblem";
-        }
+    }
 
 
 
@@ -176,7 +177,7 @@ public class ReviewRegisterService {
     }
 
     // 리뷰 좋아요
-    public String addRecommend(int popupId, int reviewId, String token) {
+    public String addLikeToReview(int popupId, int reviewId, String token) {
         String userId = jwtUtil.getUsername(token.split(" ")[1]);
         ReviewDto existingReview = reviewMapper.getReviewById(popupId, reviewId);
         UserDto existingUser = popupMapper.getUserById(userId);
@@ -188,39 +189,76 @@ public class ReviewRegisterService {
         }
 
         try {
-            ReviewRecommendDto reviewRecommendDto = new ReviewRecommendDto();
-            reviewRecommendDto.setReviewId(reviewId);
-            reviewRecommendDto.setUserId(userId);
-            reviewMapper.addRecommend(reviewRecommendDto);
-            logger.info("Review recommendation added successfully: {}", reviewRecommendDto);
-        } catch (Exception e) {
+            // 2. 중복 확인
+            ReviewRecommendDto duplicateCheckDto = new ReviewRecommendDto();
+            duplicateCheckDto.setReviewId(reviewId);
+            duplicateCheckDto.setUserId(userId);
+
+            int duplicateCount = reviewMapper.duplicateReviewRecommend(duplicateCheckDto);
+
+            if (duplicateCount > 0) {
+                // 이미 좋아요를 한 경우 예외 처리 또는 원하는 동작 수행
+                System.out.println("이미 좋아요를 한 상태입니다.");
+                return "alreadyGoods"; // 또는 예외를 던지거나 원하는 대응을 수행
+            }
+        }catch (Exception e) {
             logger.error("Failed to add review recommendation", e);
             throw new RuntimeException("Failed to add review recommendation", e);
-        }return "noProblem";
+        }
+        reviewMapper.addLikeToReview(reviewId);
+
+        ReviewRecommendDto reviewRecommendDto = new ReviewRecommendDto();
+        reviewRecommendDto.setReviewId(reviewId);
+        reviewRecommendDto.setUserId(userId);
+
+        reviewMapper.addReviewRecommend(reviewRecommendDto);
+
+        logger.info("Review recommendation added successfully: {}", reviewRecommendDto);
+
+        return "noProblem";
     }
 
-    // 리뷰 좋아요 취소
-    public String removeRecommend(int popupId, int reviewId, String token) {
+    // 특정 팝업에 좋아요 취소
+    public String cancelLikeToReview(int popupId, int reviewId, String token) throws Exception {
         String userId = jwtUtil.getUsername(token.split(" ")[1]);
-        ReviewDto existingReivew = reviewMapper.getReviewById(popupId, reviewId);
+        ReviewDto existingReview = reviewMapper.getReviewById(popupId, reviewId);
         UserDto existingUser = popupMapper.getUserById(userId);
 
-        if (existingReivew == null || existingUser == null) {
+        if (existingReview == null || existingUser == null) {
             // 팝업이 존재하지 않거나 사용자가 존재하지 않을 경우 예외 처리 또는 원하는 동작 수행
             System.out.println("존재하지 않는 팝업이거나 존재하지 않는 유저입니다.");
             return "notExistingPopupUser"; // 또는 예외를 던지거나 원하는 대응을 수행
         }
 
         try {
+            // 2. 중복 확인
+            ReviewRecommendDto duplicateCheckDto = new ReviewRecommendDto();
+            duplicateCheckDto.setReviewId(reviewId);
+            duplicateCheckDto.setUserId(userId);
+
+            int duplicateCount = reviewMapper.duplicateReviewRecommend(duplicateCheckDto);
+
+            if (duplicateCount == 0) {
+                // 이미 좋아요를 한 경우 예외 처리 또는 원하는 동작 수행
+                System.out.println("이미 좋아요 취소 한 상태입니다.");
+                return "alreadyCancel"; // 또는 예외를 던지거나 원하는 대응을 수행
+            }
+            // 1. popup_like를 감소시키는 업데이트 쿼리 수행
+            reviewMapper.cancelLikeToReview(reviewId);
+
+            // 2. popup_recommend 테이블에서 해당 사용자와 팝업 정보 삭제
             ReviewRecommendDto reviewRecommendDto = new ReviewRecommendDto();
             reviewRecommendDto.setReviewId(reviewId);
             reviewRecommendDto.setUserId(userId);
-            reviewMapper.removeRecommend(reviewRecommendDto);
-            logger.info("Review recommendation removed successfully: {}", reviewRecommendDto);
+            reviewMapper.deleteReviewRecommend(reviewRecommendDto);
+
         } catch (Exception e) {
-            logger.error("Failed to remove review recommendation", e);
-            throw new RuntimeException("Failed to remove review recommendation", e);
-        }return "noProblem";
+            // 중복 발생 시 처리할 내용
+            System.out.println("중복된 좋아요 취소는 할 수 없습니다.");
+            // 또는 원하는 로깅 등의 작업 수행 가능
+            throw new Exception("중복된 좋아요 취소는 할 수 없습니다.");
+        }
+        return "noProblem";
     }
 
     // 리뷰 좋아요 카운트

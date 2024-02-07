@@ -106,13 +106,19 @@ public class ReviewController {
             @PathVariable("reviewId") int reviewId,
             @RequestHeader("Authorization") String token) throws Exception{
 
-        reviewRegisterService.addRecommend(popupId, reviewId, token);
+        String problemGoods = reviewRegisterService.addLikeToReview(popupId, reviewId, token);
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body("리뷰 좋아요가 추가되었습니다.");
+            if(problemGoods.equals("notExistingPopupUser")) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("존재하지 않는 팝업이거나 존재하지 않은 유저입니다.");
+            }
+            else if (problemGoods.equals("alreadyGoods")) {
+                return new ResponseEntity<>("이미 좋아요를 한 상태입니다.", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 좋아요 추가에 실패하였습니다.");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return ResponseEntity.status(HttpStatus.OK).body("리뷰 좋아요가 추가되었습니다.");
     }
 
     // 리뷰 좋아요 삭제
@@ -120,14 +126,20 @@ public class ReviewController {
     public ResponseEntity<String> removeReviewRecommend(
             @PathVariable("popupId") int popupId,
             @PathVariable("reviewId") int reviewId,
-            @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String token) throws Exception{
+        String problemGoods = reviewRegisterService.cancelLikeToReview(popupId, reviewId, token);
+
         try {
-            String userId = jwtUtil.getUsername(token.split(" ")[1]);
-            reviewRegisterService.removeRecommend(popupId, reviewId, userId);
-            return ResponseEntity.status(HttpStatus.OK).body("리뷰 좋아요가 삭제되었습니다.");
+            if(problemGoods.equals("notExistingPopupUser")) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("존재하지 않는 팝업이거나 존재하지 않은 유저입니다.");
+            }
+            else if (problemGoods.equals("alreadyCancel")) {
+                return new ResponseEntity<>("이미 좋아요 취소를 한 상태입니다.", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 좋아요 삭제에 실패하였습니다.");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return ResponseEntity.status(HttpStatus.OK).body("리뷰 좋아요가 삭제되었습니다.");
     }
 
     // 리뷰 좋아요 수 조회
