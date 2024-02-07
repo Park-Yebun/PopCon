@@ -15,7 +15,7 @@
         <result column="popup_event" property="popupEvent"/>
         <result column="popup_view" property="popupView"/>
         <result column="popup_car" property="popupCar"/>
-        <result column="popup_entryfee" property="popupEntryfee"/>
+        <result column="popup_entryfee" property="popupEntryFee"/>
         <result column="popup_wifi" property="popupWifi"/>
         <result column="popup_eat" property="popupEat"/>
         <result column="popup_site" property="popupSite"/>

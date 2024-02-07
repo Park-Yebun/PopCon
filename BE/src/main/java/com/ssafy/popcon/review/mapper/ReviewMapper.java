@@ -1,7 +1,6 @@
 package com.ssafy.popcon.review.mapper;
 
 import com.ssafy.popcon.popup.dto.PopupDto;
-import com.ssafy.popcon.popup.dto.PopupRecommendDto;
 import com.ssafy.popcon.review.dto.ReviewDto;
 import com.ssafy.popcon.review.dto.ReviewRecommendDto;
 import com.ssafy.popcon.review.dto.ReviewImageDto;
@@ -25,7 +24,7 @@ public interface ReviewMapper {
 
     UserDto getUserById(String userId);
 
-    ReviewDto getReviewById(@Param("popupId")int popupId, @Param("reviewId")int reviewId);
+    ReviewDto getReviewById(int popupId, int reviewId);
 
     void updateReview(ReviewDto reviewDto);
 
@@ -37,15 +36,9 @@ public interface ReviewMapper {
 
     List<ReviewDto> getReviewTop9(int popupId); // 상세보기 페이지 에서는 리뷰 9개만 주면 됨
 
-    void addLikeToReview(int reviewId);
+    void addRecommend(ReviewRecommendDto reviewRecommendDto);
+
+    void removeRecommend(ReviewRecommendDto reviewRecommendDto);
 
     int getRecommendCount(@Param("reviewId") int reviewId);
-
-    int duplicateReviewRecommend(ReviewRecommendDto duplicateCheckDto);
-
-    void addReviewRecommend(ReviewRecommendDto reviewRecommendDto);
-
-    void deleteReviewRecommend(ReviewRecommendDto reviewRecommendDto);
-
-    void cancelLikeToReview(int reviewId);
 }
