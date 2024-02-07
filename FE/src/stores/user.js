@@ -65,7 +65,8 @@ export const useMemberStore = defineStore (
         },
         (error) => {
           console.log(error);
-          // to do : 사용자 정보가 없습니다. 다시 로그인 하세요 ..? 로그인 페이지로 보내 ? 
+          // to do : 사용자 정보가 없습니다. 다시 로그인 하세요 ..
+          router.push({name:"login"});
         }
       );
     };
