@@ -1,12 +1,16 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { storeToRefs } from 'pinia'
+import { useMemberStore } from './user'
 
 export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
+  const memberStore = useMemberStore()
+  const { userInfo } = storeToRefs(memberStore)
 
-  return { count, doubleCount, increment }
+  // const modifyUser = ref({
+  //   userId: userInfo.value.userId,
+  //   userType: userInfo.value.userType
+  // })
+
+  return { }
 })

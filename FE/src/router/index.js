@@ -8,6 +8,7 @@ import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
+import MapMainview from '@/views/MapMainview.vue'
 import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
 import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
 import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
@@ -72,6 +73,16 @@ const router = createRouter({
       path: '/recommend',
       name: 'recommend',
       component: RecommendPageViewVue
+    },
+    { //지도 페이지 
+      path: '/map',
+      name: 'map',
+      component: MapMainview
+    },
+    { //검색 페이지 
+      path: '/search/:category',
+      name: 'search',
+      component: SearchView
     },
 
     // 유저 기능 라우터 
@@ -148,19 +159,6 @@ const router = createRouter({
       name:"popup",
       redirect: {name:"popup-search"},
       children:[
-        { // 검색 
-          path: '/popup/search',
-          name: 'popup-search',
-          component: SearchView,
-          children: [
-            {
-              path: '/popup/search/:category',
-              name: 'popup-search-category',
-              component: SearchView
-            }
-          ]
-
-        },
         {   // 제보 ; 회원만 접근 가능 
           path: 'report',
           name: 'popup-report',

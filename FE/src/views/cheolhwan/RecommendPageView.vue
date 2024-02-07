@@ -115,6 +115,9 @@
   
 <script setup>
 import { ref,computed } from 'vue';
+import { useCounterStore } from '@/stores/counter';
+
+const store = useCounterStore()
 
 const fileInput = ref(null);
 const imageUrl = ref(null);
@@ -190,6 +193,10 @@ const recommendationsC = [
   { name: '추천8', image: '/img/recommendation5.jpg' },
   { name: '추천9', image: '/img/recommendation6.jpg' }
 ];
+
+
+// 좋아요 알고리즘
+
 </script>
   
   <style scoped>

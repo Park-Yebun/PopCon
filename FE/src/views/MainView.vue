@@ -42,7 +42,7 @@
         font-size: 16px;
         font-weight: 800;
         line-height: 30px;
-        word-wrap: break-word">마감임박</h5>
+        word-break: keep-all;">마감임박</h5>
     <div href="#"
         style="width: 100%;
         height: 100%;
@@ -54,32 +54,11 @@
         word-wrap: break-word">더보기</div>
   </div>
   <div title="마감임박 팝업리스트" class="deadline-popup-group">
-    <div class="deadline-popup">
-      <img src="@/assets/images/popup_01.png" class="deadline-popup-img" alt="">
-      <h5 class="deadline-popup-titdeadline-popuple">Card title</h5>
-    </div>
-    <div class="deadline-popup">
-      <img src="@/assets/images/popup_02.png" class="deadline-popup-img" alt="">
-      <h5 class="deadline-popup-title">Card title</h5>
-    </div>
-    <div class="deadline-popup">
-      <img src="@/assets/images/popup_03.png" class="deadline-popup-img" alt="">
-      <h5 class="deadline-popup-title">Card title</h5>
-    </div>
-    <div class="deadline-popup">
-      <img src="@/assets/images/popup_01.png" class="deadline-popup-img" alt="">
-      <h5 class="deadline-popup-title">Card title</h5>
-    </div>
-    <div class="deadline-popup">
-      <img src="@/assets/images/popup_02.png" class="deadline-popup-img" alt="">
-      <h5 class="deadline-popup-title">Card title</h5>
+    <div v-for="popup in popupend" class="deadline-popup">
+      <img :src= "popup.previewImagePath" class="deadline-popup-img" :alt="popup.popupName + '사진'">
+      <h5 class="deadline-popup-titdeadline-popuple">{{ popup.popupName }}</h5>
     </div>
   </div>
-</div>
-
-<!-- 임시버튼 -->
-<div>
-  <button @click="getLocaion()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
 </div>
 
 <!-- 카테고리 -->
@@ -123,64 +102,64 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { compileScript } from 'vue/compiler-sfc';
 
 const router = useRouter()
+
+const popupend = ref({})
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
 const goSearch = function(categoryName) {
-  router.push({ name: 'popup-search-category', params: {category: 'categoryName'}})
-}
-const lat = ref(0)
-const lng = ref(0)
-
-function getLocaion() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      lat.value = position.coords.latitude
-      lng.value = position.coords.longitude
-    })
-  }
+  router.push({ name: 'search', params: {'category': categoryName}})
 }
 
-function openCamera(){
-  navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          const video = document.createElement('video');
-          video.srcObject = stream;
-          video.autoplay = true;
-          video.onloadedmetadata = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          canvas.getContext('2d').drawImage(video, 0, 0);
-          this.imageUrl = canvas.toDataURL('image/png');
-          stream.getTracks().forEach(track => track.stop());
-          };
+onMounted(async () => {
+  // axios({
+  //   method: 'get',
+  //   url: `http://localhost:8080/popups/search?startDa&endDate=~~&area=~~&status=~~&category=~ `,
+  //   data: {
+  //     title: threadTitle.value,
+  //     content: threadContent.value,
+  //     user: store.userId,
+  //     review: reviewId.value
+  //   }
+  // })
+  // .then((response) => {
+  //   console.log('타래 작성 완료')
+  //   router.push({ name: 'ThreadListPage', params: { reviewId: reviewId.value } })
+  // })
+  // .catch((error) => {
+  //   console.log('타래 작성 실패!')
+  // })
+
+  // 마감임박 리스트 가져오기
+  // 3일 뒤 날짜를 가져오는 코드
+  const date = new Date()
+  date.setDate(date.getDate() + 3)
+  const year = date.getFullYear()
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const day = ('0' + (date.getDate())).slice(-2)
+  const endDate = `${year}-${month}-${day}`
+  console.log(endDate)
+
+  axios.get('/popups/search',{params : {
+        startDate: null,
+        endDate: endDate,
+        area: null,
+        status: "진행중",
+        category: null,
+    }})
+        .then((response) => {
+          popupend.value = response.data
         })
-        .catch(error => {
-          console.error('카메라 액세스 거부:', error);
-        });
-}
+        .catch((error) => {
+          console.log(error);
+        })
 
-function openGallery(){
-  const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.onchange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            this.imageUrl = e.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-      input.click();
-    }
-  
+})
 </script>
 
 <style scoped>
