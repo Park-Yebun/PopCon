@@ -30,6 +30,11 @@ function home(success, fail) {
     local.get('/home').then(success).catch(fail);
 }
 
+// 지도 
+function map(param, success, fail) {
+    local.get('/maps/nearby', {params: param}).then(success).catch(fail);
+}
+
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map
 };
