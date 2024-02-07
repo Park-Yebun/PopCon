@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class="container">
-    <section v-show="showResult" id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
+    <section id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
       <h3 class="pt-5">당신의 결과는?!</h3>
       <div class="resultname">
+        <p> {{ point }}</p>
         <p> {{ infoList[mbtitype].name }}</p>
       </div>
       <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-        <!-- <img src="@/assets/images/popbti-img/popbti-img-{{mbtitype}}.svg" alt="{{mbtitype}}" class="img-fluid"> -->
+        <!-- <img src="/src/assets/images/popbti-img/popbti-img-{{mbtitype}}.svg" alt="{{mbtitype}}" class="img-fluid"> -->
       </div>
       <div class="resultDesc">
         <P>{{ infoList[mbtitype].desc }}</P>
@@ -21,11 +22,16 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
+
+const point = route.params
 
 const moveHome = () => {
   window.location.href = '/popbti';
 }
-const mbtitype = 0
+
 const mbtimatch = {'ISTJ':0, 'ISTP':1, 'ISFJ':2, 'ISFP':3,
                     'INTJ':4, 'INTP':5, 'INFJ':6, 'INFP':7,
                     'ESTJ':8, 'ESTP':9, 'ESFJ':10, 'ESFP':11,

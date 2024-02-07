@@ -27,16 +27,20 @@
 
 
     <section v-show="showResult" id="result" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
-      <h3 class="pt-5">당신의 결과는?!</h3>
+      <p class="pt-5">당신의 결과는?!</p>
       <div class="resultname">
-
       </div>
+
       <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-       
       </div>
+      
       <div class="resultDesc">
-
       </div>
+
+      <p>당신에게 추천드리는 팝업스토어!!</p>
+      <img src="" alt="">
+      <img src="" alt="">
+      
       <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3">공유하기</button>
     </section>
 
@@ -45,9 +49,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter()
+
+
 
 const showMain = ref(true);
 const showQna = ref(false);
@@ -184,7 +188,7 @@ const setResult = () => {
 
   var resultImg = document.createElement('img');
   const imgDiv = document.querySelector('#resultImg');
-  var imgURL = '@/assets/images/popbti-img/popbti-img-' + point + '.svg';
+  var imgURL = '/src/assets/images/popbti-img/popbti-img-' + point + '.svg';
   
   console.log(imgURL)
   resultImg.src = imgURL;
@@ -277,8 +281,10 @@ const url = 'https://popcon.netlify.app'
 const setShare = () => {
   var resultImg = document.querySelector('#resultImg');
   var resultAlt = resultImg.firstElementChild.alt;
+  // resultAlt는 MBTI 코드
   const shareTitle = 'POPBTI 테스트 결과'
   const shareDes = infoList[resultAlt].name;
+  console.log(resultAlt + '**')
   const shareImage = url + 'img/image-' + resultAlt + '.png';
   const shareURL = url + 'page/result-' + resultAlt + '.html';
   Kakao.Share.sendDefault({
@@ -309,6 +315,8 @@ const setShare = () => {
 
 <style scoped>
 .container {
+  width: 360px;
+  height: 800px;
   background-color: pink;
 }
 
@@ -328,10 +336,10 @@ const setShare = () => {
   opacity: 1;
 }
 .resultname{
-  font-size: 26px;
+  font-size: 14px;
 }
 .resultDesc{
-  font-size: 20px;
+  font-size: 14px;
 }
 .kakao{
   color: white;
