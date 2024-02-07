@@ -1,6 +1,25 @@
 <template>
-  <div>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum dolorem ratione animi quibusdam numquam quam praesentium officia deserunt sequi est. Molestiae et sed ipsam obcaecati hic consectetur ex quisquam in!</p>
+  <div class="all">
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    <p>뒤에 깔리는 화면입니다</p>
+    
+    <p>뒤에 깔리는 화면입니다</p>
+
   </div>
 </template>
 
@@ -9,5 +28,8 @@
 </script>
 
 <style scoped>
-
+.all {
+  background-color: black;
+  color: white;
+}
 </style>
