@@ -1,12 +1,7 @@
-// Give the service worker access to Firebase Messaging.
-// Note that you can only use Firebase Messaging here. Other Firebase libraries
-// are not available in the service worker.
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 
-// Initialize the Firebase app in the service worker by passing in
-// your app's Firebase config object.
-// https://firebase.google.com/docs/web/setup#config-object
+
 firebase.initializeApp({
     apiKey: "AIzaSyDvNw-1CiYp-H2q_RTsM_uM778SsrWj2ZM",
     authDomain: "ssafypopcon.firebaseapp.com",
@@ -17,8 +12,6 @@ firebase.initializeApp({
     measurementId: "G-5QZKSRXRD2"
 });
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
@@ -29,9 +22,50 @@ messaging.onBackgroundMessage((payload) => {
     // Customize notification here
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
-        body: playload.notification.body,
-        icon: '/favicon-32x32.png'
+        body: payload.notification.body,
+        icon: '/icon.png'
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+// 추가코드
+self.addEventListener("install", function (e) {
+    self.skipWaiting();
+});
+  
+self.addEventListener("activate", function (e) {
+    console.log("fcm sw activate..");
+});
+
+self.addEventListener("notificationclose", function (event) {
+    console.log("Notification closed");
+    // Add your custom handling for notification close event here
+});
+
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close(); // 알림 닫기
+  
+    // 알림 클릭 후 이동할 URL 설정
+    var urlToOpen = 'https://example.com';
+  
+    // 클라이언트 창이 열려 있으면 포커스를 해당 창으로 이동
+    event.waitUntil(
+      clients.matchAll({
+        type: 'window'
+      })
+      .then(function(clientList) {
+        for (var i = 0; i < clientList.length; i++) {
+          var client = clientList[i];
+          if (client.url === urlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // 클라이언트 창이 없으면 새 창을 열고 해당 URL로 이동
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
+    );
+  });
