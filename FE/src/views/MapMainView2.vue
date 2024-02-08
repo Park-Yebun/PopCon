@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import "@webzlodimir/vue-bottom-sheet/dist/style.css";
-import {map} from '@/api/popup';
 
 const overlay = ref(true)
 const maxWidth = ref(360)
@@ -11,147 +11,17 @@ const clickToClose = ref(true)
 const overlayColorSelect = ref('#0000004D')
 const canSwipe = ref(true)
 const myBottomSheet = ref(null)
-
-const param=ref({
-    "lat":"",
-    "lng":""
-})
 const lat = ref(0)
 const lng = ref(0)
-const markers=ref([]);
-const popups=ref([]);
 
-
-onMounted(async () => {
-  try {
-    await getLocation();
-    await getNearbyPopups();
-    // await loadMap(lat.value, lng.value);
-  } catch (error) {
-    console.error('위치 정보를 가져오는 동안 오류가 발생했습니다:', error);
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      lat.value = position.coords.latitude
+      lng.value = position.coords.longitude
+    })
   }
-});
-
-
-const getLocation = () => { // 현재위치 가져오기 
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        lat.value = position.coords.latitude;
-        lng.value = position.coords.longitude;
-        // console.log(lat.value);
-        // console.log(lng.value);
-        resolve();
-      }, reject);
-    }
-  });
 }
-
-const getNearbyPopups=()=>{ // 주변팝업 가져오기 
-    param.value.lat=lat.value;
-    param.value.lng=lng.value;
-
-    map(
-        param.value,
-        ({data})=>{
-        // console.log("정상!");
-        console.log(data);
-        popups.value=data;
-        console.log(popups.value);
-        loadMap(lat.value,lng.value);
-    },
-    ({response}) => {
-      console.log("error");
-    }
-    )
-
-}
-
-
-const loadMap = (lat, lng) => {
-  const script = document.createElement("script");
-  script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
-  script.async = true;
-  script.defer = true;
-
-  script.onload = () => {
-    const mapRef = new window.naver.maps.Map("map", {
-      center: new window.naver.maps.LatLng(lat, lng),
-      zoom: 13
-    });
-
-    new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(lat, lng),
-      map: mapRef,
-    //   icon: {
-    //     url: "/src/assets/images/marker_yellow.png",
-    //     size: new window.naver.maps.Size(20, 20),
-    //     scaledSize: new window.naver.maps.Size(20, 20),
-    //   },
-      zIndex: 999,
-    });
-
-    // 내 현재 위치에서 가장 가까운 100개만 마커 생성
-    // const markers = [];
-    for (let i = 0; i < 1 ; i++) {
-        // console.log("마커를 만들자!!");
-        // console.log(popups.value);
-        // console.log(popups.value[i].popupLatitude);
-
-      const marker = new window.naver.maps.Marker({
-        map: mapRef,
-        position: new window.naver.maps.LatLng(popups.value[i].popupLatitude, popups.value[i].popupLongitude),
-        icon: {
-        //   url: 'https://www.naver.com',
-            content: CustomMapMarker(popups.value[i]),
-            size: new window.naver.maps.Size(35, 35),
-            scaledSize: new window.naver.maps.Size(35, 35),
-        },
-        // zIndex:999,
-      });
-
-      markers.value.push(marker);
-    }
-  };
-
-  document.head.appendChild(script);
-}
-
-const CustomMapMarker = function(data) {
-    console.log("custom marker !!!!");
-    console.log(data);
-
-//   const mobileContentArray = [
-//   '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid darkgreen; background: white; cursor: pointer; position: relative; z-index: 2">',
-//     '<div style="display: table-cell; display: inline-block; width: 4rem; height: 4rem; background-image: url(Images/markerIcon.svg); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>',
-//     '<div style="max-width: 13rem; height: 2rem; padding: 0 0.8rem 0 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 1.5rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 4rem;">',
-//             data.popupName,
-//     '</div>',
-//     '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
-//     '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: var(--color--darkgreen) transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
-//     '</div>',
-//   ];
-
-const mobileContentArray = [
-    '<div class=bubble style="background-color:white;">',
-        '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
-            data.popupName,
-        '</div>',
-    '</div>',
-    // '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid #FF534C; background: white; cursor: pointer; position: relative; z-index: 2">',
-    //     '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
-    //             data.popupName,
-    //     '</div>',
-    //     // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
-    //     // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: blue transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
-    // '</div>',
-  ];
-
-  return mobileContentArray.join('');
-};
-
-
-
 
 function goMapSearch() {
   window.location.href = '/map/search';
@@ -164,6 +34,76 @@ const close = () => {
   myBottomSheet.value.close()
 }
 
+</script>
+
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  async mounted() {
+    const lat = ref(0);
+    const lng = ref(0);
+
+    if (navigator.geolocation) {
+      await this.getLocation(lat, lng);
+      this.loadMap(lat.value, lng.value);
+    }
+  },
+  methods: {
+    getLocation(lat, lng) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lat.value = position.coords.latitude;
+          lng.value = position.coords.longitude;
+          resolve();
+        }, reject);
+      });
+    },
+    loadMap(lat, lng) {
+      const script = document.createElement("script");
+      script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => {
+        const mapRef = new window.naver.maps.Map("map", {
+          center: new window.naver.maps.LatLng(lat, lng),
+          zoom: 13
+        });
+
+        new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(lat, lng),
+          map: mapRef,
+          icon: {
+            url: "/src/assets/images/my-location.png",
+            size: new window.naver.maps.Size(43, 43),
+            scaledSize: new window.naver.maps.Size(43, 43),
+          },
+          zIndex: 999,
+        });
+
+        // 내 현재 위치에서 가장 가까운 100개만 마커 생성
+        const markers = [];
+        for (let i = 1; i < 100; i++) {
+          const marker = new window.naver.maps.Marker({
+            map: mapRef,
+            position: new window.naver.maps.LatLng(sortedToiletData[i].Y_WGS84, sortedToiletData[i].X_WGS84),
+            icon: {
+              url: `${aroundToilet}`,
+              size: new window.naver.maps.Size(35, 35),
+              scaledSize: new window.naver.maps.Size(35, 35),
+            },
+          });
+
+          markers.push(marker);
+        }
+      };
+
+      document.head.appendChild(script);
+    }
+  }
+};
 </script>
 
 <template>
@@ -453,62 +393,5 @@ const close = () => {
   }
 }
 
-</style>
 
-<style>
-/* .bubble
-{
-position: relative;
-width: 105px;
-height: 35px;
-padding: 0px;
-background: #FFFFFF;
--webkit-border-radius: 10px;
--moz-border-radius: 10px;
-border-radius: 10px;
-border: #FF534C solid 4px;
-} */
-
-.bubble {
-  position: relative;
-  width: 105px;
-  height: 35px;
-  padding: 0px;
-  background: #FFFFFF;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  border: #FF534C solid 4px;
-  display: flex; /* flex 컨테이너 설정 */
-  justify-content: center; /* 수평 가운데 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-}
-
-.bubble:after
-{
-content: '';
-position: absolute;
-border-style: solid;
-border-width: 9px 14px 0;
-border-color: #FFFFFF transparent;
-display: block;
-width: 0;
-z-index: 1;
-bottom: -9px;
-left: 16px;
-}
-
-.bubble:before
-{
-content: '';
-position: absolute;
-border-style: solid;
-border-width: 12px 17px 0;
-border-color: #FF534C transparent;
-display: block;
-width: 0;
-z-index: 0;
-bottom: -16px;
-left: 13px;
-}
 </style>
