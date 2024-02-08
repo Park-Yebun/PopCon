@@ -1,19 +1,10 @@
 
 <template>
   <div class="container">
-    <RouterView class="router-view" />
+    <RouterView class="router-view"/>
     <div title="알림검색 상단바" class="topbar">
-      <img
-        @click="goSearch"
-        class="search-button"
-        src="@/assets/images/searchbutton.png"
-        alt="검색버튼"
-      />
-      <img
-        class="notification-button"
-        src="@/assets/images/notification_false.png"
-        alt="알림버튼"
-      />
+      <img @click="goSearch()" class="search-button" src="@/assets/images/searchbutton.png" alt="검색버튼">
+      <img class="notification-button" src="@/assets/images/notification_false.png" alt="알림버튼" data-bs-toggle="modal" data-bs-target="#exampleModal">
     </div>
     <nav class="navbar">
       <div class="container-fluid">
@@ -26,11 +17,7 @@
           <div class="nav-text">Map</div>
         </div>
         <div class="nav-item">
-          <img
-            class="nav-icon-camera"
-            src="@/assets/images/nav_camera.png"
-            alt="카메라 아이콘"
-          />
+          <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
         </div>
         <div @click="goRec" class="nav-item">
           <img class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
@@ -43,14 +30,29 @@
       </div>
     </nav>
   </div>
+
+<!-- 알람 모달 템플릿 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
 .container {
   max-width: 360px;
-  position: relative;
+  position:relative;
   margin-bottom: 88px; /* navbar의 높이만큼 margin-bottom 추가 */
 }
+
 
 .navbar {
   width: 360px;
@@ -73,7 +75,7 @@
   justify-content: center;
 }
 .nav-text {
-  color: #2c3550;
+  color: #2C3550;
   text-align: center;
   font-family: ABeeZee;
   font-size: 12px;
@@ -115,22 +117,23 @@ import { useCounterStore } from '@/stores/counter'
 const router = useRouter()
 const store = useCounterStore()
 
-onMounted(() => {
+onMounted(()=>{
+
   navigator.serviceWorker
-    .register("registerSW.js")
-    .then(function (registration) {
-      console.log("Service worker successfully registered.");
-      return registration;
-    })
-    .catch(function (err) {
-      console.error("Unable to register service worker.", err);
-    });
-});
+        .register("registerSW.js")
+        .then(function (registration) {
+          console.log("Service worker successfully registered.");
+          return registration;
+        })
+        .catch(function (err) {
+          console.error("Unable to register service worker.", err);
+        });
+})
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
 const goSearch = function() {
-  router.push({ name: 'search', params: {'category': undefined}})
+  router.push({ name: 'search', params: {'category': ''}})
 }
 
 const goHome = function() {
@@ -146,18 +149,18 @@ const goRec = function() {
 }
 
 const goOthers = function() {
-  // // 만약 현재 로그인한 유저가 개인회원이라면
-  // if (store.modifyUser.userType == "GENERAL") {
-  //   router.push({name : 'other-member'})
-  // }
-  // // 만약 현재 로그인한 유저가 기업회원이라면
-  // else if (store.modifyUser.userType == "CORP") {
-  //   router.push({name : 'other-corporate'})
-  // }
-  // // 만약 현재 로그인한 유저가 비회원이라면
-  // else {
+  // 만약 현재 로그인한 유저가 개인회원이라면
+  if (store.modifyUser.userType == "GENERAL") {
+    router.push({name : 'other-member'})
+  }
+  // 만약 현재 로그인한 유저가 기업회원이라면
+  else if (store.modifyUser.userType == "CORP") {
+    router.push({name : 'other-corporate'})
+  }
+  // 만약 현재 로그인한 유저가 비회원이라면
+  else {
     
-  // }
+  }
   router.push({name : 'other-member'})
 }
 </script>

@@ -80,7 +80,7 @@ const router = createRouter({
       component: MapMainview
     },
     { //검색 페이지 
-      path: '/search/:category',
+      path: '/search/:category?',
       name: 'search',
       component: SearchView
     },

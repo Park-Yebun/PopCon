@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.notification.mapper.NotificationMapper">
+
+    <resultMap id="notification" type="NotificationDto">
+        <result column="user_device_token_id" property="userDeviceTokenId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_device_token" property="userDeviceToken" />
+    </resultMap>
+
+    <insert id="addUserToken" parameterType="NotificationDto">
+        insert into user_device_token (user_id, user_device_token) values (#{userId},#{userDeviceToken})
+    </insert>
+
+    <insert id="addNonUserToken" parameterType="String">
+        insert into non_user_device_token (non_user_device_token) values (#{token})
+    </insert>
+
+    <delete id="removeToken" parameterType="String">
+        delete from user_device_token where user_id=#{userId}
+    </delete>
+</mapper>

@@ -1,86 +1,3 @@
-<script setup>
-import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import { home } from "@/api/popup";
-
-const router = useRouter();
-
-const popupend = ref();
-const popupgood = ref();
-
-onMounted(async () => {
-  await home(
-    ({ data }) => {
-      console.log(data);
-      console.log(data.popupend);
-      popupend.value = data.popupend;
-      popupgood.value = data.popupgood;
-    },
-    ({ response }) => {
-      console.log(response);
-    }
-  );
-});
-
-// 버튼 클릭하면 통합검색 링크 바로가기
-// 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
-const goSearch = function (categoryName) {
-  router.push({
-    name: "popup-search-category",
-    params: { category: "categoryName" },
-  });
-};
-const lat = ref(0);
-const lng = ref(0);
-
-function getLocaion() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      lat.value = position.coords.latitude;
-      lng.value = position.coords.longitude;
-    });
-  }
-}
-
-function openCamera() {
-  navigator.mediaDevices
-    .getUserMedia({ video: true })
-    .then((stream) => {
-      const video = document.createElement("video");
-      video.srcObject = stream;
-      video.autoplay = true;
-      video.onloadedmetadata = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-        this.imageUrl = canvas.toDataURL("image/png");
-        stream.getTracks().forEach((track) => track.stop());
-      };
-    })
-    .catch((error) => {
-      console.error("카메라 액세스 거부:", error);
-    });
-}
-
-function openGallery() {
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/*";
-  input.onchange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imageUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  input.click();
-}
-</script>
-
 <template>
   <!-- 캐루셀 -->
   <div
@@ -116,23 +33,23 @@ function openGallery() {
     <div v-if="popupgood" class="carousel-inner">
       <div class="carousel-item active">
         <img
-          :src="popupgood[0].popupImagePath"
+          :src="popupgood[0].previewImagePath"
           class="d-block w-100 rounded-bottom-4"
-          alt=""
+          alt="이미지 없음"
         />
       </div>
       <div class="carousel-item">
         <img
           :src="popupgood[1].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
-          alt=""
+          alt="이미지 없음"
         />
       </div>
       <div class="carousel-item">
         <img
           :src="popupgood[2].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
-          alt=""
+          alt="이미지 없음"
         />
       </div>
     </div>
@@ -177,90 +94,81 @@ function openGallery() {
       </template>
     </div>
   </div>
+</div>
 
   <!-- 카테고리 -->
   <div title="main-category">
     <div class="main-category-container">
       <div class="main-category-text">
         <img
-          @click="goSearch('패션뷰티')"
           class="main-category-logo"
           src="@/assets/images/category_beauty.png"
-          alt="패션/뷰티 아이콘"
+          alt="패션뷰티"
         />패션/뷰티
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('식음료')"
           class="main-category-logo"
           src="@/assets/images/category_foods.png"
-          alt="식음료 아이콘"
+          alt="식음료"
         />식음료
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('콘텐츠')"
           class="main-category-logo"
           src="@/assets/images/category_content.png"
-          alt="콘텐츠 아이콘"
+          alt="콘텐츠"
         />콘텐츠
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('취미여가')"
           class="main-category-logo"
           src="@/assets/images/category_hobby.png"
-          alt="취미/여가 아이콘"
+          alt="취미여가"
         />취미/여가
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('금융')"
           class="main-category-logo"
           src="@/assets/images/category_finance.png"
-          alt="금융 아이콘"
+          alt="금융"
         />금융
       </div>
     </div>
     <div class="main-category-container">
       <div class="main-category-text">
         <img
-          @click="goSearch('연예')"
           class="main-category-logo"
           src="@/assets/images/category_entertain.png"
-          alt="연예 아이콘"
+          alt="연예"
         />연예
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('가전/디지털')"
           class="main-category-logo"
           src="@/assets/images/category_digital.png"
-          alt="가전/디지털 아이콘"
+          alt="가전/디지털"
         />가전/디지털
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('리빙')"
           class="main-category-logo"
           src="@/assets/images/category_living.png"
-          alt="리빙 아이콘"
+          alt="리빙"
         />리빙
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('게임')"
           class="main-category-logo"
           src="@/assets/images/category_game.png"
-          alt="게임 아이콘"
+          alt="게임"
         />게임
       </div>
       <div class="main-category-text">
         <img
-          @click="goSearch('캐릭터')"
           class="main-category-logo"
           src="@/assets/images/category_character.png"
-          alt="캐릭터 아이콘"
+          alt="캐릭터"
         />캐릭터
       </div>
     </div>
@@ -272,61 +180,74 @@ import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { compileScript } from 'vue/compiler-sfc';
+import { home } from '@/api/popup' 
 
 const router = useRouter()
 
-const popupend = ref({})
+const popupend = ref()
+const popupgood = ref()
 
-// 버튼 클릭하면 통합검색 링크 바로가기
-// 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
-const goSearch = function(categoryName) {
-  router.push({ name: 'search', params: {'category': categoryName}})
+onMounted(() => {
+  home(
+    ({ data }) => {
+      console.log(data);
+      console.log(data.popupend);
+      popupend.value = data.popupend;
+      popupgood.value = data.popupgood;
+    },
+    ({ response }) => {
+      console.log(response);
+    }
+  );
+  // 카테고리버튼 클릭 이벤트 감시
+  const selectedCategory = document.querySelectorAll('.main-category-logo')
+
+  for (let i = 0; i < selectedCategory.length; i++) {
+      selectedCategory[i].addEventListener('click', function(event) {
+      // 클릭한 요소의 alt값을 인자로 가지고 통합검색 페이지로 이동
+      const categoryName = event.target.alt
+      router.push({ name: 'search', params: {'category': categoryName}})
+      })
+  }
+});
+
+function openCamera() {
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then((stream) => {
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      video.autoplay = true;
+      video.onloadedmetadata = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        this.imageUrl = canvas.toDataURL("image/png");
+        stream.getTracks().forEach((track) => track.stop());
+      };
+    })
+    .catch((error) => {
+      console.error("카메라 액세스 거부:", error);
+    });
 }
 
-onMounted(async () => {
-  // axios({
-  //   method: 'get',
-  //   url: `http://localhost:8080/popups/search?startDa&endDate=~~&area=~~&status=~~&category=~ `,
-  //   data: {
-  //     title: threadTitle.value,
-  //     content: threadContent.value,
-  //     user: store.userId,
-  //     review: reviewId.value
-  //   }
-  // })
-  // .then((response) => {
-  //   console.log('타래 작성 완료')
-  //   router.push({ name: 'ThreadListPage', params: { reviewId: reviewId.value } })
-  // })
-  // .catch((error) => {
-  //   console.log('타래 작성 실패!')
-  // })
-
-  // 마감임박 리스트 가져오기
-  // 3일 뒤 날짜를 가져오는 코드
-  const date = new Date()
-  date.setDate(date.getDate() + 3)
-  const year = date.getFullYear()
-  const month = ('0' + (date.getMonth() + 1)).slice(-2)
-  const day = ('0' + (date.getDate())).slice(-2)
-  const endDate = `${year}-${month}-${day}`
-  console.log(endDate)
-
-  axios.get('/popups/search',{params : {
-        startDate: null,
-        endDate: endDate,
-        area: null,
-        status: "진행중",
-        category: null,
-    }})
-        .then((response) => {
-          popupend.value = response.data
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-
-})
+function openGallery() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.onchange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  input.click();
+}
 </script>
 
 <style scoped>
