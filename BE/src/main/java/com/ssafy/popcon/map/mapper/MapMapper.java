@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface MapMapper {
     List<MapDto> findNearbyPopups(double latitude, double longitude);    // 내 위치 근방 2km 의 팝업들 조회
+
+    List<String> findCategories(int popupId);   // 팝업의 카테고리 조회
 }

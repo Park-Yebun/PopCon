@@ -19,6 +19,12 @@ public class MapNearbySearchService {
 //        latitude=126.97725;
 //        longitude=37.570892; // 테스트값
 
-        return mapMapper.findNearbyPopups(latitude,longitude);
+        List<MapDto> mapDtos= mapMapper.findNearbyPopups(latitude,longitude);
+
+        for(int i=0;i<mapDtos.size();i++){
+            mapDtos.get(i).setPopupCategory(mapMapper.findCategories(mapDtos.get(i).getPopupId()));
+        }
+
+        return mapDtos;
     }
 }

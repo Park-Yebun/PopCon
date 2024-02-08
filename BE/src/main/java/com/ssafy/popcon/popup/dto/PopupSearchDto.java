@@ -15,6 +15,10 @@ public class PopupSearchDto {
     private String popupEnd;
     private String popupLocation;
 
+    private int reviewCnt;  // resultMap선언 x
+    private int popupView;
+    private int popupLike;
+
     // parameter 부분
 //    private String startDate;
 //    private String endDate;

@@ -30,4 +30,6 @@ public class MapController {
                 .status(HttpStatus.OK)
                 .body(popups);
     }
+
+
 }

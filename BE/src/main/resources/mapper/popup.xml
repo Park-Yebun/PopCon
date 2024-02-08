@@ -84,6 +84,8 @@
         <result property="popupStart" column="popup_start"/>
         <result property="popupEnd" column="popup_end" />
         <result property="popupLocation" column="popup_location" />
+        <result property="popupView" column="popup_view" />
+        <result property="popupLike" column="popup_like" />
     </resultMap>
 
     <!-- 모든 팝업 정보를 가져오는 SQL문 -->
@@ -252,7 +254,9 @@
         select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
                p.popup_start as popup_start, p.popup_end as popup_end,
                (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
-                order by popup_image.popup_image_id limit 1) as preview_image_path
+                order by popup_image.popup_image_id limit 1) as preview_image_path,
+            p.popup_view, p.popup_like,
+            (select count(*) from review where review.popup_id=p.popup_id) as reviewCnt
         from popup p join popup_category c on p.popup_id=c.popup_id
         <where>
         <if test="startDate != '' and startDate != null">
