@@ -51,8 +51,6 @@
 import { ref } from 'vue';
 
 
-
-
 const showMain = ref(true);
 const showQna = ref(false);
 const showResult = ref(false);
@@ -309,7 +307,6 @@ const setShare = () => {
     ]
   });
 }
-
 
 </script>
 
