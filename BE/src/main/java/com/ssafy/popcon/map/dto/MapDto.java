@@ -19,7 +19,6 @@ public class MapDto {   // 나중에 얘는 없애고 팝업 dto 를 가져오�
     private String popupEnd;
     private int popupLike;
 
-    // resultMap 에 넣지 않음
     private BigDecimal distance;
     private String previewImagePath;
 

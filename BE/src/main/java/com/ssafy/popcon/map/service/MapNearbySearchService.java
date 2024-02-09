@@ -5,6 +5,7 @@ import com.ssafy.popcon.map.mapper.MapMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -14,16 +15,12 @@ public class MapNearbySearchService {
     private final MapMapper mapMapper;
 
     // 내 위치 기반 반경 2km 팝업 검색 및 반환 -> 2km 는 임시값
-    public List<MapDto> findNearbyPopups(double latitude, double longitude){
+    public List<MapDto> findNearbyPopups(double latitude, double longitude) throws SQLException {
 
 //        latitude=126.97725;
 //        longitude=37.570892; // 테스트값
 
         List<MapDto> mapDtos= mapMapper.findNearbyPopups(latitude,longitude);
-
-        for(int i=0;i<mapDtos.size();i++){
-            mapDtos.get(i).setPopupCategory(mapMapper.findCategories(mapDtos.get(i).getPopupId()));
-        }
 
         return mapDtos;
     }
