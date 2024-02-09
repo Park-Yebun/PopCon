@@ -30,6 +30,7 @@ import onetoone from '@/views/1to1.vue'
 import MapMainView from '@/views/MapMainView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 import PopbtiViewVue from '@/views/PopbtiView.vue'
+import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -89,6 +90,11 @@ const router = createRouter({
       path: '/popbti',
       name: 'popbti',
       component: PopbtiViewVue
+    },
+    { //팝비티아이 페이지 
+      path: '/popbti/:mbtiId',
+      name: 'popbtiresult',
+      component: PopbtiResultViewVue
     },
 
     // 유저 기능 라우터 
