@@ -1,6 +1,8 @@
 
 <template>
   <div class="container">
+    <!-- 토큰확인하기위한 p -->
+    <!-- <p>{{ getPhoneToken }}</p> -->
     <RouterView class="router-view"/>
     <div title="알림검색 상단바" class="topbar">
       <img @click="goSearch()" class="search-button" src="@/assets/images/searchbutton.png" alt="검색버튼">
@@ -31,19 +33,19 @@
     </nav>
   </div>
 
-<!-- 알람 모달 템플릿 -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fullscreen">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+  <!-- 알람 모달 템플릿 -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <style scoped>
@@ -110,25 +112,88 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
+// pwa-push
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage  } from "firebase/messaging";
 
+const firebaseConfig = {
+    apiKey: "AIzaSyDvNw-1CiYp-H2q_RTsM_uM778SsrWj2ZM",
+    authDomain: "ssafypopcon.firebaseapp.com",
+    projectId: "ssafypopcon",
+    storageBucket: "ssafypopcon.appspot.com",
+    messagingSenderId: "543956021805",
+    appId: "1:543956021805:web:07b2670024d09e5ec9fea4",
+    measurementId: "G-5QZKSRXRD2"
+  };
 const router = useRouter()
 const store = useCounterStore()
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging();
+const getPhoneToken = ref()
 
-onMounted(()=>{
-
-  navigator.serviceWorker
-        .register("registerSW.js")
-        .then(function (registration) {
-          console.log("Service worker successfully registered.");
-          return registration;
-        })
-        .catch(function (err) {
-          console.error("Unable to register service worker.", err);
+onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    let notificationPermission = Notification.permission;
+    if (notificationPermission === "granted") {
+      //Notification을 이미 허용한 사람들에게 보여주는 알람창
+      new Notification(payload.notification.title,{
+      body:payload.notification.body,
+      icon: '/icon.png',
+      image:payload.notification.image
+      });
+    } else if (notificationPermission !== 'denied') {
+      //Notification을 거부했을 경우 재 허용 창 띄우기
+      Notification.requestPermission(function (permission) {
+      if (permission === "granted") {
+        new Notification(payload.notification.title, {
+          body:payload.notification.body
         });
-})
+        }else {
+          alert("알람 허용이 거부되었습니다.")
+        }
+      });
+    }
+});
+navigator.serviceWorker.register("firebase-messaging-sw.js")
+    .then(function (registration) {
+      console.log("firebase-massaging Service Worker 등록 성공:",registration);
+      return registration;
+    })
+    .catch(function (err) {
+      console.error("firebase-massaging Service Worker 등록 실패:", err);
+    });
+
+  getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' })
+    .then((currentToken) => {
+      if (currentToken) {
+          // Send the token to your server and update the UI if necessary
+          console.log("Token is:",currentToken);
+          getPhoneToken.value = currentToken
+          // ...
+      } else {
+          // Show permission request UI
+          console.log('No registration token available. Request permission to generate one.');
+          // ...
+      }
+  }).catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      // ...
+  });
+// onMounted(()=>{
+
+//   navigator.serviceWorker
+//         .register("registerSW.js")
+//         .then(function (registration) {
+//           console.log("Service worker successfully registered.");
+//           return registration;
+//         })
+//         .catch(function (err) {
+//           console.error("Unable to register service worker.", err);
+//         });
+// })
 
 // 버튼 클릭하면 통합검색 링크 바로가기
 // 카테고리 버튼 클릭할 경우 인자 값으로 클릭한 카테고리 정보값 넘겨주기
