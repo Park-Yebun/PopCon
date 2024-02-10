@@ -18,8 +18,9 @@
         </div>
         <div class="nav-item">
           <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
-        </div>0
-          <img class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
+        </div>
+        <div>
+          <img @click="goRec" class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
           <div class="nav-text">Rec</div>
         </div>
         <div @click="goOthers" class="nav-item">

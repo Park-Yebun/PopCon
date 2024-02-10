@@ -33,7 +33,7 @@
         </div>
         <div title="카테고리 옵션">
             <div class="search-category-title">카테고리</div>
-                <ul class="button-group">
+                <ul class="button-group" style="margin-left: 40px;">
                     <div v-for="(value, key) in categoryGroup" class="search-category-option">
                         <!-- 카테고리 변수 안에 값이 들어있고 key값과 같으면 select이미지로 대체 -->
                         <img v-if="category !== '' && category == value " class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_a.png'" :alt="value + ' 아이콘'">
@@ -43,7 +43,7 @@
                 </ul>
         </div>
 
-        <div class="title">
+        <div class="button-container">
             <button @click="goSearch" type="button" class="btn btn-light">검색</button>
         </div>
 
@@ -57,8 +57,8 @@
                     <option value="">마감순</option>
                 </select>
             </div>
-            <div class="search-popup-group">
-                <div v-for="popup in popupList" :key="popup" class="search-popup">
+            <div v-for="popup in popupList" :key="popup" class="search-popup-group">
+                <div @click="goDetail(popup.popupId)" class="search-popup">
                     <img class="search-popup-img" :src= popup.previewImagePath alt="정렬된 팝업 목록">
                     <div class="search-popup-info">
                         <div class="search-popup-info-title">{{ popup.popupName }}</div>
@@ -70,7 +70,6 @@
         </div>
     </div>
 
-
 </template>
 
 <script setup>
@@ -81,7 +80,7 @@ import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { walkIdentifiers } from 'vue/compiler-sfc';
 
-// import 'v-calendar/style.css';
+import 'v-calendar/style.css';
 // import Calendar from 'v-calendar/lib/components/calendar.umd'
 // import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
@@ -146,14 +145,12 @@ onMounted(() => {
 }})
     .then((response) => {
         popupList.value = response.data
-        console.log(1)
     })
     .then((response) => {
         // 클릭한 옵션값 감시
         const selectedRegion = document.querySelectorAll('.region')
         const selectedDate = document.querySelectorAll('.date')
         const selectedStatus = document.querySelectorAll('.status')
-        console.log(2)
 
     for (let i = 0; i < selectedRegion.length; i++) {
         selectedRegion[i].addEventListener('click', function(event) {
@@ -207,18 +204,21 @@ const changeSelect = function() {
     if (selectedOption.innerText == "최신순") {
         popupList.value.sort((a, b) => a.popupId - b.popupId)
     }
-    // else if (selectedOption.innerText == "좋아요 순") {
-
-    // }
-    // else if (selectedOption.innerText == "조회수") {
-
-    // }
+    else if (selectedOption.innerText == "리뷰 많은순") {
+        popupList.value.sort((a, b) => b.reviewCnt - a.reviewCnt)
+    }
+    else if (selectedOption.innerText == "좋아요 순") {
+        popupList.value.sort((a, b) => b.popupLike - a.popupLike)
+    }
+    else if (selectedOption.innerText == "조회수") {
+        popupList.value.sort((a, b) => b.popupView - a.popupView)
+    }
     else if (selectedOption.innerText == "마감순") {
         popupList.value.sort((a, b) => a.popupEnd - b.popupEnd)
     }
 }
 
-
+// 검색버튼 누르면 결과 새로고침
 const goSearch = function() {
     axios.get('/popups/search', {params : {
     startDate: startDate.value,
@@ -235,40 +235,28 @@ const goSearch = function() {
         console.log(error)
     })
 }
+
+// 팝업스토어 상세페이지로 이동
+const goDetail = (popupId) => {
+  router.push({ name: 'popup-detail', params: { popupId }})
+}
+
 </script>
 
 <style scoped>
-.date-title {
+.title {
+    margin-top: 25px;
+    margin-left: 40px;
+
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 34px;
+    word-wrap: break-word"
+}
+
+.title:first-child {
     margin-top: 52px;
-    margin-left: 40px;
-
-    font-size: 16px;
-    font-family: Inter;
-    font-weight: 400;
-    line-height: 34px;
-    word-wrap: break-word"
-}
-
-.region-title {
-    margin-top: 25px;
-    margin-left: 40px;
-
-    font-size: 16px;
-    font-family: Inter;
-    font-weight: 400;
-    line-height: 34px;
-    word-wrap: break-word"
-}
-
-.status-title {
-    margin-top: 25px;
-    margin-left: 40px;
-
-    font-size: 16px;
-    font-family: Inter;
-    font-weight: 400;
-    line-height: 34px;
-    word-wrap: break-word"
 }
 
 .search-category-title {
@@ -285,14 +273,11 @@ const goSearch = function() {
 
 .button-group {
     list-style: none;
-    margin-top: 5px;
-    margin-left: 28px;
     margin-right: 28px;
 
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    border-bottom: 1px solid #212121;
     word-break: keep-all;
 
     /* 가로 스크롤 설정 */
@@ -395,18 +380,22 @@ li + li {
 .search-popup-info {
     position: absolute;
     left: 91px;
+    width: 230px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
 
 }
 
 .search-popup-info-title{
     font-family: Inter;
-    font-size: 16px;
+    font-size: ;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
 
     margin-top: 13px;
-    margin-left: 16px;
 }
 
 .search-popup-info-content{
@@ -418,9 +407,14 @@ li + li {
     line-height: normal;
 
     margin-top: 6px;
-    margin-left: 19px;
 }
 
+/* 검색 버튼 오른쪽으로 정렬하기 */
+.button-container {
+    display: flex;
+    justify-content: end;
+    margin-right: 28px;
+}
 
 
 </style>
