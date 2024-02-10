@@ -41,7 +41,7 @@
       <div>
       <div title="recpopup" class="popup-group">
         <div v-for="popup in recpopup" class="popup">
-          <img :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
+          <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
           <p class="popup-title">{{popup.popupName}}</p>
         </div>
       </div>
@@ -60,9 +60,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { popbti } from '@/api/popup'
 
-
+const router = useRouter()
 const showMain = ref(true);
 const showQna = ref(false);
 const showResult = ref(false);
@@ -227,6 +228,10 @@ const goResult = () => {
   // console.log(select);
   setResult();
 
+}
+
+const goPopupDetail = (popupId) => {
+  router.push(`/popup/${popupId}`)
 }
  
 const addAnswer = (answerText, qIdx, idx) => {
