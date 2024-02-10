@@ -16,7 +16,7 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import 'vue3-geolocation/dist/vue3-geolocation.js'
 
 
-axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
 
 const app = createApp(App)
 

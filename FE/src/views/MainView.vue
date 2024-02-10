@@ -33,7 +33,7 @@
     <div v-if="popupgood" class="carousel-inner">
       <div class="carousel-item active">
         <img
-          :src="popupgood[0].previewImagePath"
+          :src="popupgood[0].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
           alt="이미지 없음"
         />

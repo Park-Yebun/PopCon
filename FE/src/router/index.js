@@ -28,6 +28,7 @@ import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
 
 import MapMainView from '@/views/MapMainView.vue'
+import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 import PopbtiViewVue from '@/views/PopbtiView.vue'
 import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
@@ -81,6 +82,12 @@ const router = createRouter({
       name: 'map',
       component: MapMainview
     },
+    { //지도 검색 페이지 
+      path: '/map/search',
+      name: 'mapsearch',
+      component: MapSearchView
+    },
+
     { //검색 페이지 
       path: '/search/:category?',
       name: 'search',
@@ -91,7 +98,7 @@ const router = createRouter({
       name: 'popbti',
       component: PopbtiViewVue
     },
-    { //팝비티아이 페이지 
+    { //팝비티아이 결과 페이지 
       path: '/popbti/:mbtiId',
       name: 'popbtiresult',
       component: PopbtiResultViewVue
