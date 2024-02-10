@@ -176,26 +176,13 @@ const fullImageUrl = computed(() => {
   return null;
 });
 
-const recommendationsA = [
-  { name: '추천1', image: '/img/recommendation1.jpg' },
-  { name: '추천2', image: '/img/recommendation2.jpg' },
-  { name: '추천3', image: '/img/recommendation3.jpg' }
-];
-
-const recommendationsB = [
-  { name: '추천4', image: '/img/recommendation4.jpg' },
-  { name: '추천5', image: '/img/recommendation5.jpg' },
-  { name: '추천6', image: '/img/recommendation6.jpg' }
-];
-
-const recommendationsC = [
-  { name: '추천7', image: '/img/recommendation4.jpg' },
-  { name: '추천8', image: '/img/recommendation5.jpg' },
-  { name: '추천9', image: '/img/recommendation6.jpg' }
-];
+const recommendationsA = ref()
+const recommendationsB = ref()
+const recommendationsC = ref()
 
 
 // 좋아요 알고리즘
+// 유저가 좋아요한 팝업을 좋아요한 다른 사용자 정보 가져오기
 
 </script>
   
