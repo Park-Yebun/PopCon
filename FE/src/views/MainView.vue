@@ -31,21 +31,21 @@
       ></button>
     </div>
     <div v-if="popupgood" class="carousel-inner">
-      <div class="carousel-item active">
+      <div @click="goDetail(popupgood[0].popupId)" class="carousel-item active">
         <img
           :src="popupgood[0].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
           alt="이미지 없음"
         />
       </div>
-      <div class="carousel-item">
+      <div @click="goDetail(popupgood[1].popupId)" class="carousel-item">
         <img
           :src="popupgood[1].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
           alt="이미지 없음"
         />
       </div>
-      <div class="carousel-item">
+      <div @click="goDetail(popupgood[2].popupId)" class="carousel-item">
         <img
           :src="popupgood[2].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
@@ -74,7 +74,7 @@
   </div>
   <div title="마감임박 팝업리스트" class="deadline-popup-group">
     <template v-for="(popup, key) in popupend" :key="key">
-      <div class="deadline-popup">
+      <div @click="goDetail(popup.popupId)" class="deadline-popup">
         <img
           :src="popupend[key].previewImagePath"
           class="deadline-popup-img"
