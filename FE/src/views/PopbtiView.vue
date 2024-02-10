@@ -42,7 +42,7 @@
       <div title="recpopup" class="popup-group">
         <div v-for="popup in recpopup" class="popup">
           <img :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
-          <h5 class="popup-title">{{popup.popupName}}</h5>
+          <p class="popup-title">{{popup.popupName}}</p>
         </div>
       </div>
     </div>
@@ -199,6 +199,7 @@ const setResult = () => {
     ({ data }) => {
       console.log(data);
       recpopup.value = data
+      console.log(recpopup)
     },
     ({ response }) => {
       console.log(response);
@@ -330,7 +331,9 @@ const setShare = () => {
 .popup-group::-webkit-scrollbar{
   display:none;
 }
-
+.popup-title{
+  font-size: 10px;
+}
 .popup-img {
   width: 120px;
   height: 120px;
