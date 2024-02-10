@@ -1,11 +1,11 @@
 <template>
-  <!-- 서치 창 -->
-  <button @click="goMapSearch" type="button" class="btn btn-light search-btn">
+ <!-- 서치 창 -->
+ <div type="button" class="btn btn-light search-btn">
     <div class="search-btn-content">
-      <p style="font-size: 30px;"><</p> 
-      <p>지역 혹은 이름을 검색해보세요.</p>
+      <i @click="goMapMain" class="bi bi-chevron-left"></i>
+      <input class="search-input" v-model="searchTerm" @input="searchKeyword($event)" @keyup.enter="handleSearch" placeholder="지역 혹은 이름을 검색해보세요." />
     </div>
-  </button>
+  </div>
  
   <!-- 카테고리별 스크롤 -->
   <div class="wrap">
@@ -44,29 +44,55 @@
         🐰 캐릭터
       </button>
     </div>
-  </div>   
-  <p>최근검색</p>
-  <hr>
-  <div class="search-keywords">
-    <i class="bi bi-search"></i>
-    <span>최근검색어</span>
-    <i class="bi bi-x-lg"></i>
   </div>
-  <hr>
-  <div class="search-keywords">
-    <i class="bi bi-geo-alt-fill"></i>
-    <span>최근검색팝업</span>
-    <i class="bi bi-x-lg"></i>
+
+  <div>
+    <ul class="search-list">
+      <li v-for="search in searchList" :key="search" class="search-item">
+        <!-- 지도 아이콘 -->
+        <span>{{ search.distance }}</span>
+        <span>{{ search.title }}</span>
+        <span>{{ search.location }}</span>
+      </li>
+    </ul>
   </div>
-  <hr>
 
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const searchList = ref('dididididi')
+
+function goMapMain() {
+  window.location.href = '/map';
+}
+
+function searchKeyword(event) {
+  console.log(event.target.value);
+
+  const len = this.searchList.length;
+
+  for (let i = 0; i < len; i++) {
+    if (
+      this.searchList[i].popupName.includes(event.target.value) === false &&
+      this.searchList[i].popupLocation.includes(event.target.value) === false
+      ) {
+        document.querySelectorAll(".search-item")[i].style.display = "none";
+      } else {
+        document.querySelectorAll(".search-item")[i].style.display = "flex";
+      }
+  }
+}
 
 </script>
 
 <style scoped>
+.search-input{
+  font-size: 12px;
+  width: 250px;
+  background-color: transparent;
+}
 .search-btn {
   background-color: #fff;
   border-radius: 40px;
@@ -74,6 +100,7 @@
   background: #fff;
   transition: all 0.3s ease;
   font-size: 12px;
+  width: 250px;
 }
 .search-btn-content {
   display: flex; 

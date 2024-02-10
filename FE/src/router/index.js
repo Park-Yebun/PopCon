@@ -28,6 +28,7 @@ import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
 
 import MapMainView from '@/views/MapMainView.vue'
+import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 
 import { storeToRefs } from "pinia";
@@ -79,10 +80,26 @@ const router = createRouter({
       name: 'map',
       component: MapMainview
     },
+    { //지도 검색 페이지 
+      path: '/map/search',
+      name: 'mapsearch',
+      component: MapSearchView
+    },
+
     { //검색 페이지 
       path: '/search/:category?',
       name: 'search',
       component: SearchView
+    },
+    { //팝비티아이 페이지 
+      path: '/popbti',
+      name: 'popbti',
+      component: PopbtiViewVue
+    },
+    { //팝비티아이 결과 페이지 
+      path: '/popbti/:mbtiId',
+      name: 'popbtiresult',
+      component: PopbtiResultViewVue
     },
 
     // 유저 기능 라우터 

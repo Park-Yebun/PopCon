@@ -35,6 +35,11 @@ function map(param, success, fail) {
     local.get('/maps/nearby', {params: param}).then(success).catch(fail);
 }
 
+// POPBTI 결과와 매칭
+function popbti(param, success, fail) {
+    local.get('/recommends/popbti', { params: param }).then(success).catch(fail);
+}
+
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti
 };
