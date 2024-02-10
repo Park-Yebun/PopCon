@@ -51,8 +51,8 @@
       <li v-for="search in searchList" :key="search" class="search-item">
         <!-- 지도 아이콘 -->
         <span>{{ search.distance }}</span>
-        <span>{{ search.title }}</span>
-        <span>{{ search.location }}</span>
+        <span>{{ search.popupName }}</span>
+        <span>{{ search.popupLocation }}</span>
       </li>
     </ul>
   </div>
@@ -60,19 +60,68 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue';
+import { mapSearch } from '@/api/popup';
 
-const searchList = ref('dididididi')
+const searchList = ref()
+const param = ref({
+    "keyword":"",
+    "lat":"",
+    "lng":""
+})
+const lat = ref(0)
+const lng = ref(0)
+
+onMounted(async () => {
+  try {
+    await getLocation();
+  } catch (error) {
+    console.error('위치 정보를 가져오는 동안 오류가 발생했습니다:', error);
+  }
+});
+
+const getLocation = () => { // 현재위치 가져오기 
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        lat.value = position.coords.latitude;
+        lng.value = position.coords.longitude;
+        // console.log(lat.value);
+        // console.log(lng.value);
+        resolve();
+      }, reject);
+    }
+  });
+}
 
 function goMapMain() {
   window.location.href = '/map';
 }
 
 function searchKeyword(event) {
-  console.log(event.target.value);
+  const keyword = event.target.value.trim(); // 입력된 검색어
+  console.log(keyword);
 
+  if (keyword === '') {
+    searchList.value = []; // 검색어가 비어있을 때는 검색 결과를 초기화
+    return;
+  }
+
+  const param = { keyword, lat: lat.value, lng: lng.value };
+  mapSearch(
+    param,
+    ({ data }) => {
+      console.log(data);
+      searchList.value = data;
+      console.log(searchList);
+    },
+    ({ response }) => {
+      console.log(response);
+    }
+  );
+  
   const len = this.searchList.length;
-
+  
   for (let i = 0; i < len; i++) {
     if (
       this.searchList[i].popupName.includes(event.target.value) === false &&
@@ -82,9 +131,10 @@ function searchKeyword(event) {
       } else {
         document.querySelectorAll(".search-item")[i].style.display = "flex";
       }
+    }
   }
-}
 
+  
 </script>
 
 <style scoped>
