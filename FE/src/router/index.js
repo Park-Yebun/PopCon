@@ -8,7 +8,7 @@ import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
-import MapMainview from '@/views/MapMainView.vue'
+import MapMainview from '@/views/MapMainview.vue'
 import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
 import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
 import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
@@ -29,8 +29,6 @@ import onetoone from '@/views/1to1.vue'
 
 import MapMainView from '@/views/MapMainView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
-import PopbtiViewVue from '@/views/PopbtiView.vue'
-import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -85,16 +83,6 @@ const router = createRouter({
       path: '/search/:category?',
       name: 'search',
       component: SearchView
-    },
-    { //팝비티아이 페이지 
-      path: '/popbti',
-      name: 'popbti',
-      component: PopbtiViewVue
-    },
-    { //팝비티아이 페이지 
-      path: '/popbti/:mbtiId',
-      name: 'popbtiresult',
-      component: PopbtiResultViewVue
     },
 
     // 유저 기능 라우터 
@@ -172,19 +160,19 @@ const router = createRouter({
       redirect: {name:"popup-search"},
       children:[
         {   // 제보 ; 회원만 접근 가능 
-          path: 'report',
+          path: '/popup/report',
           name: 'popup-report',
           component: ReportPopupStore,
           beforeEnter : onlyAuthUser
         },
         {   // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
-          path: 'register',
+          path: '/popup/register',
           name: 'popup-register',
           component: PopupStoreCorporateReport,
           beforeEnter : onlyAuthUser
         },
         { // 상세보기 
-          path:":popupId",
+          path:"/popup/:popupId",
           name: 'popup-detail',
           component: PopupDetailView
         },

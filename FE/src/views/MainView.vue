@@ -33,7 +33,7 @@
     <div v-if="popupgood" class="carousel-inner">
       <div class="carousel-item active">
         <img
-          :src="popupgood[0].previewImagePath"
+          :src="popupgood[0].popupImagePath"
           class="d-block w-100 rounded-bottom-4"
           alt="이미지 없음"
         />
@@ -73,26 +73,19 @@
         word-wrap: break-word">더보기</div>
   </div>
   <div title="마감임박 팝업리스트" class="deadline-popup-group">
-    <div v-for="popup in popupend" class="deadline-popup">
-      <img :src= "popup.previewImagePath" class="deadline-popup-img" :alt="popup.popupName + '사진'">
-      <h5 class="deadline-popup-titdeadline-popuple">{{ popup.popupName }}</h5>
-
-    </div>
-    <div title="마감임박 팝업리스트" class="deadline-popup-group">
-      <template v-for="(popup, key) in popupend">
-        <div class="deadline-popup">
-          <img
-            :src="popupend[key].previewImagePath"
-            class="deadline-popup-img"
-            alt=""
-          />
-          <p class="deadline-popup-titdeadline-popuple">
-            {{ popup.popupName }}
-          </p>
-          <p>{{ popup.popupEnd }}</p>
-        </div>
-      </template>
-    </div>
+    <template v-for="(popup, key) in popupend" :key="key">
+      <div class="deadline-popup">
+        <img
+          :src="popupend[key].previewImagePath"
+          class="deadline-popup-img"
+          alt=""
+        />
+        <p @click="goDetail(popup.popupId)" class="deadline-popup-title">
+          {{ popup.popupName }}
+        </p>
+        <p>{{ popup.popupEnd }}</p>
+      </div>
+    </template>
   </div>
 </div>
 
@@ -248,6 +241,11 @@ function openGallery() {
   };
   input.click();
 }
+
+// 팝업스토어 상세페이지로 이동
+const goDetail = (popupId) => {
+  router.push({ name: 'popup-detail', params: { popupId }})
+}
 </script>
 
 <style scoped>
@@ -322,7 +320,6 @@ img {
   font-family: ABeeZee;
   font-weight: 400;
   line-height: 22px;
-  word-wrap: break-word;
 }
 
 .main-category-container {
