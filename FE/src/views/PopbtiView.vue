@@ -59,27 +59,6 @@ const select = [];
 // endPoint는 질문의 개수
 
 
-// meta tag
-const name = 'MyComponent';
-const metaInfo = {
-  title: 'My Page Title',
-  meta: [
-    { charset: 'utf-8'},
-    { name: 'viewport', content: 'width=device-width, initial-sacle=1'},
-    { name: 'author', content: 'wiese0630'},
-    { name: 'keywords', content: 'POPBTI'},
-    { name: 'description', content: 'POPBTI'},
-    
-    // SNS share
-    { property: 'og:url', content: 'https://popcon.netlify.app'},
-    { property: 'og:title', content: 'POPBTI 테스트'},
-    { property: 'og:type', content: 'website'},
-    { property: 'og:image', content: 'img/share.png'},
-    { property: 'og:description', content: 'POPBTI 테스트로 알아보는 팝업 취향'},
-  ],
-};
-
-
 
 const qnaList = [
   {
@@ -274,17 +253,17 @@ const begin = () => {
   goNext(qIdx);
 };
 
-const url = 'https://popcon.netlify.app'
-
+const url = 'http://localhost:5173'
+// 배포 후 URL 수정
 const setShare = () => {
   var resultImg = document.querySelector('#resultImg');
   var resultAlt = resultImg.firstElementChild.alt;
   // resultAlt는 MBTI 코드
   const shareTitle = 'POPBTI 테스트 결과'
   const shareDes = infoList[resultAlt].name;
-  console.log(resultAlt + '**')
-  const shareImage = url + 'img/image-' + resultAlt + '.png';
-  const shareURL = url + 'page/result-' + resultAlt + '.html';
+  // console.log(resultAlt + '**') 
+  const shareImage = '/src/assets/images/popbti-img/popbti-img-' + resultAlt + '.svg';
+  const shareURL = url + '/popbti/' + resultAlt;
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
@@ -309,6 +288,7 @@ const setShare = () => {
 }
 
 </script>
+
 
 <style scoped>
 .container {
