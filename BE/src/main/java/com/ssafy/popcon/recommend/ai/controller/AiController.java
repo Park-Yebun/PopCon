@@ -21,7 +21,7 @@ public class AiController {
 
     @GetMapping
     public ResponseEntity<?> resultList(@RequestParam String className, @RequestHeader("Authorization") String token) throws Exception {
-        List<RecommendDto> aiDtos = aiService.findUserAiResult(token);
+        List<RecommendDto> aiDtos = aiService.findAi(className,token);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(aiDtos);
