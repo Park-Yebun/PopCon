@@ -32,6 +32,67 @@ onMounted(async () => {
   }
 });
 
+const categoryClick = (event) => {
+  if (event.target.dataset.category) {
+    const category = event.target.dataset.category;
+    if (category === 'all') {
+      goCategoryAll();
+    } else {
+      goCategory(category);
+    }
+  }
+}
+const goCategoryAll = () => {
+  const param = { lat: lat.value, lng: lng.value };
+    map(
+    param,
+    ({ data }) => {
+      // console.log(data);
+      popups.value = data;
+      console.log(popups);
+    },
+    ({ response }) => {
+      console.log(response);
+    }
+  );
+}
+
+  const goCategory = (text) => {
+    const param = {lat: lat.value, lng: lng.value };
+    map(
+      param,
+      ({ data }) => {
+        console.log(data);
+        const Data = data.filter(item => item.popupCategory.includes(text));
+        popups.value = Data;
+        console.log(popups);
+        createMarkers();
+      },
+      ({ response }) => {
+        console.log(response);
+      }
+    );
+  }
+
+  const createMarkers = () => {
+  // 이전 마커 제거
+  markers.value = [];
+
+  // 새로운 마커 생성
+  for (let i = 0; i < popups.value.length; i++) {
+    const marker = new window.naver.maps.Marker({
+      map: mapRef,
+      position: new window.naver.maps.LatLng(popups.value[i].popupLatitude, popups.value[i].popupLongitude),
+      icon: {
+        content: CustomMapMarker(popups.value[i]),
+        size: new window.naver.maps.Size(35, 35),
+        scaledSize: new window.naver.maps.Size(35, 35),
+      },
+    });
+    markers.value.push(marker);
+  }
+}  
+
 
 const getLocation = () => { // 현재위치 가져오기 
   return new Promise((resolve, reject) => {
@@ -48,6 +109,7 @@ const getLocation = () => { // 현재위치 가져오기
 }
 
 const getNearbyPopups=()=>{ // 주변팝업 가져오기 
+    console.log('니어바이 실행')
     param.value.lat=lat.value;
     param.value.lng=lng.value;
 
@@ -77,7 +139,7 @@ const loadMap = (lat, lng) => {
   script.onload = () => {
     const mapRef = new window.naver.maps.Map("map", {
       center: new window.naver.maps.LatLng(lat, lng),
-      zoom: 13
+      zoom: 15
     });
 
     new window.naver.maps.Marker({
@@ -93,7 +155,7 @@ const loadMap = (lat, lng) => {
 
     // 내 현재 위치에서 가장 가까운 100개만 마커 생성
     // const markers = [];
-    for (let i = 0; i < 1 ; i++) {
+    for (let i = 0; i < 100 ; i++) {
         // console.log("마커를 만들자!!");
         // console.log(popups.value);
         // console.log(popups.value[i].popupLatitude);
@@ -182,7 +244,7 @@ const close = () => {
       </button>
 
       <!-- 내위치 버튼 -->
-      <button @click="myLocation" type="button" class="btn btn-light my-location-btn">
+      <button @click="getNearbyPopups" type="button" class="btn btn-light my-location-btn">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
           <path d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
         </svg>
@@ -190,44 +252,44 @@ const close = () => {
     </div>
       
       
-      <!-- 카테고리별 스크롤 -->
-      <div class="wrap">
+    <!-- 카테고리별 스크롤 -->
+    <div class="wrap" @click="categoryClick">
         <div class="scroll__wrap">
-          <button @click="goCategoryAll" type="button" class="btn btn-light category-btn scroll--element">
+          <button data-category="all" type="button" class="btn btn-light category-btn scroll--element">
           ❤️ 전체
-        </button>
-        <button @click="goCategoryFashion" type="button" class="btn btn-light category-btn scroll--element">
-          ✨ 패션/뷰티
-        </button>
-        <button @click="goCategoryFNB" type="button" class="btn btn-light category-btn scroll--element">
-          🍐 식음료
-        </button>
-        <button @click="goCategoryContents" type="button" class="btn btn-light category-btn scroll--element">
-          📽️ 콘텐츠
-        </button>
-        <button @click="goCategoryHobbies" type="button" class="btn btn-light category-btn scroll--element">
-          🏓 취미/여가
-        </button>
-        <button @click="goCategoryFinance" type="button" class="btn btn-light category-btn scroll--element">
-          💵 금융
-        </button>
-        <button @click="goCategoryCeleb" type="button" class="btn btn-light category-btn scroll--element">
-          🎤 연예
-        </button>
-        <button @click="goCategoryDigital" type="button" class="btn btn-light category-btn scroll--element">
-          📺 가전/디지털
-        </button>
-        <button @click="goCategoryLiving" type="button" class="btn btn-light category-btn scroll--element ">
-          🛋️ 리빙
-        </button>
-        <button @click="goCategoryGame" type="button" class="btn btn-light category-btn scroll--element">
-          🎮 게임
-        </button>
-        <button @click="goCategoryCharacter" type="button" class="btn btn-light category-btn scroll--element">
-          🐰 캐릭터
-        </button>
-      </div>
-    </div>   
+          </button>
+          <button data-category="패션뷰티" type="button" class="btn btn-light category-btn scroll--element">
+            ✨ 패션/뷰티
+          </button>
+          <button data-category="식음료" type="button" class="btn btn-light category-btn scroll--element">
+            🍐 식음료
+          </button>
+          <button data-category="콘텐츠" type="button" class="btn btn-light category-btn scroll--element">
+            📽️ 콘텐츠
+          </button>
+          <button data-category="취미여가" type="button" class="btn btn-light category-btn scroll--element">
+            🏓 취미/여가
+          </button>
+          <button data-category="금융" type="button" class="btn btn-light category-btn scroll--element">
+            💵 금융
+          </button>
+          <button data-category="연예" type="button" class="btn btn-light category-btn scroll--element">
+            🎤 연예
+          </button>
+          <button data-category="가전디지털" type="button" class="btn btn-light category-btn scroll--element">
+            📺 가전/디지털
+          </button>
+          <button data-category="리빙" type="button" class="btn btn-light category-btn scroll--element ">
+            🛋️ 리빙
+          </button>
+          <button data-category="게임" type="button" class="btn btn-light category-btn scroll--element">
+            🎮 게임
+          </button>
+          <button data-category="캐릭터" type="button" class="btn btn-light category-btn scroll--element">
+            🐰 캐릭터
+          </button>
+        </div>
+      </div> 
     
       <!-- 임시버튼 -->
       <div>
