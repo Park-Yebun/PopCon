@@ -47,7 +47,7 @@
         <result column="popup_event" property="popupEvent"/>
         <result column="popup_view" property="popupView"/>
         <result column="popup_car" property="popupCar"/>
-        <result column="popup_entryfee" property="popupEntryFee"/>
+        <result column="popup_entryfee" property="popupEntryfee"/>
         <result column="popup_wifi" property="popupWifi"/>
         <result column="popup_eat" property="popupEat"/>
         <result column="popup_site" property="popupSite"/>
@@ -75,6 +75,8 @@
         <result column="user_phone" property="userPhone"/>
         <result column="user_deleted" property="userDeleted"/>
     </resultMap>
+
+
 
     <insert id="registerReview" parameterType="com.ssafy.popcon.review.dto.ReviewDto" useGeneratedKeys="true" keyProperty="reviewId">
         INSERT INTO popcon.review (popup_id, review_content, review_score, review_quality,
@@ -130,7 +132,7 @@
     </delete>
 
     <!-- 리뷰 테이블에 해당 리뷰 존재하는지 SQL -->
-    <select id="getReviewById" parameterType="int" resultType="com.ssafy.popcon.review.dto.ReviewDto" resultMap="reviewResult">
+    <select id="getReviewById" resultType="com.ssafy.popcon.review.dto.ReviewDto" resultMap="reviewResult">
         SELECT * FROM popcon.review WHERE review.popup_id = #{popupId} AND review_id = #{reviewId}
     </select>
 
@@ -187,13 +189,30 @@
     </select>
 
     <!-- 좋아요 추가 -->
-    <update id="addLikeToReview" parameterType="int">
-        UPDATE popcon.review SET review_like = review_like + 1 WHERE popup_id = #{popupId}
+    <update id="addLikeToReview" parameterType="com.ssafy.popcon.review.dto.ReviewDto">
+        UPDATE popcon.review SET review_like = review_like + 1 WHERE popup_id = #{popupId} AND review_id = #{reviewId}
     </update>
+
+    <!-- 팝업 추천 정보 추가 -->
+    <insert id="addReviewRecommend" parameterType="ReviewRecommendDto">
+        INSERT INTO popcon.review_recommend (review_id, user_id) VALUES (#{reviewId}, #{userId})
+    </insert>
+
+    <!-- 리뷰 추천 정보 등록 -->
+    <select id="duplicateReviewRecommend" resultType="java.lang.Integer" parameterType="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        SELECT COUNT(*)
+        FROM popcon.review_recommend
+        WHERE review_id = #{reviewId, jdbcType=INTEGER} AND user_id = #{userId}
+    </select>
 
     <!-- 좋아요 취소 -->
     <update id="cancelLikeToReview" parameterType="int">
-        UPDATE popcon.review SET review_like = review_like - 1 WHERE popup_id = #{popupId}
+        UPDATE popcon.review SET review_like = review_like - 1 WHERE popup_id = #{popupId} AND review_id = #{reviewId}
     </update>
+
+    <!-- 리뷰 추천 정보 삭제 -->
+    <delete id="deleteReviewRecommend" parameterType="ReviewRecommendDto">
+        DELETE FROM popcon.review_recommend WHERE review_id = #{reviewId} AND user_id = #{userId}
+    </delete>
 
 </mapper>
