@@ -49,7 +49,10 @@
 
 
       
+    <div class="d-grid">
       <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3">공유하기</button>
+      <button @click="goBack" type="button" class="kakao mt-3 py-2 px-3">돌아가기</button>
+    </div>
     </section>
 
 
@@ -326,6 +329,12 @@ const setShare = () => {
       },
     ]
   });
+}
+
+
+// 결과 화면 나온 후 다시 추천 페이지로 돌아가기
+const goBack = function() {
+  router.push({ name: 'recommend' })
 }
 
 </script>

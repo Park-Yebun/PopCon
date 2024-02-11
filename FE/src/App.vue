@@ -166,4 +166,25 @@ const goOthers = function() {
   router.push({name : 'other-member'})
 }
 
+import { useMemberStore } from "@/stores/user";
+
+
+// others 페이지 인증권한 확인용 함수
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore();
+  const { userInfo } = storeToRefs(memberStore);
+  const { getUserInfo } = memberStore;
+
+  let token = localStorage.getItem("accessToken");
+
+  if(token!=null){  // 토큰이 있으면 아이디 찾아오기
+    console.log(1); 
+    await getUserInfo(token);
+    next();
+  } else {  // 없으면 로그인 시키기 
+    next({name:"user-login"});
+  }
+
+};
+
 </script>
