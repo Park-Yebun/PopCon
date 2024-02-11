@@ -13,4 +13,11 @@ public class RecommendDto {
     private String popupName;
     private String previewImage;
 
+
+    private int popupRecommend;
+    private String userId;
+
+    private String categoryName;
+
+    private String popupImagePath;
 }

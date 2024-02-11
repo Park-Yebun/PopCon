@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.recommend.good.mapper.GoodMapper">
+
+    <resultMap id="good" type="RecommendDto">
+        <result column="user_id" property="userId"/>
+        <result column="popup_id" property="popupId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="popup_image_path" property="popupImagePath"/>
+        <result column="popup_name" property="popupName"/>
+    </resultMap>
+
+
+    <select id="findUserGoodResult" resultMap="good">
+        SELECT a.popup_image_path, b.popup_name
+        FROM popcon.popup AS b
+                 JOIN popcon.popup_image AS a ON b.popup_id = a.popup_id
+        WHERE b.popup_id IN (
+            SELECT DISTINCT pc.popup_id
+            FROM popcon.popup_category pc
+                     JOIN (
+                SELECT popcon.popup_category.category_Name
+                FROM popcon.popup_category
+                         JOIN popcon.popup_recommend ON popcon.popup_category.popup_id = popcon.popup_recommend.popup_id
+                WHERE popcon.popup_recommend.user_id = #{user_id}
+                GROUP BY popcon.popup_category.category_Name
+                ORDER BY COUNT(*) DESC
+                LIMIT 3
+            ) AS top_categories ON pc.category_Name = top_categories.category_Name
+            WHERE pc.popup_id NOT IN (
+                SELECT popup_id
+                FROM popcon.popup_recommend
+                WHERE popcon.popup_recommend.user_id = #{user_id}
+            )
+        )
+        group by popup_name
+        limit 10;
+    </select>
+
+</mapper>

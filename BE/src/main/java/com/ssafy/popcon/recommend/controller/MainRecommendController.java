@@ -2,6 +2,7 @@ package com.ssafy.popcon.recommend.controller;
 
 import com.ssafy.popcon.recommend.ai.service.AiService;
 import com.ssafy.popcon.recommend.dto.RecommendDto;
+import com.ssafy.popcon.recommend.good.service.GoodService;
 import com.ssafy.popcon.recommend.popbti.service.PopbtiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class MainRecommendController {      // 추천 페이지 최초 진입 컨트롤러
 
     private final AiService aiService;
+    private final GoodService goodService;
 
     @GetMapping
     public ResponseEntity<?> recommendList(@RequestHeader("Authorization") String token) throws Exception {
@@ -27,8 +29,9 @@ public class MainRecommendController {      // 추천 페이지 최초 진입 �
         List<RecommendDto> aiDtos=aiService.findUserAiResult(token);
         result.put("ai", aiDtos);
 
+        List<RecommendDto> goodDtos = goodService.findUserGoodResult(token);
         // 좋아요 기반 추천 목록
-        result.put("good", aiDtos);
+        result.put("good", goodDtos);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
