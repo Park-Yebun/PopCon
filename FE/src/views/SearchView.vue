@@ -75,7 +75,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted, watch, computed } from 'vue';
-import { getSearchedPopup } from '@/api/popup';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { walkIdentifiers } from 'vue/compiler-sfc';

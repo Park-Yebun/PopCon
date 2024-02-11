@@ -70,11 +70,20 @@ const router = createRouter({
       path: '/join',
       name: 'join',
       component: SignUpCheckViewVue // 개인, 기업 회원 가입 선택 페이지 
-    },    
-    { // 추천 페이지 
+    },
+
+    // 추천 페이지 라우터    
+    {
       path: '/recommend',
       name: 'recommend',
-      component: RecommendPageViewVue
+      component: RecommendPageViewVue,
+      // children: [
+      //   { //
+      //     path: '/popbti',
+      //     name: 'recommend-popbiti',
+      //     component: PopbtiView
+      //   }
+      // ]
     },
     { //지도 페이지 
       path: '/map',
