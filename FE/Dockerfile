@@ -1,23 +1,26 @@
-# 1단계: Vue.js 앱을 빌드합니다.
-FROM node:20.11.0-alpine3.18 AS build-stage
+# nginx 이미지 사용
+FROM nginx:latest
 
+# root에 /app 폴더 생성
+RUN mkdir /app
+
+# work dir 고정
 WORKDIR /app
 
-# package.json 및 package-lock.json을 복사하여 종속성을 설치합니다.
-COPY . .
-RUN npm install
-RUN npm install @webzlodimir/vue-bottom-sheet 
-# 소스 코드를 복사하여 앱을 빌드합니다.
-# COPY . .
-RUN npm run build
+# work dir에 build 폴더 생성
+RUN mkdir ./dist
 
-# 2단계: Nginx로 Vue.js 앱을 호스팅합니다.
-FROM nginx:stable-alpine as production-stage
+# host pc의 현재 경로의 build 폴더를 work dir의 build 폴더로 복사
+ADD ./dist ./dist
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# nginx의 default.conf 삭제
+RUN rm /etc/nginx/conf.d/default.conf
 
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# host pc의 nginx.conf를 아래 경로에 복사
+COPY ./nginx.conf /etc/nginx/conf.d
 
+# 80 포트 개방
 EXPOSE 80
 
+# container 실행 시 자동으로 실행할 command. nginx 시작함
 CMD ["nginx", "-g", "daemon off;"]
