@@ -5,64 +5,86 @@
        <i @click="goMapMain" class="bi bi-chevron-left"></i>
        <input class="search-input" v-model="searchTerm" @input="searchKeyword($event)" @keyup.enter="handleSearch" placeholder="지역 혹은 이름을 검색해보세요." />
      </div>
-   </div>
+  </div>
   
-   <!-- 카테고리별 스크롤 -->
-   <div class="wrap" @click="categoryClick">
-     <div class="scroll__wrap">
-       <button data-category="all" type="button" class="btn btn-light category-btn scroll--element">
-       ❤️ 전체
-       </button>
-       <button data-category="패션뷰티" type="button" class="btn btn-light category-btn scroll--element">
-         ✨ 패션/뷰티
-       </button>
-       <button data-category="식음료" type="button" class="btn btn-light category-btn scroll--element">
-         🍐 식음료
-       </button>
-       <button data-category="콘텐츠" type="button" class="btn btn-light category-btn scroll--element">
-         📽️ 콘텐츠
-       </button>
-       <button data-category="취미여가" type="button" class="btn btn-light category-btn scroll--element">
-         🏓 취미/여가
-       </button>
-       <button data-category="금융" type="button" class="btn btn-light category-btn scroll--element">
-         💵 금융
-       </button>
-       <button data-category="연예" type="button" class="btn btn-light category-btn scroll--element">
-         🎤 연예
-       </button>
-       <button data-category="가전디지털" type="button" class="btn btn-light category-btn scroll--element">
-         📺 가전/디지털
-       </button>
-       <button data-category="리빙" type="button" class="btn btn-light category-btn scroll--element ">
-         🛋️ 리빙
-       </button>
-       <button data-category="게임" type="button" class="btn btn-light category-btn scroll--element">
-         🎮 게임
-       </button>
-       <button data-category="캐릭터" type="button" class="btn btn-light category-btn scroll--element">
-         🐰 캐릭터
-       </button>
-     </div>
-   </div>
- 
-   <div>
-     <ul class="search-list">
-       <li @click=goPopupDetail(search.popupId) v-for="search in searchList" :key="search" class="search-item">
-         <!-- 지도 아이콘 -->
-         <i class="bi bi-geo-alt-fill"></i>
-         <div>
-           <span>{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
-           <span>{{ search.popupName }}</span>
-           <span>{{ search.popupLocation }}</span>
-           <span>좋아요 {{ search.popupLike }}</span>
-           <span v-for="category in search.popupCategory" :key="category">{{ category }}</span>
-         </div>
-         <hr>
-       </li>
-     </ul>
-   </div>
- 
+  <!-- 카테고리별 스크롤 -->
+  <div class="wrap" @click="categoryClick">
+    <div class="scroll__wrap">
+      <button data-category="all" type="button" class="btn btn-light category-btn scroll--element">
+      ❤️ 전체
+      </button>
+      <button data-category="패션뷰티" type="button" class="btn btn-light category-btn scroll--element">
+        ✨ 패션/뷰티
+      </button>
+      <button data-category="식음료" type="button" class="btn btn-light category-btn scroll--element">
+        🍐 식음료
+      </button>
+      <button data-category="콘텐츠" type="button" class="btn btn-light category-btn scroll--element">
+        📽️ 콘텐츠
+      </button>
+      <button data-category="취미여가" type="button" class="btn btn-light category-btn scroll--element">
+        🏓 취미/여가
+      </button>
+      <button data-category="금융" type="button" class="btn btn-light category-btn scroll--element">
+        💵 금융
+      </button>
+      <button data-category="연예" type="button" class="btn btn-light category-btn scroll--element">
+        🎤 연예
+      </button>
+      <button data-category="가전디지털" type="button" class="btn btn-light category-btn scroll--element">
+        📺 가전/디지털
+      </button>
+      <button data-category="리빙" type="button" class="btn btn-light category-btn scroll--element ">
+        🛋️ 리빙
+      </button>
+      <button data-category="게임" type="button" class="btn btn-light category-btn scroll--element">
+        🎮 게임
+      </button>
+      <button data-category="캐릭터" type="button" class="btn btn-light category-btn scroll--element">
+        🐰 캐릭터
+      </button>
+    </div>
+  </div>
+
+  <!-- 최근 검색어 -->
+  <div class="search-keywords">
+    <i class="bi bi-clock"></i>
+    <div v-if="recentSearches.length === 0">최근 검색어가 없습니다.</div>
+    <div v-else>
+      <div v-for="keyword in recentSearches" :key="keyword" class="keyword-item">
+        <span @click="searchKeywordFromHistory(keyword)">{{ keyword }}</span>
+        <i @click="removeKeyword(keyword)" class="bi bi-x-lg"></i>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- 검색 결과 -->
+    <div>
+      <ul class="search-list">
+        <li @click=goPopupDetail(search.popupId) v-for="search in searchList" :key="search" class="search-item">
+          <!-- 지도 아이콘 -->
+          <div class="flex">
+            <div>  
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div>
+              <span>{{ search.popupName }}</span>
+              <span>{{ search.popupLocation }}</span>
+              <span>좋아요 {{ search.popupLike }}</span>
+            </div>
+            <div>
+              <span>{{search.popupCategory.join(', ') }}</span>
+              <span>{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
+            </div>
+          </div>
+          <hr>
+        </li>
+      </ul>
+    </div>
+  
 </template>
  
 <script setup>
@@ -72,6 +94,8 @@
   
   const router = useRouter()
   const searchList = ref()
+  const recentSearches = ref(JSON.parse(localStorage.getItem('recentSearches')) || [])
+  const searchTerm = ref('')
   const param = ref({
       "keyword":"",
       "lat":"",
@@ -87,9 +111,50 @@
       console.error('위치 정보를 가져오는 동안 오류가 발생했습니다:', error);
     }
   });
+
+  const handleSearch = () => {
+    // Save search term
+    saveSearchTerm();
+    // Perform search
+    // ...
+  }
+
+  const saveSearchTerm = () => {
+  const term = searchTerm.value.trim();
+  if (term === '') return;
+
+  // Add term to recent searches
+  recentSearches.value.unshift(term);
+  // Limit recent searches to 5 items
+  recentSearches.value = recentSearches.value.slice(0, 10);
+  // Save recent searches to local storage
+  localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value));
+}
  
+// Function to remove a keyword from recent searches
+const removeKeyword = (keyword) => {
+  const index = recentSearches.value.indexOf(keyword);
+  if (index !== -1) {
+    recentSearches.value.splice(index, 1);
+    // Save recent searches to local storage
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value));
+  }
+}
+
+// Function to search using a keyword from recent searches
+const searchKeywordFromHistory = (keyword) => {
+  searchTerm.value = keyword;
+  handleSearch();
+}
+
+function hideRecentSearches() {
+  // 최근 검색어를 숨기는 함수
+  document.querySelector('.search-keywords').style.display = 'none';
+}
 
   const categoryClick = (event) => {
+    // 최근 검색어 숨기기
+    hideRecentSearches();
   if (event.target.dataset.category) {
     const category = event.target.dataset.category;
     if (category === 'all') {
@@ -157,7 +222,18 @@
   function searchKeyword(event) {
     const keyword = event.target.value.trim(); // 입력된 검색어
     console.log(keyword);
+
+    // 검색어가 입력되면 최근 검색어를 숨깁니다.
+    document.querySelector('.search-keywords').style.display = 'none';
   
+    if (keyword === '') {
+    // 검색어가 비어있을 때는 최근 검색어를 보여줍니다.
+    document.querySelector('.search-keywords').style.display = 'flex';
+  } else {
+    // 검색어가 입력되면 최근 검색어를 숨깁니다.
+    document.querySelector('.search-keywords').style.display = 'none';
+  }
+
     if (keyword === '') {
       searchList.value = []; // 검색어가 비어있을 때는 검색 결과를 초기화
       return;
@@ -204,7 +280,9 @@
    width: 250px;
    background-color: transparent;
  }
- 
+ .flex {
+  display: flex;
+ }
  .search-list {
    margin: 0 auto;
    width: 360px;
