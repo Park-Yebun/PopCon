@@ -8,7 +8,7 @@ import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
-import MapMainview from '@/views/MapMainview.vue'
+import MapMainView from '@/views/MapMainView.vue'
 import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
 import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
 import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
@@ -27,10 +27,10 @@ import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
 
-
-import MapMainView from '@/views/MapMainView.vue'
 import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
+import PopbtiViewVue from '@/views/PopbtiView.vue'
+import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -79,7 +79,7 @@ const router = createRouter({
     { //지도 페이지 
       path: '/map',
       name: 'map',
-      component: MapMainview
+      component: MapMainView
     },
     { //지도 검색 페이지 
       path: '/map/search',
@@ -247,11 +247,7 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
-    {
-      path: '/map',
-      name: 'map',
-      component: MapMainView
-    }
+  
 
   ]
 })
