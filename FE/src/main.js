@@ -98,7 +98,7 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
   getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' }).then((currentToken) => {
       if (currentToken) {
           // Send the token to your server and update the UI if necessary
-          console.log("Token is:",currentToken);
+          // console.log("Token is:",currentToken);
           // ...
       } else {
           // Show permission request UI
@@ -110,6 +110,8 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
       console.log('An error occurred while retrieving token. ', err);
       // ...
   });
+
+
   if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("firebase-messaging-sw.js")
@@ -124,3 +126,4 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
