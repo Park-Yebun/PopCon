@@ -40,7 +40,7 @@
       <p>당신에게 추천드리는 팝업스토어</p>
       <div>
       <div title="recpopup" class="popup-group">
-        <div v-for="popup in recpopup" class="popup">
+        <div v-for="popup in recpopup" class="popup" key="popup">
           <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
           <p class="popup-title">{{popup.popupName}}</p>
         </div>
