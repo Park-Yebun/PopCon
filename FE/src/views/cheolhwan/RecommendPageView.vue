@@ -2,7 +2,10 @@
   <i class="bi bi-arrow-left"></i>
   <div>
     <!-- 추천 유형 A -->
-    <div>
+    <div class="">
+
+    </div>
+    <div v-if="isHaveCookie == true">
       <div class="d-flex justify-content-between m-3">
         <div style="font-weight: bold;">팝BIT</div>
         <div>
@@ -103,7 +106,7 @@
 </template>
   
 <script setup>
-import { ref,computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 
@@ -117,9 +120,13 @@ const inputImagebutton = ref();
 const imgPreview = ref(null);
 
 const AList = ref()
+const isHaveCookie = ref(false)
+
 const BList = ref()
 const CList = ref()
-  
+
+
+// ai추천 이미지 플라스크로 보내서 검사하기
 const getFileName = async (files) => {
   const fileName = files[0];
   inputImagebutton.value = true; // 이미지 레이블을 숨기기 위해 inputImagebutton을 true로 설정
@@ -191,11 +198,22 @@ const fullImageUrl = computed(() => {
   }
   return null;
 });
+///////////////////////////////////////////////////////////////////////////////////
 
 
-const recommendationsA = ref()
-const recommendationsB = ref()
-const recommendationsC = ref()
+// popbti 쿠키 확인하고 있으면 추천리스트 가져오기, 없으면 검사페이지로 라우팅
+onMounted(() => {
+  const getCookie = function(name) {
+  const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
+  return value? value[2] : null
+}
+console.log(getCookie("mbtiResult"))
+  if (getCookie("mbtiResult")) {
+    isHaveCookie.value == true
+    console.log(isHaveCookie.value)
+  }
+})
+
 
 
 // 좋아요 알고리즘
