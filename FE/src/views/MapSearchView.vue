@@ -113,30 +113,28 @@
   });
 
   const handleSearch = () => {
-    // Save search term
+    // 검색어 저장
     saveSearchTerm();
-    // Perform search
-    // ...
   }
 
   const saveSearchTerm = () => {
   const term = searchTerm.value.trim();
   if (term === '') return;
 
-  // Add term to recent searches
+  // 최근검색어 저장
   recentSearches.value.unshift(term);
-  // Limit recent searches to 5 items
+  // 최근검색어는 10개까지만
   recentSearches.value = recentSearches.value.slice(0, 10);
-  // Save recent searches to local storage
+  // 로컬스토리지 집어넣기
   localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value));
 }
  
-// Function to remove a keyword from recent searches
+// 최근검색어 삭제
 const removeKeyword = (keyword) => {
   const index = recentSearches.value.indexOf(keyword);
   if (index !== -1) {
     recentSearches.value.splice(index, 1);
-    // Save recent searches to local storage
+    // 최근검색어 하나 빼고 로컬스토리지 저장
     localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value));
   }
 }
