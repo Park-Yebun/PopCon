@@ -41,18 +41,24 @@
         🎮 게임
       </button>
       <button @click="goCategoryCharacter" type="button" class="btn btn-light category-btn scroll--element">
-        🐰 캐릭터
+        🐰 캐릭터searchsearch
       </button>
     </div>
   </div>
 
   <div>
     <ul class="search-list">
-      <li v-for="search in searchList" :key="search" class="search-item">
+      <li @click=goPopupDetail(search.popupId) v-for="search in searchList" :key="search" class="search-item">
         <!-- 지도 아이콘 -->
-        <span>{{ search.distance }}</span>
-        <span>{{ search.popupName }}</span>
-        <span>{{ search.popupLocation }}</span>
+        <i class="bi bi-geo-alt-fill"></i>
+        <div>
+          <span>{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
+          <span>{{ search.popupName }}</span>
+          <span>{{ search.popupLocation }}</span>
+          <span>좋아요 {{ search.popupLike }}</span>
+          <span>{{ search.popupCategory[0] }}</span>
+        </div>
+        <hr>
       </li>
     </ul>
   </div>
@@ -62,7 +68,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { mapSearch } from '@/api/popup';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const searchList = ref()
 const param = ref({
     "keyword":"",
@@ -92,6 +100,10 @@ const getLocation = () => { // 현재위치 가져오기
       }, reject);
     }
   });
+}
+
+const goPopupDetail = (popupId) => {
+  router.push(`/popup/${popupId}`)
 }
 
 function goMapMain() {
@@ -138,11 +150,32 @@ function searchKeyword(event) {
 </script>
 
 <style scoped>
-.search-input{
+
+* {
+  padding: 0;
+  margin: 0;
+}
+.search-input {
   font-size: 12px;
   width: 250px;
   background-color: transparent;
 }
+
+.search-list {
+  margin: 0 auto;
+  width: 360px;
+}
+
+.search-list li {
+  list-style-type: none;
+}
+
+.search-list span {
+  display: block;
+}
+
+
+
 .search-btn {
   background-color: #fff;
   border-radius: 40px;
