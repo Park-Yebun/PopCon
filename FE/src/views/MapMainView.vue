@@ -394,7 +394,7 @@ const close = () => {
   background: #fff;
   transition: all 0.3s ease;
   font-size: 12px;
-  width: 280px;
+  width: 250px;
 }
 .search-btn-content {
   display: flex; 

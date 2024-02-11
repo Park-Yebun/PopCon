@@ -1,11 +1,11 @@
 <template>
-  <!-- 서치 창 -->
-  <button @click="goMapSearch" type="button" class="btn btn-light search-btn">
+ <!-- 서치 창 -->
+ <div type="button" class="btn btn-light search-btn">
     <div class="search-btn-content">
-      <p style="font-size: 30px;"><</p> 
-      <p>지역 혹은 이름을 검색해보세요.</p>
+      <i @click="goMapMain" class="bi bi-chevron-left"></i>
+      <input class="search-input" v-model="searchTerm" @input="searchKeyword($event)" @keyup.enter="handleSearch" placeholder="지역 혹은 이름을 검색해보세요." />
     </div>
-  </button>
+  </div>
  
   <!-- 카테고리별 스크롤 -->
   <div class="wrap">
@@ -41,32 +41,141 @@
         🎮 게임
       </button>
       <button @click="goCategoryCharacter" type="button" class="btn btn-light category-btn scroll--element">
-        🐰 캐릭터
+        🐰 캐릭터searchsearch
       </button>
     </div>
-  </div>   
-  <p>최근검색</p>
-  <hr>
-  <div class="search-keywords">
-    <i class="bi bi-search"></i>
-    <span>최근검색어</span>
-    <i class="bi bi-x-lg"></i>
   </div>
-  <hr>
-  <div class="search-keywords">
-    <i class="bi bi-geo-alt-fill"></i>
-    <span>최근검색팝업</span>
-    <i class="bi bi-x-lg"></i>
+
+  <div>
+    <ul class="search-list">
+      <li @click=goPopupDetail(search.popupId) v-for="search in searchList" :key="search" class="search-item">
+        <!-- 지도 아이콘 -->
+        <i class="bi bi-geo-alt-fill"></i>
+        <div>
+          <span>{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
+          <span>{{ search.popupName }}</span>
+          <span>{{ search.popupLocation }}</span>
+          <span>좋아요 {{ search.popupLike }}</span>
+          <span>{{ search.popupCategory[0] }}</span>
+        </div>
+        <hr>
+      </li>
+    </ul>
   </div>
-  <hr>
 
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import { mapSearch } from '@/api/popup';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
+const searchList = ref()
+const param = ref({
+    "keyword":"",
+    "lat":"",
+    "lng":""
+})
+const lat = ref(0)
+const lng = ref(0)
+
+onMounted(async () => {
+  try {
+    await getLocation();
+  } catch (error) {
+    console.error('위치 정보를 가져오는 동안 오류가 발생했습니다:', error);
+  }
+});
+
+const getLocation = () => { // 현재위치 가져오기 
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        lat.value = position.coords.latitude;
+        lng.value = position.coords.longitude;
+        // console.log(lat.value);
+        // console.log(lng.value);
+        resolve();
+      }, reject);
+    }
+  });
+}
+
+const goPopupDetail = (popupId) => {
+  router.push(`/popup/${popupId}`)
+}
+
+function goMapMain() {
+  window.location.href = '/map';
+}
+
+function searchKeyword(event) {
+  const keyword = event.target.value.trim(); // 입력된 검색어
+  console.log(keyword);
+
+  if (keyword === '') {
+    searchList.value = []; // 검색어가 비어있을 때는 검색 결과를 초기화
+    return;
+  }
+
+  const param = { keyword, lat: lat.value, lng: lng.value };
+  mapSearch(
+    param,
+    ({ data }) => {
+      console.log(data);
+      searchList.value = data;
+      console.log(searchList);
+    },
+    ({ response }) => {
+      console.log(response);
+    }
+  );
+  
+  const len = this.searchList.length;
+  
+  for (let i = 0; i < len; i++) {
+    if (
+      this.searchList[i].popupName.includes(event.target.value) === false &&
+      this.searchList[i].popupLocation.includes(event.target.value) === false
+      ) {
+        document.querySelectorAll(".search-item")[i].style.display = "none";
+      } else {
+        document.querySelectorAll(".search-item")[i].style.display = "flex";
+      }
+    }
+  }
+
+  
 </script>
 
 <style scoped>
+
+* {
+  padding: 0;
+  margin: 0;
+}
+.search-input {
+  font-size: 12px;
+  width: 250px;
+  background-color: transparent;
+}
+
+.search-list {
+  margin: 0 auto;
+  width: 360px;
+}
+
+.search-list li {
+  list-style-type: none;
+}
+
+.search-list span {
+  display: block;
+}
+
+
+
 .search-btn {
   background-color: #fff;
   border-radius: 40px;
@@ -74,6 +183,7 @@
   background: #fff;
   transition: all 0.3s ease;
   font-size: 12px;
+  width: 250px;
 }
 .search-btn-content {
   display: flex; 

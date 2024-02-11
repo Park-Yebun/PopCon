@@ -8,7 +8,7 @@ import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
-import MapMainview from '@/views/MapMainview.vue'
+import MapMainView from '@/views/MapMainView.vue'
 import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
 import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
 import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
@@ -26,10 +26,11 @@ import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
-import PopupDetailView from '@/views/PopupDetailView.vue'
-import PopbtiView from '@/views/PopbtiView.vue'
 
-import GibonView2 from '@/views/GibonView2.vue'
+import MapSearchView from '@/views/MapSearchView.vue'
+import PopupDetailView from '@/views/PopupDetailView.vue'
+import PopbtiViewVue from '@/views/PopbtiView.vue'
+import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -87,22 +88,28 @@ const router = createRouter({
     { //지도 페이지 
       path: '/map',
       name: 'map',
-      component: MapMainview
+      component: MapMainView
     },
+    { //지도 검색 페이지 
+      path: '/map/search',
+      name: 'mapsearch',
+      component: MapSearchView
+    },
+
     { //검색 페이지 
       path: '/search/:category?',
       name: 'search',
       component: SearchView
     },
-    { //바텀시트 페이지 
-      path: '/test',
-      name: 'test',
-      component: GibonView2
-    },
-    { //
+    { //팝비티아이 페이지 
       path: '/popbti',
-      name: 'recommend-popbiti',
-      component: PopbtiView
+      name: 'popbti',
+      component: PopbtiViewVue
+    },
+    { //팝비티아이 결과 페이지 
+      path: '/popbti/:mbtiId',
+      name: 'popbtiresult',
+      component: PopbtiResultViewVue
     },
 
     // 유저 기능 라우터 
@@ -249,6 +256,8 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
+  
+
   ]
 })
 

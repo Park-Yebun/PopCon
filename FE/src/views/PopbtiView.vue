@@ -38,25 +38,40 @@
       </div>
 
       <p>당신에게 추천드리는 팝업스토어</p>
-      <img src="" alt="">
-      <img src="" alt="">
+      <div>
+      <div title="recpopup" class="popup-group">
+        <div v-for="popup in recpopup" class="popup" key="popup">
+          <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
+          <p class="popup-title">{{popup.popupName}}</p>
+        </div>
+      </div>
+    </div>
+
+
       
       <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3">공유하기</button>
     </section>
+
+
+
 
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { popbti } from '@/api/popup'
 
-
+const router = useRouter()
 const showMain = ref(true);
 const showQna = ref(false);
 const showResult = ref(false);
 const endPoint = 4;
 const select = [];
 // endPoint는 질문의 개수
+
+const recpopup = ref()
 
 
 
@@ -156,7 +171,9 @@ const infoList = [
     name: 'ENFP : 재기발랄한 탐험가',
     desc: '당신은 열정적이고 창의적인 성향을 가진 사람입니다. 새로운 아이디어를 탐구하고 다양한 가능성을 모색하는 것을 즐기며, 타인과의 유대를 중요시합니다. 어울리는 팝업 스토어는 예술작품이나 창작물을 전시하는 곳일 겁니다.'
   },
-]
+]  
+  
+
 
 const setResult = () => {
   let point = calResult();
@@ -176,7 +193,7 @@ const setResult = () => {
   const imgDiv = document.querySelector('#resultImg');
   var imgURL = '/src/assets/images/popbti-img/popbti-img-' + point + '.svg';
   
-  console.log(imgURL)
+  // console.log(imgURL)
   resultImg.src = imgURL;
   resultImg.alt = point;
   resultImg.classList.add('img-fluid');
@@ -185,9 +202,20 @@ const setResult = () => {
 
   const resultDesc = document.querySelector('.resultDesc');
   resultDesc.innerHTML = infoList[point].desc;
-
-
-
+  console.log(point)
+  const param = { code: point };
+  popbti(
+    param,
+    ({ data }) => {
+      console.log(data);
+      recpopup.value = data
+      console.log(recpopup)
+    },
+    ({ response }) => {
+      console.log(response);
+    }
+  
+  );
 }
 
 const calResult = () => {
@@ -209,6 +237,10 @@ const goResult = () => {
   // console.log(select);
   setResult();
 
+}
+
+const goPopupDetail = (popupId) => {
+  router.push(`/popup/${popupId}`)
 }
  
 const addAnswer = (answerText, qIdx, idx) => {
@@ -300,6 +332,29 @@ const setShare = () => {
 
 
 <style scoped>
+.popup-group {
+  margin-top: 5.31px;
+  min-width: 201.78px;
+  height: 170px;
+  overflow-x: scroll;
+  white-space: nowrap;
+  display: flex;
+  -ms-overflow-style: none;
+}
+
+.popup-group::-webkit-scrollbar{
+  display:none;
+}
+.popup-title{
+  font-size: 10px;
+}
+.popup-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 5px;
+}
 .container {
   width: 360px;
   height: 800px;
