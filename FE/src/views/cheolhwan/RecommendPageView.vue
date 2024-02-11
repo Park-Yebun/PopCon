@@ -9,7 +9,7 @@
           <button type="button" class="btnStyle">더보기</button>
         </div>
       </div>
-      <div title="팝bit" class="popup-group">
+      <div title="팝bti" class="popup-group">
         <div class="popup">
           <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
           <h5 class="popup-title">Card title</h5>
@@ -42,7 +42,7 @@
         </div>
       </div>
       
-      <div title="팝bit" class="popup-group">
+      <div title="AI추천" class="popup-group">
         <div class="popup">
           <form @submit.prevent="uploadImage" enctype="multipart/form-data">
             <div>
@@ -57,22 +57,11 @@
             <!-- <input type="submit" value="업로드"> -->
           </form>
         </div>
-
-        <div class="popup">
-          <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
-          <h5 class="popup-title">Card title</h5>
-        </div>
-        <div class="popup">
-          <img src="../../assets/images/poster_03.png" class="popup-img" alt="">
-          <h5 class="popup-title">Card title</h5>
-        </div>
-        <div class="popup">
-          <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
-          <h5 class="popup-title">Card title</h5>
-        </div>
-        <div class="popup">
-          <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
-          <h5 class="popup-title">Card title</h5>
+        <div v-for="b in BList" :key="b" class="popup-group-child">
+          <div class="popup">
+            <img :src="b.previewImage" class="popup-img" alt="">
+            <h5 class="popup-title">{{ b.popupName }}</h5>
+          </div>
         </div>
       </div>
     </div>
@@ -87,7 +76,7 @@
       
       </div>
 
-      <div title="팝bit" class="popup-group">
+      <div title="좋아요추천" class="popup-group">
         <div class="popup">
           <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
           <h5 class="popup-title">Card title</h5>
@@ -116,14 +105,20 @@
 <script setup>
 import { ref,computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
+import axios from 'axios';
 
 const store = useCounterStore()
+
 
 const fileInput = ref(null);
 const imageUrl = ref(null);
 const yoloClassName = ref(null);
 const inputImagebutton = ref();
 const imgPreview = ref(null);
+
+const AList = ref()
+const BList = ref()
+const CList = ref()
   
 const getFileName = async (files) => {
   const fileName = files[0];
@@ -150,7 +145,7 @@ const uploadImage = async() => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-        const response = await fetch('http://localhost:5000/upload', {
+        const response = await fetch('https://localhost:5000/upload', {
           method: 'POST',
           body: formData
         });
@@ -159,7 +154,28 @@ const uploadImage = async() => {
         if (responseData.success) {
           imageUrl.value = responseData.file_path.replace(/\\/g, '/'); // 받은 경로를 imageUrl에 설정
           yoloClassName.value = responseData.message; 
-          console.log(yoloClassName)
+          console.log(`클래스 네임: ${yoloClassName}`)
+
+          // 이미지 분석 후 클래스 네임이 올바르게 들어온다면, api 요청을 통해 팝업스토어 매칭하기
+          axios({
+            method: 'get',
+            url: "/recommends/ai",
+            headers: {
+              Authorization: "Bearer " + store.personalToken
+            },
+            params: {
+              className: yoloClassName.value
+            }
+          })
+          .then((response) => {
+            console.log("ai 매칭완료!!")
+            BList.value = response.data
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+
+
         } else {
           console.error('Upload failed:', responseData.error);
         }
@@ -175,6 +191,7 @@ const fullImageUrl = computed(() => {
   }
   return null;
 });
+
 
 const recommendationsA = ref()
 const recommendationsB = ref()
@@ -209,6 +226,14 @@ const recommendationsC = ref()
   .popup-group {
   margin-top: 5.31px;
   min-width: 201.78px;
+  height: 170px;
+  overflow-x: scroll;
+  white-space: nowrap;
+  display: flex;
+}
+
+/* ai추천 결과 리스트 정렬 */
+.popup-group-child {
   height: 170px;
   overflow-x: scroll;
   white-space: nowrap;

@@ -26,9 +26,10 @@ import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
 import onetoone from '@/views/1to1.vue'
-
-import MapMainView from '@/views/MapMainView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
+import PopbtiView from '@/views/PopbtiView.vue'
+
+import GibonView2 from '@/views/GibonView2.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -68,11 +69,20 @@ const router = createRouter({
       path: '/join',
       name: 'join',
       component: SignUpCheckViewVue // 개인, 기업 회원 가입 선택 페이지 
-    },    
-    { // 추천 페이지 
+    },
+
+    // 추천 페이지 라우터    
+    {
       path: '/recommend',
       name: 'recommend',
-      component: RecommendPageViewVue
+      component: RecommendPageViewVue,
+      // children: [
+      //   { //
+      //     path: '/popbti',
+      //     name: 'recommend-popbiti',
+      //     component: PopbtiView
+      //   }
+      // ]
     },
     { //지도 페이지 
       path: '/map',
@@ -83,6 +93,16 @@ const router = createRouter({
       path: '/search/:category?',
       name: 'search',
       component: SearchView
+    },
+    { //바텀시트 페이지 
+      path: '/test',
+      name: 'test',
+      component: GibonView2
+    },
+    { //
+      path: '/popbti',
+      name: 'recommend-popbiti',
+      component: PopbtiView
     },
 
     // 유저 기능 라우터 
@@ -229,12 +249,6 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
-    {
-      path: '/map',
-      name: 'map',
-      component: MapMainView
-    }
-
   ]
 })
 
