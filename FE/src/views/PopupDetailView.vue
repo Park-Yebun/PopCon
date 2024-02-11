@@ -3,9 +3,12 @@
 import { ref, onMounted } from 'vue';
 import { getPopup,getPopupReviewsTop9 } from '@/api/popup';
 import {useRouter, useRoute} from 'vue-router';
+import axios from 'axios';
+import { useMemberStore } from '@/stores/user.js'
 
 const router = useRouter();
 const route = useRoute();
+const store = useMemberStore();
 // route.params.popupId -> 조회할 팝업 아이디 
 
 // 네이버 지도 API 로드
@@ -107,6 +110,22 @@ const goCheck=function(){
   console.log(currIdx.value);
 }
 
+
+// 좋아요 버튼 api 요청
+const Likes = function(popupid) {
+  console.log("버튼눌림")
+  axios.post(`popups/${popupid}/like`, {params: {
+    userId: store.userInfo.value.userId
+  }
+  })
+  .then((response) => {
+    console.log("좋아요 요청 완료")
+  })
+  .catch((error) => {
+    console.log("좋아요 요청 실패")
+  })
+}
+
 </script>
 
 <template>
@@ -143,6 +162,7 @@ const goCheck=function(){
 
     <div class="popup-title">
       <p>{{popup.popupName}}</p> 
+      <button @click="Likes(popup.popupId)" >좋아요</button>
     </div>
 
     <div class="views">
