@@ -16,10 +16,14 @@ const param=ref({
     "lat":"",
     "lng":""
 })
-const lat = ref(0)
-const lng = ref(0)
+const currentlat = ref(0)
+const currentlng = ref(0)
+const centerlat = ref(0)
+const centerlng = ref(0)
 const markers=ref([]);
 const popups=ref([]);
+
+let mapRef = null; // 전역 변수로 선언
 
 
 onMounted(async () => {
@@ -33,6 +37,13 @@ onMounted(async () => {
 });
 
 const categoryClick = (event) => {
+    // 현재 지도 화면의 중심 좌표 가져오기
+    console.log(mapRef + '밸류확인')
+    const center = mapRef.getCenter();
+    console.log("현재 지도 화면의 중심 좌표:", center);
+    centerlat.value = center.y;
+    centerlng.value = center.x;
+
   if (event.target.dataset.category) {
     const category = event.target.dataset.category;
     if (category === 'all') {
@@ -43,86 +54,74 @@ const categoryClick = (event) => {
   }
 }
 const goCategoryAll = () => {
-  const param = { lat: lat.value, lng: lng.value };
+  const param = { lat: currentlat.value, lng: currentlng.value };
     map(
     param,
     ({ data }) => {
       // console.log(data);
       popups.value = data;
-      console.log(popups);
+      // 이전에 생성된 마커들을 제거
+      markers.value.forEach(marker => marker.setMap(null));
+      markers.value = []; // 마커 배열 초기화
+ 
+      // 데이터를 기반으로 마커 생성
+      data.forEach(item => {
+        const marker = new window.naver.maps.Marker({
+            map: mapRef,
+            position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+            icon: {
+              content: CustomMapMarker(item),
+              size: new window.naver.maps.Size(35, 35),
+              scaledSize: new window.naver.maps.Size(35, 35),
+            },
+        });
+      markers.value.push(marker); // 생성된 마커를 배열에 추가
+      });
     },
     ({ response }) => {
       console.log(response);
     }
   );
-  loadMap(lat, lng)
 }
 
   const goCategory = (text) => {
-    const param = {lat: lat.value, lng: lng.value };
+    const param = {lat: currentlat.value, lng: currentlng.value };
     map(
       param,
       ({ data }) => {
-        // console.log(data);
-        const Data = data.filter(item => item.popupCategory.includes(text));
-        popups.value = Data;
-        console.log(popups);
-      },
+        // 필터링된 데이터만 가져오기
+        const filteredData = data.filter(item => item.popupCategory.includes(text));
+          // 이전에 생성된 마커들을 제거
+          markers.value.forEach(marker => marker.setMap(null));
+          markers.value = []; // 마커 배열 초기화
+
+          // 필터링된 데이터를 기반으로 마커 생성
+          filteredData.forEach(item => {
+              const marker = new window.naver.maps.Marker({
+                  map: mapRef,
+                  position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+                  icon: {
+                      content: CustomMapMarker(item),
+                      size: new window.naver.maps.Size(35, 35),
+                      scaledSize: new window.naver.maps.Size(35, 35),
+                  },
+              });
+              markers.value.push(marker); // 생성된 마커를 배열에 추가
+          });
+        },
       ({ response }) => {
         console.log(response);
       }
     );
-    loadMap(lat, lng)
   }
 
-  // const createMarkers = () => {
-  //   console.log('마커생성함수실행')
-  // // 이전 마커 제거
-  // markers.value = [];
-  // const script = document.createElement("script");
-  // script.src = "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
-  // script.async = true;
-  // script.defer = true;
-
-  // script.onload = () => {
-  //   const mapRef = new window.naver.maps.Map("map", {
-  //     center: new window.naver.maps.LatLng(lat, lng),
-  //     zoom: 15
-  //   });
-
-  //   new window.naver.maps.Marker({
-  //     position: new window.naver.maps.LatLng(lat, lng),
-  //     map: mapRef,
-  //   //   icon: {
-  //   //     url: "/src/assets/images/marker_yellow.png",
-  //   //     size: new window.naver.maps.Size(20, 20),
-  //   //     scaledSize: new window.naver.maps.Size(20, 20),
-  //   //   },
-  //     zIndex: 999,
-  //   });
-
-  // // 새로운 마커 생성
-  // for (let i = 0; i < popups.value.length; i++) {
-  //   const marker = new window.naver.maps.Marker({
-  //     map: mapRef,
-  //     position: new window.naver.maps.LatLng(popups.value[i].popupLatitude, popups.value[i].popupLongitude),
-  //     icon: {
-  //       content: CustomMapMarker(popups.value[i]),
-  //       size: new window.naver.maps.Size(35, 35),
-  //       scaledSize: new window.naver.maps.Size(35, 35),
-  //     },
-  //   });
-  //   markers.value.push(marker);
-  // }  
-  // }
-  // }
 
 const getLocation = () => { // 현재위치 가져오기 
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        lat.value = position.coords.latitude;
-        lng.value = position.coords.longitude;
+        currentlat.value = position.coords.latitude;
+        currentlng.value = position.coords.longitude;
         // console.log(lat.value);
         // console.log(lng.value);
         resolve();
@@ -132,18 +131,18 @@ const getLocation = () => { // 현재위치 가져오기
 }
 
 const getNearbyPopups=()=>{ // 주변팝업 가져오기 
-    console.log('니어바이 실행')
-    param.value.lat=lat.value;
-    param.value.lng=lng.value;
+    // console.log('니어바이 실행')
+    param.value.lat=currentlat.value;
+    param.value.lng=currentlng.value;
 
     map(
         param.value,
         ({data})=>{
         // console.log("정상!");
-        console.log(data);
+        // console.log(data);
         popups.value=data;
-        console.log(popups.value);
-        loadMap(lat.value,lng.value);
+        // console.log(popups.value);
+        loadMap(currentlat.value, currentlng.value);
     },
     ({response}) => {
       console.log("error");
@@ -160,13 +159,13 @@ const loadMap = (lat, lng) => {
   script.defer = true;
 
   script.onload = () => {
-    const mapRef = new window.naver.maps.Map("map", {
+      mapRef = new window.naver.maps.Map("map", {
       center: new window.naver.maps.LatLng(lat, lng),
       zoom: 15
     });
 
     new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(lat, lng),
+      position: new window.naver.maps.LatLng(currentlat.value, currentlng.value),
       map: mapRef,
     //   icon: {
     //     url: "/src/assets/images/marker_yellow.png",
@@ -178,7 +177,7 @@ const loadMap = (lat, lng) => {
 
     // 내 현재 위치에서 가장 가까운 100개만 마커 생성
     // const markers = [];
-    for (let i = 0; i < 100 ; i++) {
+    for (let i = 0; i < popups.value.length ; i++) {
         // console.log("마커를 만들자!!");
         // console.log(popups.value);
         // console.log(popups.value[i].popupLatitude);
@@ -203,8 +202,8 @@ const loadMap = (lat, lng) => {
 }
 
 const CustomMapMarker = function(data) {
-    console.log("custom marker !!!!");
-    console.log(data);
+    // console.log("custom marker !!!!");
+    // console.log(data);
 
 //   const mobileContentArray = [
 //   '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid darkgreen; background: white; cursor: pointer; position: relative; z-index: 2">',
@@ -316,7 +315,7 @@ const close = () => {
     
       <!-- 임시버튼 -->
       <div>
-      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
+      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ currentlat }}, {{ currentlng }}
       </div> 
     
     <div class="container pt-5 pb-5">
