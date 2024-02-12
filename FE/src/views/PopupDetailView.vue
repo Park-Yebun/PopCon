@@ -12,7 +12,9 @@ const store = useMemberStore();
 // route.params.popupId -> 조회할 팝업 아이디 
 
 // 네이버 지도 API 로드
-const loadNaverMapScript = () => {
+const loadNaverMapScript = (lat, lng) => {
+  console.log('2')
+  console.log(lng, "로드되는 경도")
   const script = document.createElement("script");
   script.src =
     "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
@@ -22,9 +24,14 @@ const loadNaverMapScript = () => {
 
   script.onload = () => {
     // 네이버 지도 생성
-    new window.naver.maps.Map("map", {
-      center: new window.naver.maps.LatLng(37.5670135, 126.9783740),
-      zoom: 18
+    mapRef = new window.naver.maps.Map("map", {
+    center: new window.naver.maps.LatLng(lat, lng),
+    zoom: 18
+  });
+    new window.naver.maps.Marker({
+      position: new window.naver.maps.LatLng(lat, lng),
+      map: mapRef,
+      zIndex: 999,
     });
   };
 };
@@ -35,16 +42,25 @@ const popupReviews=ref([]);
 const popupLoaded=ref(false);
 const currIdx = ref(0); // 사진 인덱스
 const reviewSummary=ref({});
+const lat=ref(0)
+const lng=ref(0)
+let mapRef = null; // 전역 변수로 선언
 
 // onMounted 훅 사용
 onMounted(async () => {
-  loadNaverMapScript(); // 네이버 지도 가져오기 
-
-  await getPopup(
+  getPopup(
     route.params.popupId,
-    ({data})=>{
+    async ({data})=>{
       console.log(data);  // data 에 팝업스토어 정보 존재 
       popup.value=data;
+      // console.log(popup.value.popupLatitude + '위도확인')
+      // console.log(popup.value.popupLongitude + '경도확인')
+      lat.value = popup.value.popupLatitude
+      lng.value = popup.value.popupLongitude
+      console.log('1')
+      // console.log(lat.value + '찐위도확인' )
+      // console.log(lng.value + '찐경도확인' )
+
       popup.value.popupOperating = popup.value.popupOperating.replace(/\n/g, '<br>');
       popup.value.popupContent = popup.value.popupContent.replace(/\n/g, '<br>');
       if(popup.value.popupNotice!=null){
@@ -60,6 +76,9 @@ onMounted(async () => {
           console.log(data[0]);
           popupReviews.value=data;
           popupLoaded.value=true;
+
+          // 데이터를 모두 받은 후에 loadNaverMapScript 호출
+          loadNaverMapScript(lat.value, lng.value);
         },
         (error)=>{
           console.log(error);
@@ -70,7 +89,6 @@ onMounted(async () => {
       console.log(error);
     }
   )
-
 });
 
 
