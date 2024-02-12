@@ -54,6 +54,7 @@
       <div v-for="keyword in recentSearches" :key="keyword" class="keyword-item">
         <span @click="searchKeywordFromHistory(keyword)">{{ keyword }}</span>
         <i @click="removeKeyword(keyword)" class="bi bi-x-lg"></i>
+        <hr>
       </div>
     </div>
   </div>

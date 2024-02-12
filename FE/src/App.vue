@@ -78,7 +78,7 @@
 .nav-text {
   color: #2C3550;
   text-align: center;
-  font-family: ABeeZee;
+  font-family: 'NanumSquareNeo-Variable';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -114,6 +114,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
+import './fonts/NanumSquareNeo.css'
 
 const router = useRouter()
 const store = useCounterStore()

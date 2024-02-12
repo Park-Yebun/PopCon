@@ -8,6 +8,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/js/all.js'
+import './fonts/NanumSquareNeo.css'
 
 import 'vue3-geolocation/dist/vue3-geolocation.js'
 
