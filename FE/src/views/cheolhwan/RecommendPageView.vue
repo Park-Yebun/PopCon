@@ -286,12 +286,22 @@ const goTest = function() {
   display: flex;
 }
 
+.popup {
+  margin-left: 10px;
+  width: 120px;
+}
+
 /* ai추천 결과 리스트 정렬 */
 .popup-group-child {
   height: 170px;
   overflow-x: scroll;
   white-space: nowrap;
   display: flex;
+}
+
+.popup-title {
+  margin-top: 5px;
+  font-size: 12px;
 }
 
 /* 스크롤 안보이게 숨기기 */
@@ -306,7 +316,5 @@ const goTest = function() {
   width: 120px;
   height: 120px;
   border-radius: 20px;
-  padding-left: 10px;
-  padding-right: 5px;
 }
   </style>
