@@ -1,23 +1,32 @@
-# nginx 이미지 사용
-FROM nginx:latest
-
-# root에 /app 폴더 생성
-RUN mkdir /app
+# nginx 이미지 사용 
+# builder 라는 이름의 temporary image 
+FROM node:lts-alpine as builder
 
 # work dir 고정
 WORKDIR /app
 
-# work dir에 build 폴더 생성
-RUN mkdir ./dist
+COPY package*.json ./
 
-# host pc의 현재 경로의 build 폴더를 work dir의 build 폴더로 복사
-ADD ./dist ./dist
+RUN npm install 
 
-# nginx의 default.conf 삭제
-RUN rm /etc/nginx/conf.d/default.conf
+COPY . .
 
-# host pc의 nginx.conf를 아래 경로에 복사
-COPY ./nginx.conf /etc/nginx/conf.d
+RUN npm run build
+
+
+FROM nginx:stable-alpine
+
+RUN rm -rf /etc/nginx/conf.d/default.conf
+
+# nginx.conf 파일 복사 
+# here should be the same name as the nginx configuration file in the project
+COPY --from=builder ./nginx.conf /etc/nginx/conf.d/default.conf
+
+
+RUN rm -rf /usr/share/nginx/html/*
+
+# 임시로 만든 build 이미지를 가져와서 그 파일을 nginx/html 에 복사 
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # 80 포트 개방
 EXPOSE 80
