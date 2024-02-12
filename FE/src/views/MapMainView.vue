@@ -16,10 +16,14 @@ const param=ref({
     "lat":"",
     "lng":""
 })
-const lat = ref(0)
-const lng = ref(0)
+const currentlat = ref(0)
+const currentlng = ref(0)
+const centerlat = ref(0)
+const centerlng = ref(0)
 const markers=ref([]);
 const popups=ref([]);
+
+let mapRef = null; // 전역 변수로 선언
 
 
 onMounted(async () => {
@@ -33,6 +37,13 @@ onMounted(async () => {
 });
 
 const categoryClick = (event) => {
+    // 현재 지도 화면의 중심 좌표 가져오기
+    console.log(mapRef + '밸류확인')
+    const center = mapRef.getCenter();
+    console.log("현재 지도 화면의 중심 좌표:", center);
+    centerlat.value = center.y;
+    centerlng.value = center.x;
+
   if (event.target.dataset.category) {
     const category = event.target.dataset.category;
     if (category === 'all') {
@@ -43,34 +54,34 @@ const categoryClick = (event) => {
   }
 }
 const goCategoryAll = () => {
-  const param = { lat: lat.value, lng: lng.value };
+  const param = { lat: currentlat.value, lng: currentlng.value };
     map(
     param,
     ({ data }) => {
       // console.log(data);
       popups.value = data;
-      console.log(popups);
-      loadMap(lat.value, lng.value)
+      // console.log(popups);
+      loadMap(centerlat.value, centerlng.value)
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
 }
 
   const goCategory = (text) => {
-    const param = {lat: lat.value, lng: lng.value };
+    const param = {lat: currentlat.value, lng: currentlng.value };
     map(
       param,
       ({ data }) => {
         // console.log(data);
         const Data = data.filter(item => item.popupCategory.includes(text));
         popups.value = Data;
-        console.log(popups);
-        loadMap(lat.value, lng.value)
+        // console.log(popups);
+        loadMap(centerlat.value, centerlng.value)
       },
       ({ response }) => {
-        console.log(response);
+        // console.log(response);
       }
     );
   }
@@ -80,8 +91,8 @@ const getLocation = () => { // 현재위치 가져오기
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        lat.value = position.coords.latitude;
-        lng.value = position.coords.longitude;
+        currentlat.value = position.coords.latitude;
+        currentlng.value = position.coords.longitude;
         // console.log(lat.value);
         // console.log(lng.value);
         resolve();
@@ -91,18 +102,18 @@ const getLocation = () => { // 현재위치 가져오기
 }
 
 const getNearbyPopups=()=>{ // 주변팝업 가져오기 
-    console.log('니어바이 실행')
-    param.value.lat=lat.value;
-    param.value.lng=lng.value;
+    // console.log('니어바이 실행')
+    param.value.lat=currentlat.value;
+    param.value.lng=currentlng.value;
 
     map(
         param.value,
         ({data})=>{
         // console.log("정상!");
-        console.log(data);
+        // console.log(data);
         popups.value=data;
-        console.log(popups.value);
-        loadMap(lat.value,lng.value);
+        // console.log(popups.value);
+        loadMap(currentlat.value, currentlng.value);
     },
     ({response}) => {
       console.log("error");
@@ -119,17 +130,13 @@ const loadMap = (lat, lng) => {
   script.defer = true;
 
   script.onload = () => {
-    const mapRef = new window.naver.maps.Map("map", {
+      mapRef = new window.naver.maps.Map("map", {
       center: new window.naver.maps.LatLng(lat, lng),
       zoom: 15
     });
 
-    // 현재 지도 화면의 중심 좌표 가져오기
-    const center = mapRef.getCenter();
-    console.log(center)
-
     new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(lat, lng),
+      position: new window.naver.maps.LatLng(currentlat.value, currentlng.value),
       map: mapRef,
     //   icon: {
     //     url: "/src/assets/images/marker_yellow.png",
@@ -166,8 +173,8 @@ const loadMap = (lat, lng) => {
 }
 
 const CustomMapMarker = function(data) {
-    console.log("custom marker !!!!");
-    console.log(data);
+    // console.log("custom marker !!!!");
+    // console.log(data);
 
 //   const mobileContentArray = [
 //   '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid darkgreen; background: white; cursor: pointer; position: relative; z-index: 2">',
@@ -279,7 +286,7 @@ const close = () => {
     
       <!-- 임시버튼 -->
       <div>
-      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
+      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ currentlat }}, {{ currentlng }}
       </div> 
     
     <div class="container pt-5 pb-5">
