@@ -33,7 +33,7 @@
                 FROM popcon.popup_recommend
                 WHERE popcon.popup_recommend.user_id = #{user_id}
             )
-        )
+        ) AND b.popup_end >= CURDATE()
         group by popup_name
         limit 10;
     </select>
