@@ -238,14 +238,14 @@ const close = () => {
       <!-- 서치 창 -->
       <button @click="goMapSearch" type="button" class="btn btn-light search-btn">
         <div class="search-btn-content">
-          <i class="bi bi-search"></i>
-          <p>지역 혹은 이름을 검색해보세요.</p>
+          <i class="bi bi-search me-3"></i>
+          지역 혹은 이름을 검색해보세요.
         </div>
       </button>
 
       <!-- 내위치 버튼 -->
       <button @click="getNearbyPopups" type="button" class="btn btn-light my-location-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
           <path d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
         </svg>
       </button>
@@ -414,7 +414,8 @@ const close = () => {
 
 .top-bar {
   position: absolute;
-  top:0px;
+  top: 20px;
+  left: 20px;
   display: flex;
   gap: 5px;
   justify-content: space-between; /* 두 요소를 각각 양쪽 끝에 정렬합니다. */
@@ -427,7 +428,8 @@ const close = () => {
 }
  .wrap {max-width:400px; margin:10px auto; 
   position: absolute; 
-  top: 50px
+  top: 70px;
+  left: 20px;
 }
 
 /* 가로 스크롤 적용 */
@@ -447,6 +449,7 @@ const close = () => {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
   transition: all 0.3s ease;
+  margin-left: 10px;
 }
 
 .search-btn {
@@ -573,4 +576,13 @@ z-index: 0;
 bottom: -16px;
 left: 13px;
 }
+
+/* 스크롤 안보이게 숨기기 */
+.scroll__wrap {
+   -ms-overflow-style: none;
+}
+.scroll__wrap::-webkit-scrollbar {
+  display: none;
+}
+/*  */
 </style>

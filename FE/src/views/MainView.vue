@@ -317,7 +317,7 @@ img {
   display: flex;
   flex-direction: column;
   font-size: 10px;
-  font-family: ABeeZee;
+  font-family: 'NanumSquareNeo-Variable';
   font-weight: 400;
   line-height: 22px;
 }
