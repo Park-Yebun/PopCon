@@ -60,11 +60,26 @@ const goCategoryAll = () => {
     ({ data }) => {
       // console.log(data);
       popups.value = data;
-      // console.log(popups);
-      loadMap(centerlat.value, centerlng.value)
+      // 이전에 생성된 마커들을 제거
+      markers.value.forEach(marker => marker.setMap(null));
+      markers.value = []; // 마커 배열 초기화
+ 
+      // 데이터를 기반으로 마커 생성
+      data.forEach(item => {
+        const marker = new window.naver.maps.Marker({
+            map: mapRef,
+            position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+            icon: {
+              content: CustomMapMarker(item),
+              size: new window.naver.maps.Size(35, 35),
+              scaledSize: new window.naver.maps.Size(35, 35),
+            },
+        });
+      markers.value.push(marker); // 생성된 마커를 배열에 추가
+      });
     },
     ({ response }) => {
-      // console.log(response);
+      console.log(response);
     }
   );
 }
@@ -74,14 +89,28 @@ const goCategoryAll = () => {
     map(
       param,
       ({ data }) => {
-        // console.log(data);
-        const Data = data.filter(item => item.popupCategory.includes(text));
-        popups.value = Data;
-        // console.log(popups);
-        loadMap(centerlat.value, centerlng.value)
-      },
+        // 필터링된 데이터만 가져오기
+        const filteredData = data.filter(item => item.popupCategory.includes(text));
+          // 이전에 생성된 마커들을 제거
+          markers.value.forEach(marker => marker.setMap(null));
+          markers.value = []; // 마커 배열 초기화
+
+          // 필터링된 데이터를 기반으로 마커 생성
+          filteredData.forEach(item => {
+              const marker = new window.naver.maps.Marker({
+                  map: mapRef,
+                  position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+                  icon: {
+                      content: CustomMapMarker(item),
+                      size: new window.naver.maps.Size(35, 35),
+                      scaledSize: new window.naver.maps.Size(35, 35),
+                  },
+              });
+              markers.value.push(marker); // 생성된 마커를 배열에 추가
+          });
+        },
       ({ response }) => {
-        // console.log(response);
+        console.log(response);
       }
     );
   }
