@@ -14,7 +14,7 @@
                 where pi.popup_id=ai.popup_id order by pi.popup_image_id limit 1)
                    as preview_image
         from ai_popup ai join popup p on ai.popup_id=p.popup_id
-        where ai_class_name=#{className};
+        where ai_class_name=#{className} and p.popup_end <![CDATA[>=]]> curdate();
     </select>
 
     <insert id="saveAiResult" parameterType="String">
