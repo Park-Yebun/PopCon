@@ -13,7 +13,7 @@
 
 
     <select id="findUserGoodResult" resultMap="good">
-        SELECT a.popup_image_path, b.popup_name
+        SELECT a.popup_image_path as preview_image, b.popup_name, b.popup_id
         FROM popcon.popup AS b
                  JOIN popcon.popup_image AS a ON b.popup_id = a.popup_id
         WHERE b.popup_id IN (
