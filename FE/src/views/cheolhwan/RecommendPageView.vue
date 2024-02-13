@@ -122,10 +122,10 @@ const uploadImage = async() => {
     console.log(`파일은 있음${file}`)
     const formData = new FormData();
     formData.append('file', file);
-
+    
     axios({
       method: 'post',
-      url: 'http://localhost:5000/upload',
+      url: 'http://i10c211.p.ssafy.io:5000/upload',
       data: formData
     })
     .then((response) => {
@@ -134,74 +134,15 @@ const uploadImage = async() => {
       yoloClassName.value = response.data.message
       console.log(`클래스 네임: ${yoloClassName.value}`)
     })
-    //이미지 분석 후 클래스 네임이 올바르게 들어온다면, api 요청을 통해 팝업스토어 매칭하기
-    .then((response) => {
-          const accessToken = localStorage.getItem("accessToken")
-          axios({
-            method: 'get',
-            url: "/recommends/ai",
-            headers: {
-              Authorization: accessToken
-            },
-            params: {
-              className: yoloClassName.value
-            }
-          })
-          .then((response) => {
-            console.log("ai 매칭완료!!")
-            BList.value = response.data
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-    })
     .catch((error) => {
       console.log("요청실패")
     })
-    // try {
-    //     const response = await fetch('https://localhost:5000/upload', {
-    //       method: 'POST',
-    //       body: formData
-    //     });
-    //     console.log('요청보냄')
-    //     const responseData  = await response.json();
-    //     if (responseData.success) {
-    //       imageUrl.value = responseData.file_path.replace(/\\/g, '/'); // 받은 경로를 imageUrl에 설정
-    //       yoloClassName.value = responseData.message; 
-    //       console.log(`클래스 네임: ${yoloClassName}`)
-
-    //       // 이미지 분석 후 클래스 네임이 올바르게 들어온다면, api 요청을 통해 팝업스토어 매칭하기
-    //       axios({
-    //         method: 'get',
-    //         url: "/recommends/ai",
-    //         headers: {
-    //           Authorization: "Bearer " + store.personalToken
-    //         },
-    //         params: {
-    //           className: yoloClassName.value
-    //         }
-    //       })
-    //       .then((response) => {
-    //         console.log("ai 매칭완료!!")
-    //         BList.value = response.data
-    //       })
-    //       .catch((error) => {
-    //         console.log(error)
-    //       })
-
-
-    //     } else {
-    //       console.error('Upload failed:', responseData.error);
-    //     }
-    //   } catch (error) {
-    //     console.error('There was a problem with your fetch operation:', error);
-    //   } 
   };
 }
 
 const fullImageUrl = computed(() => {
   if (imageUrl.value) {
-    return 'http://localhost:5000/' + imageUrl.value;
+    return 'http://i10c211.p.ssafy.io:5000/' + imageUrl.value;
   }
   return null;
 });
@@ -286,12 +227,22 @@ const goTest = function() {
   display: flex;
 }
 
+.popup {
+  margin-left: 10px;
+  width: 120px;
+}
+
 /* ai추천 결과 리스트 정렬 */
 .popup-group-child {
   height: 170px;
   overflow-x: scroll;
   white-space: nowrap;
   display: flex;
+}
+
+.popup-title {
+  margin-top: 5px;
+  font-size: 12px;
 }
 
 /* 스크롤 안보이게 숨기기 */
@@ -306,7 +257,5 @@ const goTest = function() {
   width: 120px;
   height: 120px;
   border-radius: 20px;
-  padding-left: 10px;
-  padding-right: 5px;
 }
   </style>

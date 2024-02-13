@@ -1,4 +1,3 @@
-import io
 from operator import truediv
 import os
 import json
@@ -15,13 +14,13 @@ app = Flask(__name__)
 
 RESULT_FOLDER = os.path.join('static')
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
-CORS(app)
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 model = YOLO('best.pt')
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return 'Hello, Flask'
 
 #파일 업로드
 @app.route('/upload', methods=['POST'])
@@ -64,8 +63,6 @@ def upload_image():
 
         # 파일 경로를 반환
         return jsonify({'success': True, 'file_path': output_path, 'message':class_name}), 200
-
-
 
 
 if __name__ == '__main__':

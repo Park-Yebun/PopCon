@@ -1,26 +1,21 @@
-# nginx 이미지 사용
-FROM nginx:latest
+FROM node:20.11.0
 
-# root에 /app 폴더 생성
-RUN mkdir /app
+RUN apt-get update && apt-get install -y xsel
 
-# work dir 고정
-WORKDIR /app
+WORKDIR /home/ubuntu/S10P12C211/FE
 
-# work dir에 build 폴더 생성
-RUN mkdir ./dist
+COPY package*.json ./
 
-# host pc의 현재 경로의 build 폴더를 work dir의 build 폴더로 복사
-ADD ./dist ./dist
+ADD . .
+RUN npm install -g npm
+RUN npm install
+# RUN npm install @webzlodimir/vue-bottom-sheet
 
-# nginx의 default.conf 삭제
-RUN rm /etc/nginx/conf.d/default.conf
+# Make sure the 'serve' script is defined in package.json
+RUN npm install -g serve
 
-# host pc의 nginx.conf를 아래 경로에 복사
-COPY ./nginx.conf /etc/nginx/conf.d
+COPY . .
+RUN npm run build
+EXPOSE 8081
 
-# 80 포트 개방
-EXPOSE 80
-
-# container 실행 시 자동으로 실행할 command. nginx 시작함
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "dist", "-l", "8081"]
