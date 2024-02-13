@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.popcon.map.mapper.MapMapper">
-
     <resultMap id="mapDto" type="MapDto">
         <result column="popup_id" property="popupId"/>
         <result column="popup_name" property="popupName"/>
@@ -36,6 +35,7 @@
                 where popup_image.popup_id=popup.popup_id order by popup_image_id limit 1) as previewImagePath,
                c.category_name
         FROM popup join popup_category c on popup.popup_id = c.popup_id
+        where popup.popup_end <![CDATA[>=]]> curdate()
     </select>
 
     <select id="findNearbyPopups" parameterType="Double" resultMap="mapDto">
@@ -55,7 +55,7 @@
              where popup_image.popup_id=popup.popup_id order by popup_image_id limit 1) as previewImagePath,
             c.category_name
         FROM popup join popup_category c on popup.popup_id = c.popup_id
-        having distance <![CDATA[<=]]> 2
+        having distance <![CDATA[<=]]> 2 and popup.popup_end <![CDATA[>=]]> curdate()
     </select>
 
     <select id="findList" parameterType="map" resultMap="mapDto">
@@ -77,14 +77,12 @@
         FROM popup join popup_category c on popup.popup_id=c.popup_id
         where popup.popup_name like concat('%',#{keyword},'%') or
             popup.popup_location like concat('%',#{keyword},'%')
+        and popup.popup_end <![CDATA[>=]]> curdate()
     </select>
-
 
     <select id="findCategories" parameterType="int" resultType="String">
         select category_name from popup_category
         where popup_id=#{popupId}
     </select>
-
-
 
 </mapper>
