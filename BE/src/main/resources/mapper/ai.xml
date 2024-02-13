@@ -36,6 +36,9 @@
         )
     </select>
 
-
+    <select id="findUserAi" parameterType="String" resultType="int">
+        select count(*) from ai_result
+        where user_id=#{userId} and ai_class_name=#{className}
+    </select>
 
 </mapper>

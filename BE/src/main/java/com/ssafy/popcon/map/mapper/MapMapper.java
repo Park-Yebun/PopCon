@@ -16,4 +16,6 @@ public interface MapMapper {
 //    List<MapDto> findList(String keyword, double latitude, double longitude) throws SQLException;
 
     List<MapDto> findList(Map<String, String> parameter) throws SQLException;
+
+    List<MapDto> findPopups(double latitude, double longitude) throws SQLException;
 }

@@ -20,8 +20,8 @@ public class MapNearbySearchService {
 //        latitude=126.97725;
 //        longitude=37.570892; // 테스트값
 
-        List<MapDto> mapDtos= mapMapper.findNearbyPopups(latitude,longitude);
-
+        List<MapDto> mapDtos= mapMapper.findPopups(latitude,longitude);
+//        List<MapDto> mapDtos= mapMapper.findNearbyPopups(latitude,longitude);
         return mapDtos;
     }
 }
