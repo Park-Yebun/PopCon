@@ -16,10 +16,14 @@ const param=ref({
     "lat":"",
     "lng":""
 })
-const lat = ref(0)
-const lng = ref(0)
+const currentlat = ref(0)
+const currentlng = ref(0)
+const centerlat = ref(0)
+const centerlng = ref(0)
 const markers=ref([]);
 const popups=ref([]);
+
+let mapRef = null; // 전역 변수로 선언
 
 
 onMounted(async () => {
@@ -33,6 +37,13 @@ onMounted(async () => {
 });
 
 const categoryClick = (event) => {
+    // 현재 지도 화면의 중심 좌표 가져오기
+    console.log(mapRef + '밸류확인')
+    const center = mapRef.getCenter();
+    console.log("현재 지도 화면의 중심 좌표:", center);
+    centerlat.value = center.y;
+    centerlng.value = center.x;
+
   if (event.target.dataset.category) {
     const category = event.target.dataset.category;
     if (category === 'all') {
@@ -43,14 +54,29 @@ const categoryClick = (event) => {
   }
 }
 const goCategoryAll = () => {
-  const param = { lat: lat.value, lng: lng.value };
+  const param = { lat: currentlat.value, lng: currentlng.value };
     map(
     param,
     ({ data }) => {
       // console.log(data);
       popups.value = data;
-      console.log(popups);
-      loadMap(lat.value, lng.value)
+      // 이전에 생성된 마커들을 제거
+      markers.value.forEach(marker => marker.setMap(null));
+      markers.value = []; // 마커 배열 초기화
+ 
+      // 데이터를 기반으로 마커 생성
+      data.forEach(item => {
+        const marker = new window.naver.maps.Marker({
+            map: mapRef,
+            position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+            icon: {
+              content: CustomMapMarker(item),
+              size: new window.naver.maps.Size(35, 35),
+              scaledSize: new window.naver.maps.Size(35, 35),
+            },
+        });
+      markers.value.push(marker); // 생성된 마커를 배열에 추가
+      });
     },
     ({ response }) => {
       console.log(response);
@@ -59,16 +85,30 @@ const goCategoryAll = () => {
 }
 
   const goCategory = (text) => {
-    const param = {lat: lat.value, lng: lng.value };
+    const param = {lat: currentlat.value, lng: currentlng.value };
     map(
       param,
       ({ data }) => {
-        // console.log(data);
-        const Data = data.filter(item => item.popupCategory.includes(text));
-        popups.value = Data;
-        console.log(popups);
-        loadMap(lat.value, lng.value)
-      },
+        // 필터링된 데이터만 가져오기
+        const filteredData = data.filter(item => item.popupCategory.includes(text));
+          // 이전에 생성된 마커들을 제거
+          markers.value.forEach(marker => marker.setMap(null));
+          markers.value = []; // 마커 배열 초기화
+
+          // 필터링된 데이터를 기반으로 마커 생성
+          filteredData.forEach(item => {
+              const marker = new window.naver.maps.Marker({
+                  map: mapRef,
+                  position: new window.naver.maps.LatLng(item.popupLatitude, item.popupLongitude),
+                  icon: {
+                      content: CustomMapMarker(item),
+                      size: new window.naver.maps.Size(35, 35),
+                      scaledSize: new window.naver.maps.Size(35, 35),
+                  },
+              });
+              markers.value.push(marker); // 생성된 마커를 배열에 추가
+          });
+        },
       ({ response }) => {
         console.log(response);
       }
@@ -80,8 +120,8 @@ const getLocation = () => { // 현재위치 가져오기
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        lat.value = position.coords.latitude;
-        lng.value = position.coords.longitude;
+        currentlat.value = position.coords.latitude;
+        currentlng.value = position.coords.longitude;
         // console.log(lat.value);
         // console.log(lng.value);
         resolve();
@@ -91,18 +131,18 @@ const getLocation = () => { // 현재위치 가져오기
 }
 
 const getNearbyPopups=()=>{ // 주변팝업 가져오기 
-    console.log('니어바이 실행')
-    param.value.lat=lat.value;
-    param.value.lng=lng.value;
+    // console.log('니어바이 실행')
+    param.value.lat=currentlat.value;
+    param.value.lng=currentlng.value;
 
     map(
         param.value,
         ({data})=>{
         // console.log("정상!");
-        console.log(data);
+        // console.log(data);
         popups.value=data;
-        console.log(popups.value);
-        loadMap(lat.value,lng.value);
+        // console.log(popups.value);
+        loadMap(currentlat.value, currentlng.value);
     },
     ({response}) => {
       console.log("error");
@@ -119,17 +159,13 @@ const loadMap = (lat, lng) => {
   script.defer = true;
 
   script.onload = () => {
-    const mapRef = new window.naver.maps.Map("map", {
+      mapRef = new window.naver.maps.Map("map", {
       center: new window.naver.maps.LatLng(lat, lng),
       zoom: 15
     });
 
-    // 현재 지도 화면의 중심 좌표 가져오기
-    const center = mapRef.getCenter();
-    console.log(center)
-
     new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(lat, lng),
+      position: new window.naver.maps.LatLng(currentlat.value, currentlng.value),
       map: mapRef,
     //   icon: {
     //     url: "/src/assets/images/marker_yellow.png",
@@ -166,8 +202,8 @@ const loadMap = (lat, lng) => {
 }
 
 const CustomMapMarker = function(data) {
-    console.log("custom marker !!!!");
-    console.log(data);
+    // console.log("custom marker !!!!");
+    // console.log(data);
 
 //   const mobileContentArray = [
 //   '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid darkgreen; background: white; cursor: pointer; position: relative; z-index: 2">',
@@ -224,14 +260,14 @@ const close = () => {
       <!-- 서치 창 -->
       <button @click="goMapSearch" type="button" class="btn btn-light search-btn">
         <div class="search-btn-content">
-          <i class="bi bi-search"></i>
-          <p>지역 혹은 이름을 검색해보세요.</p>
+          <i class="bi bi-search me-3"></i>
+          지역 혹은 이름을 검색해보세요.
         </div>
       </button>
 
       <!-- 내위치 버튼 -->
       <button @click="getNearbyPopups" type="button" class="btn btn-light my-location-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-crosshair" viewBox="0 0 16 16">
           <path d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
         </svg>
       </button>
@@ -279,7 +315,7 @@ const close = () => {
     
       <!-- 임시버튼 -->
       <div>
-      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ lat }}, {{ lng }}
+      <button @click="getLocation()" id="find-me">내 위치 보기</button> {{ currentlat }}, {{ currentlng }}
       </div> 
     
     <div class="container pt-5 pb-5">
@@ -400,7 +436,8 @@ const close = () => {
 
 .top-bar {
   position: absolute;
-  top:0px;
+  top: 20px;
+  left: 20px;
   display: flex;
   gap: 5px;
   justify-content: space-between; /* 두 요소를 각각 양쪽 끝에 정렬합니다. */
@@ -413,7 +450,8 @@ const close = () => {
 }
  .wrap {max-width:400px; margin:10px auto; 
   position: absolute; 
-  top: 50px
+  top: 70px;
+  left: 20px;
 }
 
 /* 가로 스크롤 적용 */
@@ -433,6 +471,7 @@ const close = () => {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
   transition: all 0.3s ease;
+  margin-left: 10px;
 }
 
 .search-btn {
@@ -559,4 +598,13 @@ z-index: 0;
 bottom: -16px;
 left: 13px;
 }
+
+/* 스크롤 안보이게 숨기기 */
+.scroll__wrap {
+   -ms-overflow-style: none;
+}
+.scroll__wrap::-webkit-scrollbar {
+  display: none;
+}
+/*  */
 </style>

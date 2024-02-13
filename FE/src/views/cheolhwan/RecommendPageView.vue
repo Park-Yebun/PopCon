@@ -5,16 +5,13 @@
     <div>
       <div v-if="isHaveCookie == false" @click="goTest" >
         <div class="d-flex justify-content-between m-3">
-          <div style="font-weight: bold;">팝BTI 추천</div>
+          <div style="font-weight: bold;"> {{ loginuserId }}님을 위한 POPBTI 추천</div>
         </div>
-        <h3>검사 결과가 없어요~</h3>
+        <h4>검사 결과가 없습니다</h4>
         <button class="btn btn-warning" type="button">팝BTI 검사하러 가기</button>
       </div>
       <div v-else class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">OO님을 위한 팝BTI</div>
-        <div>
-          <button type="button" class="btnStyle">더보기</button>
-        </div>
+        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 팝BTI</div>
       </div>
       <div v-for="a in AList" :key="a" title="팝bti" class="popup-group">
         <div class="popup">
@@ -27,10 +24,7 @@
       <!-- 추천 유형 B -->
     <div>
       <div class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">OO님을 위한 AI 추천</div>
-        <div>
-          <button type="button" class="btnStyle">더보기</button>
-        </div>
+        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 AI 추천</div>
       </div>
       
       <div title="AI추천" class="popup-group">
@@ -60,11 +54,7 @@
       <!-- 추천 유형 C -->
     <div>
       <div class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">OO님을 위한 맞춤 추천</div>
-        <div>
-          <button type="button" class="btnStyle">더보기</button>
-        </div>
-      
+        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 맞춤 추천</div>
       </div>
 
       <div v-for="c in CList" :key="c" title="좋아요추천" class="popup-group">
@@ -81,8 +71,9 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import { jwtDecode } from "jwt-decode";
 
-
+const loginuserId = ref(null)
 const fileInput = ref(null);
 const imageUrl = ref(null);
 const yoloClassName = ref(null);
@@ -125,7 +116,8 @@ const uploadImage = async() => {
     
     axios({
       method: 'post',
-      url: 'http://i10c211.p.ssafy.io:5000/upload',
+
+      url: 'http://localhost:5001/upload',
       data: formData
     })
     .then((response) => {
@@ -142,7 +134,8 @@ const uploadImage = async() => {
 
 const fullImageUrl = computed(() => {
   if (imageUrl.value) {
-    return 'http://i10c211.p.ssafy.io:5000/' + imageUrl.value;
+
+    return 'http://localhost:5001/' + imageUrl.value;
   }
   return null;
 });
@@ -151,6 +144,13 @@ const fullImageUrl = computed(() => {
 
 // popbti 쿠키 확인하고 있으면 추천리스트 가져오기, 없으면 검사페이지로 라우팅
 onMounted(() => {
+  let token = localStorage.getItem("accessToken");
+  const IdToken=token.split(" ");
+  let decodeToken = jwtDecode(IdToken[1]);
+  loginuserId.value = decodeToken.userId
+  console.log(loginuserId.value)
+
+  
   const getCookie = function(name) {
   const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
   return value? value[2] : null

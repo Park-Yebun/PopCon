@@ -8,6 +8,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@fortawesome/fontawesome-free/js/all.js'
+import './fonts/NanumSquareNeo.css'
 
 import 'vue3-geolocation/dist/vue3-geolocation.js'
 
@@ -30,10 +31,11 @@ axios.defaults.baseURL = "https://i10c211.p.ssafy.io:8085"
   // })
   // .catch(function (err) {
   //   console.error("Unable to register service worker.", err);
-  // });
+  // // });
 
   // navigator.serviceWorker
-  //     .register("@/firebase-messaging-sw.js")
+
+  //     .register("firebase-messaging-sw.js")
   //     .then(function (registration) {
   //       console.log("Service worker successfully registered.");
   //       return registration;

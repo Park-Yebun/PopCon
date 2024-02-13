@@ -1,5 +1,4 @@
 <template>
-    <VDatePicker borderless v-model.range="range" mode="dateTime" :initial-page="{ month: 2, year: 2024 }" />
     <div>
         <div title="날짜 옵션">
           <div class="title">날짜
@@ -7,7 +6,11 @@
                 <li class="date select">오늘</li>
                 <li class="date">+7일</li>
                 <li class="date">+2주</li>
-                <li class="date">직접 선택</li>
+                <li>
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <input type="text" name="datetimes">
+                    <span></span> <b class="caret"></b>
+                </li>
             </ul>
           </div>
         </div>
@@ -78,8 +81,9 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 import { walkIdentifiers } from 'vue/compiler-sfc';
+import { end } from '@popperjs/core';
 
-import 'v-calendar/style.css';
+// import 'v-calendar/style.css';
 // import Calendar from 'v-calendar/lib/components/calendar.umd'
 // import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
@@ -87,18 +91,58 @@ const route = useRoute()
 const router = useRouter()
 const store = useCounterStore()
 
-const range = ref({
-  start: new Date(2024, 2, 6),
-  end: new Date(2024, 3, 10),
-});
+// 마감 날짜 포맷 가져오기
+const setInputDate = function(set_day) {
+    let today = new Date()
+    today.setDate(today.getDate() + set_day )
+
+
+    let year    = today.getFullYear()
+    let month   = ('0' + (today.getMonth() +  1 )).slice(-2)
+    let day     = ('0' + today.getDate()).slice(-2)
+    return year + "-" + month + "-" + day
+}
 
 
 // 쿼리 매개변수로 리스트 가져오기 //
 //매개변수
-const startDate = ref(null)
+const startDate = ref(setInputDate(0))
 const endDate = ref(null)
 const area = ref("전체")
-const status = ref(null)
+const status = ref("진행중")
+
+
+// date range picker 
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    locale: {
+    separator: " ~ ",
+    format: 'YYYY-MM-DD',
+    applyLabel: "확인",
+    cancelLabel: "취소",
+    daysOfWeek: ["일", "월", "화", "수", "목", "금", "토"],
+    monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+    },
+    autoApply: false,
+    autoUpdateInput: false,
+
+  })
+
+  // 확인 버튼 누르면 날짜 변수값 업데이트하고 선택된 날짜 유지
+$('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
+    endDate.value = picker.endDate.format('YYYY-MM-DD')
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' ~ ' + picker.endDate.format('YYYY-MM-DD'))
+    console.log(startDate.value)
+    console.log(endDate.value)
+})
+  // 취소 버튼 누르면 날짜 초기화
+$('input[name="datetimes"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
+
+
+})
+
 
 // 메인에서 클릭한 카테고리 옵션 값 변수에 저장하기
 const category = ref(route.params.category)
@@ -186,7 +230,16 @@ onMounted(() => {
         }
         // 현재 클릭한 요소를 선택 상태로 변경
         this.classList.add('select')
-        startDate.value = event.target.innerText
+        if (event.target.innerText == "오늘") {
+            endDate.value = setInputDate(1)
+            console.log(endDate.value)
+        } else if (event.target.innerText == "+7일") {
+            endDate.value = setInputDate(3)
+            console.log(endDate.value)
+        } else if (event.target.innerText == "+2주") {
+            endDate.value = setInputDate(14)
+            console.log(endDate.value)
+        }
         })
     }
 
@@ -229,6 +282,7 @@ const goSearch = function() {
     .then((response) => {
         popupList.value = response.data
         console.log("검색버튼 요청완료!!")
+        console.log(startDate.value, endDate.value, area.value, status.value, category.value)
     })
     .catch((error) => {
         console.log(error)
@@ -297,6 +351,7 @@ div>ul>li {
     padding: 8px 22px;
     padding-inline: 1.5rem;
     background: none;
+
     font-size: 14px;
     color: #807A7A;
 }
@@ -416,4 +471,20 @@ li + li {
 }
 
 
+/* 날짜 입력 input태그 테두리 없애기  */
+input {
+    border-width: 0;
+    outline: none;
+}
+
+/* div.title {
+    display: flex;
+    align-items: center;
+}
+
+ul.button-group {
+    display: flex;
+    list-style: none;
+    padding: 0;
+} */
 </style>

@@ -48,18 +48,18 @@
 
   <!-- 최근 검색어 -->
   <div class="search-keywords">
-    <i class="bi bi-clock"></i>
-    <div v-if="recentSearches.length === 0">최근 검색어가 없습니다.</div>
+    <div style="padding:10px;">
+      <i class="bi bi-clock"></i><span style="font-weight: bold;">최근 검색어</span>
+    </div>
+    <div class="keyword-item" v-if="recentSearches.length === 0">최근 검색어가 없습니다.</div>
     <div v-else>
       <div v-for="keyword in recentSearches" :key="keyword" class="keyword-item">
         <span @click="searchKeywordFromHistory(keyword)">{{ keyword }}</span>
         <i @click="removeKeyword(keyword)" class="bi bi-x-lg"></i>
+        <hr>
       </div>
     </div>
   </div>
-
-
-
 
   <!-- 검색 결과 -->
     <div>
@@ -67,17 +67,17 @@
         <li @click=goPopupDetail(search.popupId) v-for="search in searchList" :key="search" class="search-item">
           <!-- 지도 아이콘 -->
           <div class="flex">
-            <div>  
+            <div class="flex1">  
               <i class="bi bi-geo-alt-fill"></i>
             </div>
-            <div>
-              <span>{{ search.popupName }}</span>
-              <span>{{ search.popupLocation }}</span>
-              <span>좋아요 {{ search.popupLike }}</span>
+            <div class="flex2">
+              <span id="flex2-name">{{ search.popupName }}</span>
+              <span id="flex2-location">{{ search.popupLocation }}</span>
+              <span id="flex2-like">좋아요 {{ search.popupLike }}</span>
             </div>
-            <div>
-              <span>{{search.popupCategory.join(', ') }}</span>
-              <span>{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
+            <div class="flex3">
+              <span id="flex3-category">{{search.popupCategory[0] }}</span>
+              <span id="flex3-distance">{{ (Math.round(search.distance * 100) / 100).toFixed(1) }}km</span>
             </div>
           </div>
           <hr>
@@ -280,7 +280,60 @@ function hideRecentSearches() {
  }
  .flex {
   display: flex;
+  height: 90px;
  }
+
+.flex1 {
+  width : 10%;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.flex2 {
+  width : 75%;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+#flex2-name {
+  font-weight: bold;
+  font-size: large;
+    
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#flex2-location{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color:gray;
+  font-size: smaller;
+}
+
+#flex2-like {
+  font-size:small;
+  color:dimgrey;
+  font-weight: 600;
+}
+
+.flex3 {
+  width : 20%;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+#flex3-category, #flex3-distance{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color:dimgray;
+  font-size: small;
+}
+
  .search-list {
    margin: 0 auto;
    width: 360px;
@@ -293,7 +346,6 @@ function hideRecentSearches() {
  .search-list span {
    display: block;
  }
- 
  
  
  .search-btn {
@@ -327,7 +379,8 @@ function hideRecentSearches() {
  /* 최근검색어 */
  .search-keywords {
      display: flex;
-     align-items: center;
+     flex-direction: column;
+     /* align-items: center; */
    }
  .search-keywords i {
    margin-right: 10px; /* 원하는 간격 값으로 조절하세요. */
@@ -335,5 +388,13 @@ function hideRecentSearches() {
  .search-keywords .bi-x-lg {
      margin-left: auto; /* 오른쪽으로 정렬 */
    }
+
+.keyword-item {
+  border-bottom : 2px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+  
  </style>
  

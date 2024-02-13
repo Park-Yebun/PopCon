@@ -34,21 +34,21 @@
       <div @click="goDetail(popupgood[0].popupId)" class="carousel-item active">
         <img
           :src="popupgood[0].popupImagePath"
-          class="d-block w-100 rounded-bottom-4"
+          class="d-block w-100 rounded-4"
           alt="이미지 없음"
         />
       </div>
       <div @click="goDetail(popupgood[1].popupId)" class="carousel-item">
         <img
           :src="popupgood[1].popupImagePath"
-          class="d-block w-100 rounded-bottom-4"
+          class="d-block w-100 rounded-4"
           alt="이미지 없음"
         />
       </div>
       <div @click="goDetail(popupgood[2].popupId)" class="carousel-item">
         <img
           :src="popupgood[2].popupImagePath"
-          class="d-block w-100 rounded-bottom-4"
+          class="d-block w-100 rounded-4"
           alt="이미지 없음"
         />
       </div>
@@ -58,11 +58,13 @@
 <div class="deadline-container">
   <div class="deadline-text-group">
     <h5 style="opacity: 0.84;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 800;
         line-height: 30px;
-        word-break: keep-all;">마감임박</h5>
-    <div href="#"
+        word-break: keep-all;
+        letter-spacing: 1px;">마감임박 ⏰ </h5>
+
+   <!-- <div href="#"
         style="width: 100%;
         height: 100%;
         text-align:right;
@@ -70,9 +72,9 @@
         font-size: 13px;
         font-weight: 400;
         line-height: 23px;
-        word-wrap: break-word">더보기</div>
+        word-wrap: break-word">더보기</div> -->
   </div>
-  <div title="마감임박 팝업리스트" class="deadline-popup-group">
+  <div title="마감임박 팝업리스트 " class="deadline-popup-group" style="margin-bottom:20px;">
     <template v-for="(popup, key) in popupend" :key="key">
       <div @click="goDetail(popup.popupId)" class="deadline-popup">
         <img
@@ -80,52 +82,67 @@
           class="deadline-popup-img"
           alt=""
         />
-        <p @click="goDetail(popup.popupId)" class="deadline-popup-title">
+        <span @click="goDetail(popup.popupId)" class="deadline-popup-title" style="font-weight:bold;">
           {{ popup.popupName }}
-        </p>
-        <p>{{ popup.popupEnd }}</p>
+        </span>
+        <span style="font-size:11px; color:gray;">{{ popup.popupEnd }}</span>
       </div>
     </template>
   </div>
 </div>
 
+
   <!-- 카테고리 -->
-  <div title="main-category">
+  <div class="main-category">
+    <div class="main-category-text">
+      <h5 style="opacity: 0.84;
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 30px;
+        word-break: keep-all;
+        letter-spacing: 1px;">카테고리 🗺️
+      </h5>
+    </div>
     <div class="main-category-container">
       <div class="main-category-text">
-        <img
+       <img
           class="main-category-logo"
           src="@/assets/images/category_beauty.png"
           alt="패션뷰티"
-        />패션/뷰티
+        />
+        <span style="font-size:10px; font-weight:bold;">패션/뷰티</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_foods.png"
           alt="식음료"
-        />식음료
+        />
+        <span style="font-size:10px; font-weight:bold;">식음료</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_content.png"
           alt="콘텐츠"
-        />콘텐츠
+        />
+        <span style="font-size:10px; font-weight:bold;">콘텐츠</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_hobby.png"
           alt="취미여가"
-        />취미/여가
+        />
+        <span style="font-size:10px; font-weight:bold;">취미/여가</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_finance.png"
           alt="금융"
-        />금융
+        />
+        <span style="font-size:10px; font-weight:bold;">금융</span>
       </div>
     </div>
     <div class="main-category-container">
@@ -134,35 +151,40 @@
           class="main-category-logo"
           src="@/assets/images/category_entertain.png"
           alt="연예"
-        />연예
+        />
+        <span style="font-size:10px; font-weight:bold;">연예</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_digital.png"
           alt="가전/디지털"
-        />가전/디지털
+        />
+        <span style="font-size:10px; font-weight:bold;">가전/디지털</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_living.png"
           alt="리빙"
-        />리빙
+        />
+        <span style="font-size:10px; font-weight:bold;">리빙</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_game.png"
           alt="게임"
-        />게임
+        />
+        <span style="font-size:10px; font-weight:bold;">게임</span>
       </div>
       <div class="main-category-text">
         <img
           class="main-category-logo"
           src="@/assets/images/category_character.png"
           alt="캐릭터"
-        />캐릭터
+        />
+        <span style="font-size:10px; font-weight:bold;">캐릭터</span>
       </div>
     </div>
   </div>
@@ -305,7 +327,7 @@ img {
 .deadline-container {
   margin-left: 20px;
   margin-right: 20px;
-  margin-top: 3.19px;
+  margin-top: 30px;
 }
 
 .main-category-logo {
@@ -316,24 +338,25 @@ img {
 .main-category-text {
   display: flex;
   flex-direction: column;
-  font-size: 10px;
-  font-family: ABeeZee;
+  font-size: 7px;
+  font-family: 'NanumSquareNeo-Variable';
   font-weight: 400;
   line-height: 22px;
 }
 
 .main-category-container {
-  width: 282px;
+ /* width: 282px; */
   display: flex;
   text-align: center;
   justify-content: space-between;
-  margin-left: 40px;
+  margin: 10px;
+
 }
 
 .deadline-popup-group {
-  margin-top: 5.31px;
+  margin-top: 10px;
   min-width: 201.78px;
-  height: 237px;
+  height: 200px;
   overflow-x: scroll;
   white-space: nowrap;
   display: flex;
@@ -342,22 +365,41 @@ img {
 
 .deadline-popup {
   width: 200px;
-  height: 170.89px;
-  margin-right: 20px;
+  height: 195.78px;
+  margin-right: 10px;
   border-radius: 10%;
+  display:flex;
+  flex-direction:column;
+  padding: 0px 5px;
 }
 
-.deadline-popup p {
-  width: 146.56px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
+.deadline-popup span {
+  width: 150px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .deadline-popup-img {
-  width: 146.56px;
-  height: 170.89px;
+  width: 150px;
+  height: 150px;
   border-radius: 20%;
+}
+
+.main-category {
+  margin-left:20px;
+  margin-right:20px;
+  margin-top:30px;
+}
+
+.main-category-text {
+    display: flex;
+    justify-content: space-between;
+}
+
+.deadline-popup-title{
+  padding: 5px 0px;
+  font-size: 13px;
 }
 
 /* 스크롤 안보이게 숨기기 */
