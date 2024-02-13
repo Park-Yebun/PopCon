@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.map.mapper.MapMapper">
+
+    <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
+        <result column="popup_id" property="popupId"/>
+        <result column="popup_name" property="popupName"/>
+        <result column="popup_brand" property="popupBrand"/>
+        <result column="popup_content" property="popupContent"/>
+        <result column="popup_location" property="popupLocation"/>
+        <result column="popup_start" property="popupStart"/>
+        <result column="popup_end" property="popupEnd"/>
+        <result column="popup_operating" property="popupOperating"/>
+        <result column="popup_event" property="popupEvent"/>
+        <result column="popup_view" property="popupView"/>
+        <result column="popup_car" property="popupCar"/>
+        <result column="popup_entryfee" property="popupEntryFee"/>
+        <result column="popup_wifi" property="popupWifi"/>
+        <result column="popup_eat" property="popupEat"/>
+        <result column="popup_site" property="popupSite"/>
+        <result column="popup_instar" property="popupInstar"/>
+        <result column="popup_notice" property="popupNotice"/>
+        <result column="popup_phone" property="popupPhone"/>
+        <result column="popup_honey" property="popupHoney"/>
+        <result column="popup_like" property="popupLike"/>
+        <result column="user_id" property="userId"/>
+        <result column="popup_latitude" property="popupLatitude"/>
+        <result column="popup_longitude" property="popupLongitude"/>
+    </resultMap>
+
+    <select id="findNearbyPopups" parameterType="Double" resultType="TempMapDto">
+        select * from map
+        where (
+            6371*ACOS(COS(RADIANS(#{latitude}))
+            *COS(RADIANS(latitude))
+            *COS(RADIANS(longitude)-RADIANS(#{longitude}))
+            +SIN(RADIANS(#{latitude}))*SIN(RADIANS(latitude)))
+        ) <![CDATA[<=]]> 2
+    </select>
+
+
+</mapper>
