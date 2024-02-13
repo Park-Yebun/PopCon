@@ -58,10 +58,11 @@
 <div class="deadline-container">
   <div class="deadline-text-group">
     <h5 style="opacity: 0.84;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 800;
         line-height: 30px;
-        word-break: keep-all;">마감임박</h5>
+        word-break: keep-all;
+        letter-spacing: 1px;">마감임박</h5>
     <div href="#"
         style="width: 100%;
         height: 100%;
@@ -305,7 +306,7 @@ img {
 .deadline-container {
   margin-left: 20px;
   margin-right: 20px;
-  margin-top: 3.19px;
+  margin-top: 15px;
 }
 
 .main-category-logo {
@@ -316,7 +317,7 @@ img {
 .main-category-text {
   display: flex;
   flex-direction: column;
-  font-size: 10px;
+  font-size: 7px;
   font-family: 'NanumSquareNeo-Variable';
   font-weight: 400;
   line-height: 22px;
@@ -331,9 +332,9 @@ img {
 }
 
 .deadline-popup-group {
-  margin-top: 5.31px;
+  margin-top: 10px;
   min-width: 201.78px;
-  height: 237px;
+  height: 200px;
   overflow-x: scroll;
   white-space: nowrap;
   display: flex;
@@ -348,15 +349,15 @@ img {
 }
 
 .deadline-popup p {
-  width: 146.56px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
+  width: 130px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .deadline-popup-img {
-  width: 146.56px;
-  height: 170.89px;
+  width: 130px;
+  height: 150px;
   border-radius: 20%;
 }
 
