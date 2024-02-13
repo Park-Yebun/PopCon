@@ -11,4 +11,5 @@ public interface AiMapper {
     void saveAiResult(String className, String userId) throws SQLException;   // ai 결과 저장
     List<RecommendDto> findAi(String className) throws SQLException;    // ai 검사 후 결과 조회
     List<RecommendDto> findUserAiResult(String userId) throws SQLException; // user의 ai 결과 조회 (메인페이지)
+    int findUserAi(String className, String userId) throws SQLException;    // 기존에 검사한 결과가 있는지 조회
 }

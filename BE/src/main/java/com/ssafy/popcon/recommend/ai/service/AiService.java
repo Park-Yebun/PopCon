@@ -18,7 +18,9 @@ public class AiService {
 
     public List<RecommendDto> findAi(String className, String token) throws Exception { // ai 매칭 결과 찾기
         String userId=jwtUtil.getUsername(token.split(" ")[1]);
-        aiMapper.saveAiResult(className, userId);
+        if(aiMapper.findUserAi(className,userId)==0) {
+            aiMapper.saveAiResult(className, userId);
+        }
         return aiMapper.findAi(className);
     }
 
