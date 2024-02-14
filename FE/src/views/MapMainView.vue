@@ -197,7 +197,7 @@ const loadMap = (lat, lng) => {
       // console.log("마커를 만들자!!");
       // console.log(popups.value);
       // console.log(popups.value[i].popupLatitude);
-
+      const popupId = popups.value[i].popupId;
       const marker = new window.naver.maps.Marker({
         map: mapRef,
         position: new window.naver.maps.LatLng(
@@ -211,6 +211,11 @@ const loadMap = (lat, lng) => {
           scaledSize: new window.naver.maps.Size(35, 35),
         },
         // zIndex:999,
+      });
+
+      marker.addListener("click", () => {
+        window.location.href = `/popup/${popupId}`;
+        // 클릭할 때마다 해당 상세페이지로 이동
       });
 
       markers.value.push(marker);
@@ -237,17 +242,17 @@ const CustomMapMarker = function (data) {
 
   const mobileContentArray = [
     '<div class=bubble style="background-color:white;">',
-    '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
-    data.popupName,
+    // '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
+    // data.popupName,
+    // "</div>",
     "</div>",
-    "</div>",
-    // '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid #FF534C; background: white; cursor: pointer; position: relative; z-index: 2">',
-    //     '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
-    //             data.popupName,
-    //     '</div>',
-    //     // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
-    //     // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: blue transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
-    // '</div>',
+    '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid #FF534C; background: white; cursor: pointer; position: relative; z-index: 2">',
+        '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
+                data.popupName,
+        '</div>',
+        // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
+        // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: blue transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
+    '</div>',
   ];
 
   return mobileContentArray.join("");
