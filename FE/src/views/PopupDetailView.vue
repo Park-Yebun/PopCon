@@ -1,14 +1,24 @@
 <script setup>
 // import 구문 추가
 import { ref, onMounted } from 'vue';
-import { getPopup,getPopupReviewsTop9,getLikeOrNot } from '@/api/popup';
+import { getPopup,getPopupReviewsTop9,getLikeOrNot, addLike, cancelLike } from '@/api/popup';
+import {addLikeReview, cancelLikeReview} from '@/api/review';
 import {useRouter, useRoute} from 'vue-router';
 import axios from 'axios';
-import { useMemberStore } from '@/stores/user.js'
+import { storeToRefs } from 'pinia';
+import { useMemberStore } from "@/stores/user";
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+const { getUserInfo } = memberStore;
 
 const router = useRouter();
 const route = useRoute();
-const store = useMemberStore();
+
+const param=ref({
+  userId:''
+});
+
 // route.params.popupId -> 조회할 팝업 아이디 
 
 // 네이버 지도 API 로드
@@ -49,12 +59,40 @@ let mapRef = null; // 전역 변수로 선언
 const photoReview=ref([]); // 사진 리뷰만 담기 
 const popupId=ref();
 const isLike=ref(false);
-
+const reviewParam = ref({
+  userId:'',
+  popupId:''
+})
 
 // onMounted 훅 사용
 onMounted(async () => {
+
+  if(localStorage.getItem("accessToken")!=null) {
+    await getUserInfo(localStorage.getItem("accessToken"));
+    
+    await getLikeOrNot(
+      route.params.popupId,
+      ({data})=>{
+        console.log("좋아요 여부!!!");
+        // console.log(data);
+        isLogin.value=true;
+
+        if(data==1) {
+          isLike.value=true;
+        } else {
+          isLike.value=false;
+        }
+        console.log(isLike.value);
+      },
+      (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
   getPopup(
     route.params.popupId,
+
     async ({data})=>{
 
       popupId.value=route.params.popupId;
@@ -101,28 +139,21 @@ onMounted(async () => {
 
      }
 
-      if(localStorage.getItem("accessToken")!=null) {
-        isLogin.value=true;
-        getLikeOrNot(
-          route.params.popupId,
-          ({data})=>{
-            // console.log("좋아요 여부!!!");
-            // console.log(data);
-            if(data==1) {
-              isLike.value=true;
-            }
-          },
-          (error)=>{
-            console.log(error);
-          }
-        )
-      }
+      // 리뷰 데이터 좋아요순 가져오기 
       
+      if(userInfo.value==null) {
+          reviewParam.value.userId=null;
+      } else {
+        reviewParam.value.userId=userInfo.value.userId;
+      }
+      reviewParam.value.popupId=route.params.popupId;
 
-      // 리뷰 데이터 최신순 9개만 가져오기 가져오기 
+
       getPopupReviewsTop9(
         route.params.popupId,
+        reviewParam.value,
         ({data})=>{
+          console.log("리뷰 데이터 조회 ! ");
           console.log(data);  // data 에 팝업스토어 리뷰 정보 존재 
           // console.log(data[0]);
 
@@ -153,24 +184,21 @@ onMounted(async () => {
 });
 
 
-// 메소드를 반환
-
-const goLike=function() {
-  console.log('좋아요 누르러 가자!!!');
-  console.log(isLike.value);
-}
-
 const goBack=function() {
   // 뒤로가기 로직 추가
   router.go(-1);
 }
 const goHPage=function() {
+  if(popup.value.popupSite!=null) {
     // 새로운 탭에서 링크 열기
-  window.open(popup.value.popupSite, '_blank');
+    window.open(popup.value.popupSite, '_blank');
+  }
 }
 const goSNS=function()  {
-  // 공식 sns 바로가기 
-  window.open(popup.value.popupInstar, '_blank');
+  if(popup.value.popupInstar!=null) {
+    // 공식 sns 바로가기 
+    window.open(popup.value.popupInstar, '_blank');
+  }
 }
 const goVisitor=function(){
   // 방문자 사진 동영상 페이지 로직 추가
@@ -192,18 +220,93 @@ const getImageUrl=function(index) {
 
 
 // 좋아요 버튼 api 요청
-const Likes = function(popupid) {
+const goLike = function() {
   console.log("버튼눌림")
-  axios.post(`popups/${popupid}/like`, {params: {
-    userId: store.userInfo.value.userId
+
+  if(userInfo.value==null) {
+    alert('로그인 하세요!');
+    // router.push({name:'login'});
+    return;
   }
-  })
-  .then((response) => {
-    console.log("좋아요 요청 완료")
-  })
-  .catch((error) => {
-    console.log("좋아요 요청 실패")
-  })
+
+  param.value.userId=userInfo.value.userId;
+
+  if(isLike.value) {  // 좋아요 취소 
+    console.log("좋아요 취소하자!!");
+    cancelLike(
+      route.params.popupId,
+      param.value,
+      ({data})=>{
+        console.log("좋아요 취소 완료!");
+        popup.value.popupLike=popup.value.popupLike-1;
+        isLike.value=!isLike.value;
+      },
+      (error)=>{
+        console.log(error);
+      }
+    )
+
+  }
+
+  else {  // 좋아요 추가 
+   addLike(
+    route.params.popupId,
+    param.value,
+    ({data})=>{
+      console.log("좋아요 추가 완료!");
+      console.log(data);
+      popup.value.popupLike=popup.value.popupLike+1;
+      isLike.value=!isLike.value;
+    },
+    (error)=>{
+      console.log("좋아요 추가 오류");
+      console.log(error);
+    }
+   )
+
+  }
+}
+
+// 리뷰 좋아요 버튼 api 요청 
+// /{popupId}/{reviewId}/recommend")
+const goReviewLike = function(like, reviewId){
+  
+  if(userInfo.value==null) {
+    alert('로그인 하세요!');
+    // router.push({name:'login'});
+    return;
+  }
+
+  // console.log("리뷰 조아요");
+  // console.log(reviewId);
+
+  if(like==1) {
+    cancelLikeReview(
+      route.params.popupId,
+      reviewId,
+      ({data})=>{
+        console.log("리뷰 좋아요 취소 완료!");
+      },
+      (error)=>{
+        console.log(error);
+      }
+    )
+  } // 좋아요 취소 
+
+  else {
+    addLikeReview(
+      route.params.popupId,
+      reviewId,
+      ({data})=>{
+        console.log("리뷰 좋아요 추가 완료!");
+      },
+      (error)=>{
+        console.log(error);
+      }
+    )
+
+  } // 좋아요 추가 
+
 }
 
 </script>
@@ -234,12 +337,6 @@ const Likes = function(popupid) {
             <i id="idxPlus" class="fa-solid fa-circle-chevron-right fa-xl"></i>
           </div>
         </template>
-      <!-- <img
-        :src="popup.popupImages[0]"
-        alt="공식 이미지"
-        width=100%;
-        height=100%;
-      /> -->
     </div>
 
     <div class="popup-title">
@@ -250,12 +347,17 @@ const Likes = function(popupid) {
     <div class="views" style="padding-left:20px;">
       <div>
         <i class="bi bi-eye-fill"></i>
-      <span style="font-size:small; color:gray;">{{' '+popup.popupView}}</span>
+        <span style="font-size:small; color:gray;">{{' '+popup.popupView}}</span>
       </div>
-      <div @click="goLike">
-        <i v-if="isLike" class="fa-solid fa-heart" style="color: #ff0000;"></i>
-        <i v-if="!isLike" class="fa-regular fa-heart" style="color: #ff0000;"></i>
-        <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
+      <div v-if="popupLoaded">
+        <div v-if="isLike" @click="goLike">
+          <i class="fa-solid fa-heart" style="color: #ff0000"></i>
+          <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
+        </div>
+        <div v-else @click="goLike">
+          <i class="fa-regular fa-heart" style="color: #ff0000"></i>
+          <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
+        </div>
       </div>
     </div>
 
@@ -388,10 +490,10 @@ const Likes = function(popupid) {
     
     <p style="font-weight:bold;">POPCON이 알려드리는 ✨꿀팁✨</p> 
     <div class="honey-box">
-      <p class="honeytip-content" :style="{filter:isLogin? none:'blur(5px)'}">
-        팁1. ㄴㄴㄴㄴㄴㄴㄴㄴ
-        팁2. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
-        팁3. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
+      <p v-if="popup.popupHoney==null">
+        꿀팁이 없습니다. 
+      </p>
+      <p v-else class="honeytip-content" :style="{filter:isLogin? 'blur(0px)':'blur(5px)'}">
         {{ popup.popupHoney }}
       </p>
       <div v-if="!isLogin" id="goLogin" @click="$router.push('/user')">
@@ -429,7 +531,9 @@ const Likes = function(popupid) {
     <div class='review-summary' style="max-width: 100%;">
       <div v-for="(value,key) in reviewSummary" class="progress">
         <div class="progress-bar" role="progressbar" :style="{width:value+'%'}" >
-         {{ key }}
+        </div>
+        <div class="progress-bar-text">
+          <span style="font-weight:bold; color:darkslategray;">{{ key }}</span>
         </div>
       </div>
     </div>
@@ -475,12 +579,35 @@ const Likes = function(popupid) {
         <div id="collapseOne" v-for="(review,index) in popupReviews" :key="index" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="row" style="padding:3px;">
               <div class="review-content col-8">
-              <div class="review-text" style="font-size:10px;">
+              <div class="review-text" style="font-size:12px;">
                 {{ review.reviewContent }}
               </div>
 
-              <div class="review-etc" style="font-size:10px;">
-              <span class="badge text-bg-light" style="border: 1px lightgray solid;"><i class="fa-solid fa-heart" style="color: red;"></i> {{ review.reviewLike }}</span>
+              <div class="review-etc" style="font-size:12px;">
+              <span class="badge text-bg-light" style="border: 1px lightgray solid;">
+                <div v-if="popupLoaded">
+                  <template v-if="userInfo!=null"> <!-- 로그인 한 유저 -->
+                    <div v-if="review.userReviewLike==1" @click="goReviewLike(1, review.reviewId); review.userReviewLike=0; review.reviewLike-=1;">
+                      <i class="fa-solid fa-heart" style="color: #ff0000"></i>
+                      {{' '+review.reviewLike}}
+                    </div>
+                    <div v-else @click="goReviewLike(0, review.reviewId); review.userReviewLike=1; review.reviewLike+=1;">
+                      <i class="fa-regular fa-heart" style="color: #ff0000"></i>
+                      {{' '+review.reviewLike}}
+                    </div>
+                  </template>
+
+                  <template v-else> <!-- 로그인 안한 유저 -->
+                    <div @click="goReviewLike(0, review.reviewId)">
+                      <i class="fa-regular fa-heart" style="color: #ff0000"></i>
+                      {{' '+review.reviewLike}}
+                    </div>
+                  </template>
+
+                </div>
+                <!-- <i class="fa-solid fa-heart" style="color: red;"></i> 
+                  {{ review.reviewLike }} -->
+              </span>
               <span class="badge text-bg-light" style="border: 1px lightgray solid; cursor:pointer;" @click="$router.push({name:'reportreview', params:{'popupId':popupId,'reviewId':review.reviewId}})"><i class="fa-solid fa-skull-crossbones" style="color: #ff0000;"></i> 신고하기 </span>
               </div>
 
@@ -493,11 +620,11 @@ const Likes = function(popupid) {
                 />  
                 <img v-else="review.userImagePath==null"
                   src="https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/profileImages/noProfile.png"
-                ></img>
+                />
               </div>
               <div class="review-date">
-                <span style="font-size:8px; font-weight:bold;"> {{review.userNickname}}</span>
-                <span style="font-size:6px; font-weight:bold;"> {{review.reviewDate}}</span>
+                <span style="font-size:10px; font-weight:bold;"> {{review.userNickname}}</span>
+                <span style="font-size:8px; font-weight:bold; color:gray;"> {{review.reviewDate}}</span>
               </div>
               </div>
             </div>
@@ -778,13 +905,75 @@ i {
   align-items: center; /* 세로 가운데 정렬 */
 }
 
-.review-summary {
+/* .review-summary {
   display:flex;
   flex-direction: column;
   position: relative;
+} */
+
+/* .progress {
+  height: 40px;
+  border-radius:20px; 
+  margin-bottom: 10px;
+  overflow:hidden;
+  display:flex;
+  justify-content: center;
+} */
+
+/* .progress-bar {
+  border-radius:20px; 
+  background-color:#FF534C; 
+  color:white;
+  overflow:hidden;
+  z-index:1;
+} */
+
+.review-summary {
+  display: flex;
+  flex-direction: column;
 }
 
-.review-summary-item{
+.progress {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  height: 40px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  position:relative;
+}
+
+.progress-bar {
+  flex-grow: 1;
+  /* background-color:#ffa8a5;  */
+  background-color: #FF534C;
+  z-index:1;
+  height: 40px;
+  border-radius: 20px;
+  position:absolute;
+}
+
+.progress-bar-text {
+  /* text-align: center;
+  justify-content: center; */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index:2; 
+  height:40px;
+  border-radius: 20px;
+  /* top:50%; */
+  left:50%;
+  transform: translateX(-50%);
+  /* transform:translateY(-50%); */
+  position:absolute;
+  /* align-items:center; */
+}
+
+
+/* .review-summary-item{
   background-color: #FF534C; 
   margin:5px 0px; 
   padding: 7px 10px;
@@ -793,7 +982,7 @@ i {
   color: white;
   display:flex;
   justify-content:space-between;
-}
+} */
 
 #write-review {
   display:flex;
@@ -883,24 +1072,8 @@ i {
   align-items: center; /*세로 가운데 정렬 */
 }
 
-
-.progress {
-  height: 40px;
-  border-radius:20px; 
-  margin-bottom: 10px;
-  overflow:hidden;
-  /* display:flex; */
-
-}
-
-
-.progress-bar {
-  /* border-radius:20px;  */
-  background-color:#FF534C; 
-  color:white;
-  overflow:hidden;
-  z-index:1;
-  /* position:absolute; */
+.honey-box {
+  font-size:small;
 }
 
 </style>
