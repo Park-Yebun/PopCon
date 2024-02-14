@@ -15,6 +15,13 @@ function getPopup(popupId,success,fail) {
     local.get(`${url}/${popupId}`).then(success).catch(fail);
 }
 
+
+// 좋아요 클릭 여부 가져오기 
+function getLikeOrNot(popupId,success,fail) {
+    local.defaults.headers["Authorization"]=localStorage.getItem("accessToken");
+    local.get(`${url}/${popupId}/like`).then(success).catch(fail);
+}
+
 // 팝업의 리뷰 조회 
 function getPopupReviewsTop9(popupId,success,fail) {
     local.get(`${url}/${popupId}/reviews`).then(success).catch(fail)
@@ -44,6 +51,7 @@ function mapSearch(param, success, fail) {
     local.get('/maps/search', { params: param }).then(success).catch(fail);
 }
 
+
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch,getLikeOrNot
 };

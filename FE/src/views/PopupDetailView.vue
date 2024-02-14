@@ -1,7 +1,7 @@
 <script setup>
 // import 구문 추가
 import { ref, onMounted } from 'vue';
-import { getPopup,getPopupReviewsTop9 } from '@/api/popup';
+import { getPopup,getPopupReviewsTop9,getLikeOrNot } from '@/api/popup';
 import {useRouter, useRoute} from 'vue-router';
 import axios from 'axios';
 import { useMemberStore } from '@/stores/user.js'
@@ -44,20 +44,31 @@ const currIdx = ref(0); // 사진 인덱스
 const reviewSummary=ref({});
 const lat=ref(0)
 const lng=ref(0)
+const isLogin=ref(false);
 let mapRef = null; // 전역 변수로 선언
+const photoReview=ref([]); // 사진 리뷰만 담기 
+const popupId=ref();
+const isLike=ref(false);
+
 
 // onMounted 훅 사용
 onMounted(async () => {
   getPopup(
     route.params.popupId,
     async ({data})=>{
+
+      popupId.value=route.params.popupId;
+
       console.log(data);  // data 에 팝업스토어 정보 존재 
       popup.value=data;
+
       // console.log(popup.value.popupLatitude + '위도확인')
       // console.log(popup.value.popupLongitude + '경도확인')
+
       lat.value = popup.value.popupLatitude
       lng.value = popup.value.popupLongitude
-      console.log('1')
+
+      // console.log('1')
       // console.log(lat.value + '찐위도확인' )
       // console.log(lng.value + '찐경도확인' )
 
@@ -68,13 +79,60 @@ onMounted(async () => {
       }
       reviewSummary.value=popup.value.reviewTagSummary.reviewSummary;
       
+      // console.log("리뷰 요약 !!");
+      // console.log(reviewSummary.value);
+
+     // 해시맵을 배열로 변환
+      let entries = Object.entries(reviewSummary.value);
+
+      entries.sort((a, b) => {
+          return b[1] - a[1];
+      });
+
+      // 정렬된 배열을 다시 해시맵으로 변환
+
+      const sortedHashmap = {};
+      for (const [key, value] of entries) {
+          sortedHashmap[key] = value;
+      }
+
+      reviewSummary.value = sortedHashmap;
+
+      if(localStorage.getItem("accessToken")!=null) {
+        isLogin.value=true;
+        getLikeOrNot(
+          route.params.popupId,
+          ({data})=>{
+            // console.log("좋아요 여부!!!");
+            // console.log(data);
+            if(data==1) {
+              isLike.value=true;
+            }
+          },
+          (error)=>{
+            console.log(error);
+          }
+        )
+      }
+      
+
       // 리뷰 데이터 최신순 9개만 가져오기 가져오기 
       getPopupReviewsTop9(
         route.params.popupId,
         ({data})=>{
           console.log(data);  // data 에 팝업스토어 리뷰 정보 존재 
-          console.log(data[0]);
-          popupReviews.value=data;
+          // console.log(data[0]);
+
+          let cnt=0;
+          for(var i=0;i<data.length;i++) {
+            if(data[i].reviewImagePath!=null) {
+              photoReview.value.push(data[i]);
+              cnt++;
+            }
+            if(cnt==9) break;
+          }
+
+          popupReviews.value=data;  // 팝업스토어 리뷰 전체 담기 
           popupLoaded.value=true;
 
           // 데이터를 모두 받은 후에 loadNaverMapScript 호출
@@ -114,6 +172,7 @@ const goReview=function(){
 }
 const ratingToPercent=function(score){  // 별점을 퍼센트로
   score = (score / 5) * 100;
+  // console.log(score);
   return score + '%';
 }
 
@@ -121,11 +180,6 @@ const getImageUrl=function(index) {
   // 이미지 URL을 동적으로 제공하는 메소드
   // 예를 들어, `require`를 사용하거나 이미지 경로를 동적으로 생성하는 방법 사용
   // return popupReviews.value[index].reviewImagePath;
-}
-
-const goCheck=function(){
-  console.log("click!!!!!!!!1")
-  console.log(currIdx.value);
 }
 
 
@@ -163,12 +217,14 @@ const Likes = function(popupid) {
           <img :src="popup.popupImages[0]" />
         </template>
         <template v-else>
-          <span id="currPage" style="background-color: gray; z-index: 1000;">{{ currIdx + 1 }}/{{ popup.popupImages.length }} </span>
-          <i v-if="currIdx > 0" id="idxMinus" class="fa-solid fa-circle-chevron-left fa-xl" @click="currIdx--"></i>
-          <!-- <font-awesome-icon :icon="['fas', 'circle-chevron-left']" /> -->
-            <img :src="popup.popupImages[currIdx]" />
-          <i v-if="currIdx < popup.popupImages.length - 1" id="idxPlus"
-            class="fa-solid fa-circle-chevron-right fa-xl" @click=goCheck></i>
+          <span id="currPage" style="background-color: gray; opacity : 0.9; z-index: 1000;">{{ currIdx + 1 }}/{{ popup.popupImages.length }} </span>
+          <div v-if="currIdx > 0" @click="currIdx--">
+            <i id="idxMinus" class="fa-solid fa-circle-chevron-left fa-xl"></i>
+          </div>
+          <img :src="popup.popupImages[currIdx]"/>
+          <div v-if="currIdx < popup.popupImages.length - 1"  @click="currIdx++">
+            <i id="idxPlus" class="fa-solid fa-circle-chevron-right fa-xl"></i>
+          </div>
         </template>
       <!-- <img
         :src="popup.popupImages[0]"
@@ -179,259 +235,272 @@ const Likes = function(popupid) {
     </div>
 
     <div class="popup-title">
-      <p>{{popup.popupName}}</p> 
-      <button @click="Likes(popup.popupId)" >좋아요</button>
+      <p style="font-weight:bold;">{{popup.popupName}}</p> 
+      <!-- <button @click="Likes(popup.popupId)" >좋아요</button> -->
     </div>
 
-    <div class="views">
+    <div class="views" style="padding-left:20px;">
       <i class="bi bi-eye-fill"></i>
-      <span>{{popup.popupView}} </span>
+      <span style="font-size:small; color:gray;">{{' '+popup.popupView}}</span>
+      
+      <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
+      <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
+      <i class="fa-regular fa-heart" style="color: #ff0000;"></i>
     </div>
 
     <!-- 별점 + 숫자  -->
     <div class="star-ratings">
-       <div 
+      <div class="star-ratings1" >
+      <div 
         class="star-ratings-fill space-x-2 text-lg"
-        :style="{ width: ratingToPercent(popup.popupStar)}"
-         >
+        :style="{ width: ratingToPercent(popup.popupStar)}">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <div class="star-ratings-base space-x-2 text-lg">
           <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-       </div>
-       <div class="star-ratings-base space-x-2 text-lg">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        <span>{{ popup.popupStar }}</span>
-       </div>
+      </div>
+      </div>
+      <div class="star-ratings2">
+        
+        <!-- {{popup.popupStar }} -->
+       <div class="star-ratings-score">
+          <span>{{ '  '+popup.popupStar +" "}}</span>
+        </div>
+      </div>
     </div>
 
     <!--주소 -->
     <div>
       <i class="bi bi-geo-alt-fill"></i>
-      <span>{{popup.popupLocation}}</span>
+      <span style="font-size: small; color:gray;">{{popup.popupLocation}}</span>
+      <span style="font-size:small; font-weight:600">{{popup.popupStart}} - {{ popup.popupEnd }}</span>
     </div>
-
-      <p>{{popup.popupStart}} - {{ popup.popupEnd }}</p>
 
     <!-- 카테고리 -->
     <div class="category">
       <template v-for="(category, index) in popup.popupCategory">
-        <button type="button" class="btn btn-danger">
-          {{ category }}</button>
+        <div class="category-button">
+          <span id="category-name">{{ category }}</span>
+        </div>
       </template>
+      
     </div>
+
+    <hr class="divider" />
 
     <!-- 해쉬태그 -->
     <div class="hashtag">
       <div v-if="popup.popupCar=='Y'" class="hashtag-item centered-image">
-        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="currentColor" class="bi bi-p-circle" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-p-circle" viewBox="0 0 16 16">
         <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.5 4.002h2.962C10.045 4.002 11 5.104 11 6.586c0 1.494-.967 2.578-2.55 2.578H6.784V12H5.5zm2.77 4.072c.893 0 1.419-.545 1.419-1.488s-.526-1.482-1.42-1.482H6.778v2.97z"/>
         </svg>
-        <p>주차가능</p>
+        <p style="font-size:x-small;">주차 가능</p>
       </div>
       <div v-if="popup.popupEntryFee=='Y'" class="hashtag-item centered-image">
-        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="currentColor" class="bi bi-ticket-perforated" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-ticket-perforated" viewBox="0 0 16 16">
         <path d="M4 4.85v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9z"/>
         <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3zM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9z"/>
         </svg>
-        <p>입장료 무료</p>
+        <p style="font-size:x-small;">입장료 무료</p>
       </div>
       <div v-if="popup.popupWifi=='Y'" class="hashtag-item centered-image">
-        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="currentColor" class="bi bi-wifi" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-wifi" viewBox="0 0 16 16">
         <path d="M15.384 6.115a.485.485 0 0 0-.047-.736A12.44 12.44 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.52.52 0 0 0 .668.05A11.45 11.45 0 0 1 8 4c2.507 0 4.827.802 6.716 2.164.205.148.49.13.668-.049"/>
         <path d="M13.229 8.271a.482.482 0 0 0-.063-.745A9.46 9.46 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065m-2.183 2.183c.226-.226.185-.605-.1-.75A6.5 6.5 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.5 5.5 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091zM9.06 12.44c.196-.196.198-.52-.04-.66A2 2 0 0 0 8 11.5a2 2 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z"/>
         </svg>
-        <p>와이파이 가능</p>
+        <p style="font-size:x-small;">와이파이 가능</p>
       </div>
       <div v-if="popup.popupEat=='Y'" class="hashtag-item centered-image">
-        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
         <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z"/>
         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
         </svg>
-        <p>식음료 반입 금지</p>
+        <p style="font-size:x-small;">식음료 반입 금지</p>
       </div>
     </div>
+
+    <hr class="divider" />
 
     <!-- 운영시간 ~ 주의사항 -->
     <div class="accordion accordion-flush" id="accordionFlushExample">
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-            운영시간
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" 
+          aria-expanded="false" aria-controls="flush-collapseOne"
+          style="font-weight:bold">
+              운영시간
           </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse show" >
           <div class="accordion-body">
-            <div v-html= "popup.popupOperating"></div>
-            <!-- {{ popup.popupOperating }} -->
-            <!-- 월 : 11:00 ~ 22:00
-            화 : 11:00 ~ 22:00
-            수 : 11:00 ~ 22:00
-            목 : 11:00 ~ 22:00
-            금 : 11:00 ~ 22:00
-            토 : 10:30 ~ 22:00
-            일 : 10:30 ~ 22:00 -->
+            <div class="accordion-text" v-html= "popup.popupOperating"></div>
           </div>
         </div>
       </div> 
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+          <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" 
+          aria-expanded="false" aria-controls="flush-collapseTwo"
+          style="font-weight:bold">
             팝업스토어 소개
           </button>
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse show">
           <div class="accordion-body">
-            <div v-html="popup.popupContent"></div>
-            <!-- {{popup.popupContent}} -->
+            <div  class="accordion-text" v-html="popup.popupContent"></div>
           </div>
         </div>
       </div>
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+          <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" 
+          aria-expanded="false" aria-controls="flush-collapseThree"
+          style="font-weight:bold">
             안내 및 주의사항
           </button>
         </h2>
         <div id="flush-collapseThree" class="accordion-collapse collapse show">
           <div class="accordion-body">
-            <div v-html="popup.popupNotice"></div>
+            <div class="accordion-text" v-html="popup.popupNotice"></div>
           </div>
         </div>
       </div>
     </div> 
 
-
+    <hr class="divider" />
     <!-- 팝콘이 알려드리는 꿀팁 -->
-    <div>
-      <p>POPCON이 알려드리는 ✨꿀팁✨</p> 
-      <p class="honeytip-content">
+    
+    <p style="font-weight:bold;">POPCON이 알려드리는 ✨꿀팁✨</p> 
+    <div class="honey-box">
+      <p class="honeytip-content" :style="{filter:isLogin? none:'blur(5px)'}">
         팁1. ㄴㄴㄴㄴㄴㄴㄴㄴ
         팁2. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
         팁3. ㄴㄴㄴㄴㄴㄴㄴㄴㄴ
         {{ popup.popupHoney }}
       </p>
-      <button type="button" class="btn btn-danger" @click="$router.push('/user')">로그인 후 확인하기</button>
-    
-      <hr class="divider">
-      <p @click="goHPage" class="moveSite">브랜드 홈페이지 바로가기</p>
-
-      <hr class="divider">
-      <p @click="goSNS" class="moveSite">공식 SNS 바로가기</p>
-    
+      <div v-if="!isLogin" id="goLogin" @click="$router.push('/user')">
+        <span style="margin-right: 3px;">로그인 후 확인하기</span>
+        <i class="fa-solid fa-circle-arrow-right" style="color: #FFCC00; "></i>
+      </div>
     </div>
+    
+    <hr class="divider">
+      <i class="fa-regular fa-paper-plane" style="color: #000000;"></i>
+      <span @click="goHPage" class="moveSite" style="font-weight: bold"> 브랜드 홈페이지 바로가기</span>
 
-    <!-- 지도 -->
+      <hr class="divider">
+      <i class="fa-brands fa-instagram" style="color: #000000;"></i>
+      <span @click="goSNS" class="moveSite" style="font-weight:bold"> 공식 SNS 바로가기</span>
+    
+    <hr class="divider">
+
+      <!-- 지도 -->
+    <p style="font-weight:bold;">오시는 길</p> 
     <div id="map"></div>
   
+    <hr class="divider">
     <!-- 방문자 정보 -->
     <div class="center-text">
       <template v-if="popup.popupReviewAge==null">
-        <p>" 아직 통계가 없어요! <br> 방문 기록을 남겨주세요! "</p>
+        <p style="font-size: small; ">" 아직 통계가 없어요! <br> 방문 기록을 남겨주세요! "</p>
       </template>
       <template v-else>
-        <p>" {{popup.popupReviewAge}} {{ popup.popupReviewSex }} 가장 많이 방문했어요! "</p>
+        <p style="font-size:small; font-weight:bold;">" {{popup.popupReviewAge}} {{ popup.popupReviewSex }} 가장 많이 방문했어요! "</p>
       </template>
     </div>
 
     <!-- 해쉬태그 기능 -->
-    <div v-for="(value,key) in reviewSummary" style="max-width: 100%;">
-      <div id="hashtagComment"
-        :style="{ width: value+'%'}" 
-         >
-       </div>
-       <div style=" background-color: #eae7e7;"> {{ key }}
-       </div>
-<!-- 
-      <span v-if="value>0" class="badge text-bg-danger" :style="{ width: value+'%'}"></span>
-      <span style="width: 100%; color: lightgray;" >{{key}}</span> -->
+    <div class='review-summary' style="max-width: 100%;">
+      <div v-for="(value,key) in reviewSummary" class="progress">
+        <div class="progress-bar" role="progressbar" :style="{width:value+'%'}" >
+         {{ key }}
+        </div>
+      </div>
     </div>
-    <!-- %로 witdh 조절 -->
 
-    <!-- 리뷰쓰기 아이콘 -->
-    <div>
-      <i class="bi bi-pencil-square"></i>
-      <p>리뷰 쓰기</p>
-    </div>
+    <hr class="divider" />
 
     <!-- 방문자 사진 영상  -->
-    <P>방문자 사진 영상</P>
-      <div id="app">
-        <div class="grid-container">
-          <div v-for="(review, index) in popupReviews.slice(0,9)" :key="index" class="grid-item">
-            <div class="square-image-wrapper">
-              <img :src="review.reviewImagePath" alt="Review Image">
-            </div>
-          </div>
-        </div>
+    <div id="write-review">
+      <div>
+        <span style="font-weight:bold;">방문자 사진 영상</span>
       </div>
-    
-    <button @click="goVisitor" type="button" class="btn btn-danger">방문자 사진 영상 더보기</button>
-
-    <!-- 방문자 리뷰  -->
-    <p>방문자 리뷰</p>
-
-
-
-    <!-- <div class="review-box" style="background-color: lightsalmon;">
-      <div class="review-item" v-for="(review,index) in popupReviews.slice(0,1)" :key="index">
-        <div class="review-image">
-          <div class="review-left">
-            <div class="review-content">
-            {{ review.reviewContent }} dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-            <div class="review-desc">
-              <span class="badge text-bg-danger">선택한 해쉬태그 중 하나</span>
-              <span class="badge text-bg-danger">+ 숫자</span>
-              <span class="badge text-bg-light">❤ {{ review.reviewLike }}</span>
-            </div>
-                  
-            <div class="review-profile">
-              <img
-                src="@/assets/images/profile.png"
-                alt="profile-picture"
-                class="rounded-profile"
-              />  
-            </div>
-          </div>
-          </div>
-          <div class="review-right">
-            <div class="review-picture"></div>
-          </div>
-          </div>
-        </div>
+      <div>
+        <i class="bi bi-pencil-square"></i>
+        <span style="font-size:small;"  @click="$router.push({name:'review',params:{popupId}})"> 리뷰 쓰기</span>
+      </div>
     </div>
-
-    <button @click="goReview" type="button" class="btn btn-danger">방문자 리뷰 더보기</button>
-  </div> -->
-
-    <div class="review-item">
-      <div class="row" v-for="(review,index) in popupReviews.slice(0,1)" :key="index">
-        <div class="review-content col-8">
-          {{ review.reviewContent }}
-        </div>
-        <div class="review-picture col-4">
+    <div class="grid-container">
+        <div v-for="(review, index) in photoReview" :key="index" class="grid-item">
           <div class="square-image-wrapper">
-            <img 
-              :src="review.reviewImagePath" 
-              alt="review-picture"
-            >
+            <img :src="review.reviewImagePath" alt="Review Image">
           </div>
         </div>
-        <div>
-          <!-- <span class="badge text-bg-danger">선택한 해쉬태그 중 하나</span>
-          <span class="badge text-bg-danger">+ 숫자</span> -->
-          <span class="badge text-bg-light">❤ {{ review.reviewLike }}</span>
-        </div>
-        
-        <div class="profile-container">
-          <img
-            :src="review.userImagePath"
-            alt="profile-picture"
-            class="rounded-profile"
-          />  
-        </div>
-        <p>{{review.userNickname}}</p>
-        <p>{{review.reviewDate}}</p>
-      </div>
     </div>
-    <button @click="goReview" type="button" class="btn btn-danger">방문자 리뷰 더보기</button>
+    <!-- <div id="app">
+      <div @click="goVisitor" id="more-photo">
+        <span style="padding-right:3px;">방문자 사진 영상 더보기</span>
+        <i class="fa-solid fa-circle-arrow-right" style="color: #FFCC00; "></i>
+      </div>
+    </div> -->
+
+    <hr class="divider" />
+
+
+
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item" style="border:none;">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+          style="font-weight:bold;">
+            방문자 리뷰
+          </button>
+        </h2>
+        <div id="collapseOne" v-for="(review,index) in popupReviews" :key="index" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="row" style="padding:3px;">
+              <div class="review-content col-8">
+              <div class="review-text" style="font-size:10px;">
+                {{ review.reviewContent }}
+              </div>
+
+              <div class="review-etc" style="font-size:10px;">
+              <span class="badge text-bg-light" style="border: 1px lightgray solid;"><i class="fa-solid fa-heart" style="color: red;"></i> {{ review.reviewLike }}</span>
+              <span class="badge text-bg-light" style="border: 1px lightgray solid; cursor:pointer;" @click="$router.push({name:'reportreview', params:{'popupId':popupId,'reviewId':review.reviewId}})"><i class="fa-solid fa-skull-crossbones" style="color: #ff0000;"></i> 신고하기 </span>
+              </div>
+
+              <div class="review-author">
+              <div class="review-profile">
+                <img v-if="review.userImagePath!=null"
+                  :src="review.userImagePath"
+                  alt="profile-picture"
+                  class="rounded-profile"
+                />  
+                <img v-else="review.userImagePath==null"
+                  src="https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/profileImages/noProfile.png"
+                ></img>
+              </div>
+              <div class="review-date">
+                <span style="font-size:8px; font-weight:bold;"> {{review.userNickname}}</span>
+                <span style="font-size:6px; font-weight:bold;"> {{review.reviewDate}}</span>
+              </div>
+              </div>
+            </div>
+
+            <div class="review-picture col-4">
+            <div class="square-image-wrapper">
+              <img v-if="review.reviewImagePath!=null"
+                :src="review.reviewImagePath"
+                style="border:1px lightgray solid;" 
+              >
+            </div>
+            </div>
+          </div>
+              <hr class="divider" />
+        </div>
+      </div> 
+    </div>
+    
+    <hr class="divider" />
   </div>
 </template>
 
@@ -439,12 +508,6 @@ const Likes = function(popupid) {
 
 <style scoped>
 
-.profile-container {
-  width: 70px; /* 프로필 이미지의 크기를 조절할 수 있습니다. */
-  height: 70px;
-  overflow: hidden;
-  border-radius: 50%; /* 반지름 50%로 설정하여 원형으로 만듭니다. */
-}
 .rounded-profile {
   width: 100%;
   height: 100%;
@@ -455,36 +518,51 @@ const Likes = function(popupid) {
 }
 
 .honeytip-content {
-  filter: blur(5px);
+  /* filter: blur(5px); */
 }
 .centered-image {
   display: inline-block;
 }
 .star-ratings {
-  color: #aaa9a9; 
+  /* color: #aaa9a9;  */
   position: relative;
-  unicode-bidi: bidi-override;
+  /* unicode-bidi: bidi-override; */
+  display:flex;
+  flex-direction: row;
   width: max-content;
   -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 1.3px;
   -webkit-text-stroke-color: #2b2a29;
   margin-top: 80px; /*임의설정값, 나중에 css 건드리면 또 고쳐야됨 ㅠㅠ*/
+  margin: 5px 0px;
 } 
+
 .star-ratings-fill {
-  color: #fff58c;
+  /* color: #fff58c; */
   padding: 0;
-  position: absolute;
+  /* position: absolute; */
   z-index: 1;
-  display: flex;
+  /* display: flex; */
   top: 0;
   left: 0;
   overflow: hidden;
   -webkit-text-fill-color: gold;
 }
 .star-ratings-base {
-  z-index: 0;
   padding: 0;
+  position: absolute;
+  z-index: 0;
+  /* display: flex; */
+  top: 0;
+  left: 0;
+  /* overflow: hidden; */
 }
+
+.star-ratings-score {
+  top:0;
+  margin-left:5px;
+}
+
 .views {
   vertical-align: middle;
   float: left; width: 20%;
@@ -497,13 +575,15 @@ const Likes = function(popupid) {
   font-weight: normal;
   float: left; width: 80%;
 }
+
 .hashtag-item {
   text-align: center;
+  margin-right: 20px;
 }
 .home-container {
   max-width: 400px;
   margin: 0 auto;
-  border: 2px solid gray; /* 테두리 스타일 설정 */
+  /* border: 2px solid gray;  */
 }
 .header-container {
   display: flex;
@@ -522,7 +602,7 @@ const Likes = function(popupid) {
 
 .divider {
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid lightgray;
   margin-top: 10px; /* 위에 간격을 줍니다. */
 }
 
@@ -545,6 +625,7 @@ const Likes = function(popupid) {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px; /* 그리드 아이템 간의 간격을 조절할 수 있습니다. */
+  padding-bottom:5px;
 }
 
 .grid-item {
@@ -636,6 +717,174 @@ i {
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
   z-index: 1000;
+}
+
+.category-button {
+  background-color: #FF534C;
+  border-radius: 20px;
+  border: 0px;
+  margin-right: 5px;
+  padding: 2px 7px;
+}
+
+#category-name {
+  color:white;
+  font-size: x-small;
+}
+
+.category {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0px;
+  padding-bottom: 10px;
+}
+
+.accordion-text{
+  font-size:small;
+}
+
+.honey-box {
+  display:flex;
+  flex-direction: column;
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+#goLogin {
+  background-color: #FF534C;
+  border-radius: 20px;
+  border: 0px;
+  padding: 7px 10px;
+  color:white;
+  font-size: small;
+  width: 70%;
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.review-summary {
+  display:flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.review-summary-item{
+  background-color: #FF534C; 
+  margin:5px 0px; 
+  padding: 7px 10px;
+  z-index:1;
+  border-radius: 20px;
+  color: white;
+  display:flex;
+  justify-content:space-between;
+}
+
+#write-review {
+  display:flex;
+  flex-direction: row;
+  justify-content:space-between;
+  padding-bottom: 10px ;
+}
+
+#app {
+  display:flex;
+  flex-direction: column;
+  align-items: center; /*세로 가운데 정렬 */
+}
+
+#more-photo{
+  background-color: #FF534C;
+  border-radius: 20px;
+  border: 0px;
+  padding: 7px 10px;
+  color:white;
+  font-size: small;
+  width: 70%;
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.review-author {
+  display:flex;
+  flex-direction: row;
+}
+
+.review-profile {
+  text-align:center;
+}
+
+.review-profile img {
+  width: 18px; /* 프로필 이미지의 크기를 조절할 수 있습니다. */
+  height: 18px;
+  overflow: hidden;
+  border-radius: 50%; /* 반지름 50%로 설정하여 원형으로 만듭니다. */
+  display: block; /* 이미지를 블록 요소로 만들어줍니다. */
+  margin: 0 auto; /* 좌우 여백을 자동으로 설정하여 이미지를 가운데 정렬합니다. */
+}
+
+.review-date {
+  display: flex;
+  flex-direction: column;
+  padding-left:5px;
+}
+
+.review-text {
+  height: 65%;
+  padding: 3px;
+}
+
+.review-etc {
+  height: 15%;
+  text-align: right;
+}
+
+.review-etc span {
+  margin-left: 3px;
+}
+
+.review-author {
+  height: 20%;
+}
+
+#more-review{
+  background-color: #FF534C;
+  border-radius: 20px;
+  border: 0px;
+  padding: 7px 10px;
+  margin-top : 10px;
+  color:white;
+  font-size: small;
+  width: 70%;
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.bottom-box {
+  display:flex;
+  flex-direction: column;
+  align-items: center; /*세로 가운데 정렬 */
+}
+
+
+.progress {
+  height: 40px;
+  border-radius:20px; 
+  margin-bottom: 10px;
+  overflow:hidden;
+  /* display:flex; */
+
+}
+
+
+.progress-bar {
+  /* border-radius:20px;  */
+  background-color:#FF534C; 
+  color:white;
+  overflow:hidden;
+  z-index:1;
+  /* position:absolute; */
 }
 
 </style>
