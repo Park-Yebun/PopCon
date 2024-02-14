@@ -132,16 +132,20 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
 import { useMemberStore } from '@/stores/user';
+import { findById } from "@/api/user.js";
+import { jwtDecode } from "jwt-decode";
 import './fonts/NanumSquareNeo.css'
 import axios from 'axios';
 
 const router = useRouter()
 const store = useCounterStore()
 const member = useMemberStore()
+
+const userType = ref()
 
 // 이거 실행이 안되는 것 같아서 일단 주석처리 해놨습니당.. 콘솔에 출력이 안되네용..-예분-
 // onMounted(()=>{
@@ -174,36 +178,40 @@ const goRec = function() {
   router.push({name : 'recommend'})
 }
 
-const goOthers = function() {
-  axios({})
-  .then((res) => {
-    if (localStorage.getItem("accessToken")) {
-    member.getUserInfo(localStorage.getItem("accessToken"))
-  }}
-  ).then((res) => {
-    console.log(member.userInfo.value.userType)
-  })
+// 토큰으로 로그인한 사용자의 유저타입 확인 후 해당되는 others 페이지로 라우팅
+const Token = localStorage.getItem("accessToken")
+
+const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 정보를 가져오기 위해 사용 , userInfo 저장함 
+      const accessToken=token.split(" ");
+      let decodeToken = jwtDecode(accessToken[1]);
+      await findById(
+              decodeToken.userId,
+              (response) => {
+                userType.value = response.data.userType
+                console.log(userType.value)
+              },
+              (error) => {
+                console.log(error);
+                router.push({name:"user-login"});
+              }
+            );
 }
- 
 
-//   if (member.isLogin.value) {
-//     // 만약 현재 로그인한 유저가 개인회원이라면
-//     if (member.decodeToken.value.userType == "GENERAL") {
-//       router.push({name : 'other-member'})
-//     }
-//     // 만약 현재 로그인한 유저가 기업회원이라면
-//     else if (member.decodeToken.value.userType == "CORP") {
-//       router.push({name : 'other-corporate'})
-//     }
-//     else if (member.decodeToken.value.userType == "ADMIN") {
-//       router.push({name : 'other-admin'})
-//     }   
-//   } else {
-//     // 만약 현재 로그인한 유저가 비회원이라면
-//     router.push({name : 'user-login'})
-//   }
-// }
-
-
+getUserInfo(Token)
+const goOthers = function() {
+  if (userType.value == "GENERAL") {
+      router.push({name : 'other-member'})
+    }
+    // 만약 현재 로그인한 유저가 기업회원이라면
+    else if (userType.value == "CORP") {
+      router.push({name : 'other-corporate'})
+    }
+    else if (userType.value == "ADMIN") {
+      router.push({name : 'other-admin'})
+    }
+    else {
+      router.push({name:"user-login"})
+    }   
+  }
 
 </script>

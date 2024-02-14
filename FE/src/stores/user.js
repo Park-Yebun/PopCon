@@ -14,6 +14,7 @@ export const useMemberStore = defineStore (
     const isLogin = ref(false);
     const isLoginError = ref(false);
     const userInfo = ref(null);
+    const userType = ref(null);
     // const isValidToken = ref(false);
 
     const userLogin = async (loginUser) => {

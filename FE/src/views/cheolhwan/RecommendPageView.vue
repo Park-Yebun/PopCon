@@ -162,6 +162,8 @@ onMounted(() => {
 
 // 좋아요 api 요청 
 const accessToken = localStorage.getItem("accessToken")
+console.log(accessToken)
+
 axios.get('/recommends/good', { headers: {
   Authorization: accessToken
 }
