@@ -194,7 +194,7 @@ const setResult = () => {
 
   var resultImg = document.createElement('img');
   const imgDiv = document.querySelector('#resultImg');
-  var imgURL = '/src/assets/images/popbti-img/popbti-img-' + point + '.svg';
+  var imgURL = '/@/assets/images/popbti-img/popbti-img-' + point + '.svg';
   
   // console.log(imgURL)
   resultImg.src = imgURL;
@@ -306,7 +306,7 @@ const setShare = () => {
   const shareTitle = 'POPBTI 테스트 결과'
   const shareDes = infoList[resultAlt].name;
   // console.log(resultAlt + '**') 
-  const shareImage = '/src/assets/images/popbti-img/popbti-img-' + resultAlt + '.svg';
+  const shareImage = '/@/assets/images/popbti-img/popbti-img-' + resultAlt + '.svg';
   const shareURL = url + '/popbti/' + resultAlt;
   Kakao.Share.sendDefault({
     objectType: 'feed',

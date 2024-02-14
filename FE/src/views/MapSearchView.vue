@@ -156,6 +156,7 @@ const searchKeywordFromHistory = (keyword) => {
       param,
       ({ data }) => {
         console.log(data);
+        data.sort((a, b) => a.distance - b.distance);
         searchList.value = data;
         console.log(searchList);
       },
@@ -187,7 +188,8 @@ function hideRecentSearches() {
     mapSearch(
       param,
       ({ data }) => {
-        console.log(data);
+        data.sort((a, b) => a.distance - b.distance);
+        // 거리 가까운 순서로 정렬
         searchList.value = data;
         console.log(searchList);
       },
@@ -204,8 +206,10 @@ function hideRecentSearches() {
       param,
       ({ data }) => {
         console.log(data);
+        data.sort((a, b) => a.distance - b.distance);
         const Data = data.filter(item => item.popupCategory.includes(text));
         searchList.value = Data;
+
       },
       ({ response }) => {
         console.log(response);
@@ -262,6 +266,7 @@ function hideRecentSearches() {
       param,
       ({ data }) => {
         console.log(data);
+        data.sort((a, b) => a.distance - b.distance);
         searchList.value = data;
         console.log(searchList);
       },
