@@ -350,11 +350,11 @@ const goReviewLike = function(like, reviewId){
         <span style="font-size:small; color:gray;">{{' '+popup.popupView}}</span>
       </div>
       <div v-if="popupLoaded">
-        <div v-if="isLike" @click="goLike">
+        <div v-if="isLike" @click="goLike" style="cursor:pointer;">
           <i class="fa-solid fa-heart" style="color: #ff0000"></i>
           <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
         </div>
-        <div v-else @click="goLike">
+        <div v-else @click="goLike" style="cursor:pointer;">
           <i class="fa-regular fa-heart" style="color: #ff0000"></i>
           <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
         </div>
@@ -446,7 +446,7 @@ const goReviewLike = function(like, reviewId){
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" 
           aria-expanded="false" aria-controls="flush-collapseOne"
           style="font-weight:bold">
-              운영시간
+          ⌚ 운영시간 
           </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse show" >
@@ -460,7 +460,7 @@ const goReviewLike = function(like, reviewId){
           <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" 
           aria-expanded="false" aria-controls="flush-collapseTwo"
           style="font-weight:bold">
-            팝업스토어 소개
+          📝 팝업스토어 소개
           </button>
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse show">
@@ -474,7 +474,7 @@ const goReviewLike = function(like, reviewId){
           <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" 
           aria-expanded="false" aria-controls="flush-collapseThree"
           style="font-weight:bold">
-            안내 및 주의사항
+          ⚠️ 안내 및 주의사항
           </button>
         </h2>
         <div id="flush-collapseThree" class="accordion-collapse collapse show">
@@ -503,17 +503,17 @@ const goReviewLike = function(like, reviewId){
     </div>
     
     <hr class="divider">
-      <i class="fa-regular fa-paper-plane" style="color: #000000;"></i>
-      <span @click="goHPage" class="moveSite" style="font-weight: bold"> 브랜드 홈페이지 바로가기</span>
+      <!-- <i class="fa-regular fa-paper-plane" style="color: #000000;"></i> -->
+      <span @click="goHPage" class="moveSite" style="font-weight: bold">✈️ 브랜드 홈페이지 바로가기</span>
 
       <hr class="divider">
-      <i class="fa-brands fa-instagram" style="color: #000000;"></i>
-      <span @click="goSNS" class="moveSite" style="font-weight:bold"> 공식 SNS 바로가기</span>
+      <!-- <i class="fa-brands fa-instagram" style="color: #000000;"></i> -->
+      <span @click="goSNS" class="moveSite" style="font-weight:bold">🌸 공식 SNS 바로가기</span>
     
     <hr class="divider">
 
       <!-- 지도 -->
-    <p style="font-weight:bold;">오시는 길</p> 
+    <p style="font-weight:bold;">🗺️ 오시는 길</p> 
     <div id="map"></div>
   
     <hr class="divider">
@@ -587,18 +587,20 @@ const goReviewLike = function(like, reviewId){
               <span class="badge text-bg-light" style="border: 1px lightgray solid;">
                 <div v-if="popupLoaded">
                   <template v-if="userInfo!=null"> <!-- 로그인 한 유저 -->
-                    <div v-if="review.userReviewLike==1" @click="goReviewLike(1, review.reviewId); review.userReviewLike=0; review.reviewLike-=1;">
+                    <div v-if="review.userReviewLike==1" @click="goReviewLike(1, review.reviewId); review.userReviewLike=0; review.reviewLike-=1;"
+                    style="cursor:pointer;">
                       <i class="fa-solid fa-heart" style="color: #ff0000"></i>
                       {{' '+review.reviewLike}}
                     </div>
-                    <div v-else @click="goReviewLike(0, review.reviewId); review.userReviewLike=1; review.reviewLike+=1;">
+                    <div v-else @click="goReviewLike(0, review.reviewId); review.userReviewLike=1; review.reviewLike+=1;"
+                    style="cursor:pointer;">
                       <i class="fa-regular fa-heart" style="color: #ff0000"></i>
                       {{' '+review.reviewLike}}
                     </div>
                   </template>
 
                   <template v-else> <!-- 로그인 안한 유저 -->
-                    <div @click="goReviewLike(0, review.reviewId)">
+                    <div @click="goReviewLike(0, review.reviewId)" style="cursor:pointer;">
                       <i class="fa-regular fa-heart" style="color: #ff0000"></i>
                       {{' '+review.reviewLike}}
                     </div>

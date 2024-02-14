@@ -2,7 +2,7 @@
 <template>
   <div class="container">
     <RouterView class="router-view"/>
-    <!-- <div v-if="store.nowURL !== '/map'" title="알림검색 상단바" class="topbar">
+    <div v-if="store.nowURL !== '/map'" title="알림검색 상단바" class="topbar">
       <img v-if="store.nowURL !== '/search' && store.nowURL !== '/map'" @click="goSearch()" class="search-button" src="@/assets/images/searchbutton.png" alt="검색버튼">
       <img class="notification-button" src="@/assets/images/notification_false.png" alt="알림버튼" data-bs-toggle="modal" data-bs-target="#exampleModal">
     </div>
@@ -49,7 +49,7 @@
           <div class="nav-text">Others</div>
         </div>
       </div>
-    </nav> -->
+    </nav>
   </div>
 
 <!-- 알람 모달 템플릿 -->

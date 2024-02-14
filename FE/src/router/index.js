@@ -60,16 +60,16 @@ const onlyAuthUser = async (to, from, next) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'fakehome',
-      component: LoginPageViewVue2
-    },
     // {
     //   path: '/',
-    //   name: 'home',
-    //   component: MainView
+    //   name: 'fakehome',
+    //   component: LoginPageViewVue2
     // },
+    {
+      path: '/',
+      name: 'home',
+      component: MainView
+    },
     {
       path: '/error',
       name: 'error',
