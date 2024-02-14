@@ -166,7 +166,6 @@ const router = createRouter({
         {
           path: 'other/member',
           name: 'other-member',
-          beforeEnter: onlyAuthUser,
           component: MemberOtherPage
         },
         {

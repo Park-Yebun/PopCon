@@ -137,6 +137,7 @@ import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
 import { useMemberStore } from '@/stores/user';
 import './fonts/NanumSquareNeo.css'
+import axios from 'axios';
 
 const router = useRouter()
 const store = useCounterStore()
@@ -174,20 +175,34 @@ const goRec = function() {
 }
 
 const goOthers = function() {
-  if (member.isLogin.value) {
-    // 만약 현재 로그인한 유저가 개인회원이라면
-    if (member.decodeToken.value.userType == "GENERAL") {
-      router.push({name : 'other-member'})
-    }
-    // 만약 현재 로그인한 유저가 기업회원이라면
-    else if (member.decodeToken.value.userType == "CORP") {
-      router.push({name : 'other-corporate'})
-    }
-  } else {
-    // 만약 현재 로그인한 유저가 비회원이라면
-    router.push({name : 'login'})
-  }
+  axios({})
+  .then((res) => {
+    if (localStorage.getItem("accessToken")) {
+    member.getUserInfo(localStorage.getItem("accessToken"))
+  }}
+  ).then((res) => {
+    console.log(member.userInfo.value.userType)
+  })
 }
+ 
+
+//   if (member.isLogin.value) {
+//     // 만약 현재 로그인한 유저가 개인회원이라면
+//     if (member.decodeToken.value.userType == "GENERAL") {
+//       router.push({name : 'other-member'})
+//     }
+//     // 만약 현재 로그인한 유저가 기업회원이라면
+//     else if (member.decodeToken.value.userType == "CORP") {
+//       router.push({name : 'other-corporate'})
+//     }
+//     else if (member.decodeToken.value.userType == "ADMIN") {
+//       router.push({name : 'other-admin'})
+//     }   
+//   } else {
+//     // 만약 현재 로그인한 유저가 비회원이라면
+//     router.push({name : 'user-login'})
+//   }
+// }
 
 
 

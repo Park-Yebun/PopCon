@@ -56,6 +56,7 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
   
   const app1 = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app1);
+<<<<<<< Updated upstream
   
   const messaging = getMessaging();
   
@@ -117,6 +118,8 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
             console.log("ServiceWorker registration successful with scope: ");
           });
       }
+=======
+>>>>>>> Stashed changes
 
 const app = createApp(App)
 
