@@ -1,5 +1,7 @@
 <template>
     <div>
+        <br>
+        <br>
         <div title="날짜 옵션">
           <div class="title">날짜
             <ul class="button-group">
@@ -299,7 +301,7 @@ const goDetail = (popupId) => {
 <style scoped>
 .title {
     margin-top: 25px;
-    margin-left: 40px;
+    margin-left: 5px;
 
     font-size: 16px;
     font-family: Inter;
@@ -309,7 +311,7 @@ const goDetail = (popupId) => {
 }
 
 .title:first-child {
-    margin-top: 52px;
+    margin-top: 0px;
 }
 
 .search-category-title {
@@ -414,7 +416,7 @@ li + li {
     align-content: center;
 
     position: relative;
-    margin-left: 12px;
+    margin-left: 0px;
 }
 
 .search-popup + .search-popup {
@@ -428,7 +430,7 @@ li + li {
 
     position: absolute;
     top: 11px;
-    left: 12px;
+    left: 0px;
 }
 
 .search-popup-info {
@@ -444,7 +446,6 @@ li + li {
 
 .search-popup-info-title{
     font-family: Inter;
-    font-size: ;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
