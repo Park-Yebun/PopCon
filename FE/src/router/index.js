@@ -31,6 +31,7 @@ import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 import PopbtiViewVue from '@/views/PopbtiView.vue'
 import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
+import GibonView2 from '@/views/GibonView2.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -192,7 +193,7 @@ const router = createRouter({
           component: ReportPopupStore,
           beforeEnter : onlyAuthUser
         },
-        {   // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
+        { // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
           path: '/popup/register',
           name: 'popup-register',
           component: PopupStoreCorporateReport,
@@ -207,7 +208,7 @@ const router = createRouter({
     },
 
     {
-      path: '/reportreview',  // 댓글 신고 
+      path: '/popup/:popupId/report/:reviewId',  // 댓글 신고 
       name: 'reportreview',
       component: ReportReviewPageViewVue
     },
@@ -237,7 +238,7 @@ const router = createRouter({
       component: SignUpMemberViewVue
     },
     {
-      path: '/review',
+      path: '/popup/:popupId/review',
       name: 'review',
       component: ReviewView
     },
@@ -256,6 +257,11 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
+    {
+      path:'/gibon2',
+      name:'gibon2',
+      component:GibonView2
+    }
   
 
   ]

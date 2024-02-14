@@ -17,8 +17,29 @@
           <div class="nav-text">Map</div>
         </div>
         <div class="nav-item">
-          <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
+          <div class="dropup-center dropup">
+            <ul class="dropdown-menu" style="background-color: rgba(255, 255, 255, 0); border: 0px; margin-left: 4px;">
+              <li>
+                <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+                  <a href="unitydl://mylink">
+                    <img class="nav-icon-camera" src="@/assets/images/camerafront.png" alt="카메라 아이콘">
+                  </a>
+                </button>
+              </li>
+              <li>
+                <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+                  <a href="unitypc://mylink">
+                    <img class="nav-icon-camera" src="@/assets/images/cameraback.png" alt="카메라 아이콘">
+                  </a>
+                </button>
+              </li>
+            </ul>
+            <button type="button" class="btn btn-secondary dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; border: 0px;">
+              <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
+            </button> 
+          </div>
         </div>
+
         <div>
           <img @click="goRec" class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
           <div class="nav-text">Rec</div>

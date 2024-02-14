@@ -297,7 +297,7 @@ const begin = () => {
   goNext(qIdx);
 };
 
-const url = 'http://localhost:5173'
+const url = 'https://i10c211.p.ssafy.io'
 // 배포 후 URL 수정
 const setShare = () => {
   var resultImg = document.querySelector('#resultImg');
