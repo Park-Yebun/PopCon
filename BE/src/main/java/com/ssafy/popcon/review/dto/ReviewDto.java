@@ -33,4 +33,5 @@ public class ReviewDto {
     private String reviewImagePath;
     private String userImagePath;
     private String userNickname;
+    private int userReviewLike;
 }

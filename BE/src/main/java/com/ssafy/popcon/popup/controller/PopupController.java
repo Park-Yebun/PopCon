@@ -81,8 +81,14 @@ public class PopupController {
 
     // 특정 팝업의 리뷰 조회 (9개만 반환)
     @GetMapping("/{popupId}/reviews")
-    public ResponseEntity<?> getPopupReviews(@PathVariable int popupId) throws Exception {
-        List<ReviewDto> reviewDtos=popupRegisterService.getReviewTop9(popupId);
+    public ResponseEntity<?> getPopupReviews(@RequestParam Map<String,Object> map) throws Exception {
+
+//        System.out.println("review!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//        System.out.println(map.get("userId"));
+//        System.out.println(map.get("popupId"));
+
+        List<ReviewDto> reviewDtos=popupRegisterService.getReviewTop9(map);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(reviewDtos);
@@ -118,8 +124,8 @@ public class PopupController {
 
     // 특정 팝업에 좋아요 추가
     @PostMapping("/{popupId}/like")
-    public ResponseEntity<String> addLikeToPopup(@PathVariable int popupId, @RequestParam String userId) throws Exception {
-        String problemGoods = popupRegisterService.addLikeToPopup(popupId, userId);
+    public ResponseEntity<String> addLikeToPopup(@PathVariable int popupId, @RequestBody Map<String,String> map) throws Exception {
+        String problemGoods = popupRegisterService.addLikeToPopup(popupId, map.get("userId"));
         try {
             if (problemGoods.equals("notExistingPopupUser")) {
                 return new ResponseEntity<>("존재하지 않는 팝업이거나 존재하지 않은 유저입니다.", HttpStatus.BAD_REQUEST);

@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ReviewMapper {
@@ -35,9 +36,9 @@ public interface ReviewMapper {
 
     List<ReviewDto> getReview(int popupId);
 
-    List<ReviewDto> getReviewTop9(int popupId); // 상세보기 페이지 에서는 리뷰 9개만 주면 됨
+    List<ReviewDto> getReviewTop9(Map<String,Object> map);
 
-    void addLikeToReview(int reviewId);
+    void addLikeToReview(ReviewDto reviewDto);
 
     int getRecommendCount(@Param("reviewId") int reviewId);
 
@@ -47,5 +48,5 @@ public interface ReviewMapper {
 
     void deleteReviewRecommend(ReviewRecommendDto reviewRecommendDto);
 
-    void cancelLikeToReview(int reviewId);
+    void cancelLikeToReview(Map<String,Object> map);
 }
