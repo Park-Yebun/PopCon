@@ -83,6 +83,7 @@ onMounted(async () => {
       // console.log(reviewSummary.value);
 
      // 해시맵을 배열로 변환
+     if(reviewSummary.value!=null) {
       let entries = Object.entries(reviewSummary.value);
 
       entries.sort((a, b) => {
@@ -97,6 +98,8 @@ onMounted(async () => {
       }
 
       reviewSummary.value = sortedHashmap;
+
+     }
 
       if(localStorage.getItem("accessToken")!=null) {
         isLogin.value=true;
@@ -151,6 +154,11 @@ onMounted(async () => {
 
 
 // 메소드를 반환
+
+const goLike=function() {
+  console.log('좋아요 누르러 가자!!!');
+  console.log(isLike.value);
+}
 
 const goBack=function() {
   // 뒤로가기 로직 추가
@@ -240,12 +248,15 @@ const Likes = function(popupid) {
     </div>
 
     <div class="views" style="padding-left:20px;">
-      <i class="bi bi-eye-fill"></i>
+      <div>
+        <i class="bi bi-eye-fill"></i>
       <span style="font-size:small; color:gray;">{{' '+popup.popupView}}</span>
-      
-      <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
-      <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
-      <i class="fa-regular fa-heart" style="color: #ff0000;"></i>
+      </div>
+      <div @click="goLike">
+        <i v-if="isLike" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+        <i v-if="!isLike" class="fa-regular fa-heart" style="color: #ff0000;"></i>
+        <span style="font-size:small; color:gray;">{{' '+popup.popupLike}}</span>
+      </div>
     </div>
 
     <!-- 별점 + 숫자  -->
@@ -273,6 +284,11 @@ const Likes = function(popupid) {
     <div>
       <i class="bi bi-geo-alt-fill"></i>
       <span style="font-size: small; color:gray;">{{popup.popupLocation}}</span>
+      <!-- <span style="font-size:small; font-weight:600">{{popup.popupStart}} - {{ popup.popupEnd }}</span> -->
+    </div>
+
+    <!-- 일정 -->
+    <div>
       <span style="font-size:small; font-weight:600">{{popup.popupStart}} - {{ popup.popupEnd }}</span>
     </div>
 
