@@ -325,10 +325,9 @@ img {
 }
 
 .deadline-container {
-  margin-left: 20px;
-  margin-right: 20px;
+  /* margin-left: 20px; */
+  /* margin-right: 20px; */
   margin-top: 30px;
-  background-color: red;
 }
 
 .main-category-logo {
@@ -388,14 +387,15 @@ img {
 }
 
 .main-category {
-  margin-left:20px;
-  margin-right:20px;
+  /* margin-left:20px;
+  margin-right:20px; */
   margin-top:30px;
 }
 
 .main-category-text {
     display: flex;
     justify-content: space-between;
+    
 }
 
 .deadline-popup-title{
