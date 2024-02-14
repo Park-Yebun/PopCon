@@ -58,59 +58,6 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
   const analytics = getAnalytics(app1);
 <<<<<<< Updated upstream
   
-  const messaging = getMessaging();
-  
-  onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-  
-       // Customize notification here
-      // const notificationTitle = payload.notification.title;
-      // const notificationOptions = {
-      //   body: payload.notification.title.body,
-      //   icon: '/icon.png'
-      // };
-    
-      // self.registration.showNotification(notificationTitle, notificationOptions);
-  
-  
-    let notificationPermission = Notification.permission;
-  
-    if (notificationPermission === "granted") {
-              //Notification을 이미 허용한 사람들에게 보여주는 알람창
-             new Notification(payload.notification.title,{
-                  body:payload.notification.body,
-                  icon: '/icon.png',
-                  image:payload.notification.image
-                      });
-          } else if (notificationPermission !== 'denied') {
-              //Notification을 거부했을 경우 재 허용 창 띄우기
-              Notification.requestPermission(function (permission) {
-                  if (permission === "granted") {
-                    new Notification(payload.notification.title, {
-                  body:payload.notification.body
-                      });
-                  }else {
-                      alert("알람 허용이 거부되었습니다.")
-                  }
-              });
-          }
-  });
-  
-  getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' }).then((currentToken) => {
-      if (currentToken) {
-          // Send the token to your server and update the UI if necessary
-          // console.log("Token is:",currentToken);
-          // ...
-      } else {
-          // Show permission request UI
-          console.log('No registration token available. Request permission to generate one.');
-          // ...
-      }
-  
-  }).catch((err) => {
-      console.log('An error occurred while retrieving token. ', err);
-      // ...
-  });
   if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("firebase-messaging-sw.js")
@@ -118,8 +65,6 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
             console.log("ServiceWorker registration successful with scope: ");
           });
       }
-=======
->>>>>>> Stashed changes
 
 const app = createApp(App)
 
