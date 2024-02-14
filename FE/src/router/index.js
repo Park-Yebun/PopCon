@@ -6,6 +6,8 @@ import ReviewView from '@/views/ReviewView.vue'
 import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
 import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
+import LoginPageViewVue2 from '@/views/LoginPageView2.vue'
+
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
 import MapMainView from '@/views/MapMainView.vue'
@@ -22,6 +24,7 @@ import MemberOtherPage from '@/views/MemberOtherPage.vue'
 import ReportPopupStore from '@/views/ReportPopupStore.vue'
 import AdminOtherPage from '@/views/AdminOtherPage.vue'
 import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
+import PersonalOtherPage from '@/views/PersonalOtherPage.vue'
 
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
@@ -57,6 +60,11 @@ const onlyAuthUser = async (to, from, next) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'fakehome',
+    //   component: LoginPageViewVue2
+    // },
     {
       path: '/',
       name: 'home',
@@ -126,7 +134,7 @@ const router = createRouter({
         },
         {
           path: 'searchId',
-          name: 'user-search-Id',
+          name: 'user-search-id',
           component: SearchIdViewVue
         },
         {
@@ -163,9 +171,8 @@ const router = createRouter({
           component: MyPageViewVue
         },
         {
-          path: 'other',
+          path: 'other/member',
           name: 'other-member',
-          beforeEnter: onlyAuthUser,
           component: MemberOtherPage
         },
         {
@@ -177,7 +184,12 @@ const router = createRouter({
           path: 'other/corporate',
           name: 'other-corporate',
           component: BusinessOtherPage
-        }
+        },
+        {
+          path: 'other',
+          name: 'other',
+          component: PersonalOtherPage
+        },
       ]
     },
     

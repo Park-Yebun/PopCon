@@ -32,14 +32,6 @@ const userLogout=function(){
     <br />
     <br />
     <h1 class="title">Others</h1>
-    <div class="image-container2">
-      <img
-        src="@/assets/images/alarm.png"
-        alt="이미지 설명"
-        width="30"
-        height="30"
-      />
-    </div>
     <br />
     <br />
     <!-- 이미지를 감싸는 컨테이너 추가 -->

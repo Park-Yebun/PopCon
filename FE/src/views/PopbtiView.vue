@@ -65,6 +65,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { popbti } from '@/api/popup'
+import { getMessaging, getToken, onMessage  } from "firebase/messaging";
+import axios from 'axios';
+import { walkIdentifiers } from 'vue/compiler-sfc';
 
 const router = useRouter()
 const showMain = ref(true);
@@ -75,6 +78,9 @@ const select = [];
 // endPoint는 질문의 개수
 
 const recpopup = ref()
+
+const fcmToken = ref()
+
 
 
 
@@ -194,7 +200,7 @@ const setResult = () => {
 
   var resultImg = document.createElement('img');
   const imgDiv = document.querySelector('#resultImg');
-  var imgURL = '/src/assets/images/popbti-img/popbti-img-' + point + '.svg';
+  var imgURL = '/@/assets/images/popbti-img/popbti-img-' + point + '.svg';
   
   // console.log(imgURL)
   resultImg.src = imgURL;
@@ -274,6 +280,68 @@ const addAnswer = (answerText, qIdx, idx) => {
   }, false);
 }
 
+// FCM 메세지 수신 설정
+const messaging = getMessaging();
+onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+  
+       // Customize notification here
+      // const notificationTitle = payload.notification.title;
+      // const notificationOptions = {
+      //   body: payload.notification.title.body,
+      //   icon: '/icon.png'
+      // };
+    
+      // self.registration.showNotification(notificationTitle, notificationOptions);
+  
+  
+    let notificationPermission = Notification.permission;
+  
+    if (notificationPermission === "granted") {
+              //Notification을 이미 허용한 사람들에게 보여주는 알람창
+             new Notification(payload.notification.title,{
+                  body:payload.notification.body,
+                  icon: '/icon.png',
+                  image:payload.notification.image
+                      });
+          } else if (notificationPermission !== 'denied') {
+              //Notification을 거부했을 경우 재 허용 창 띄우기
+              Notification.requestPermission(function (permission) {
+                  if (permission === "granted") {
+                    new Notification(payload.notification.title, {
+                  body:payload.notification.body
+                      });
+                  }else {
+                      alert("알람 허용이 거부되었습니다.")
+                  }
+              });
+          }
+  });
+  
+  getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' }).then((currentToken) => {
+      if (currentToken) {
+          // Send the token to your server and update the UI if necessary
+          fcmToken.value = currentToken
+          // ...
+      } else {
+          // Show permission request UI
+          console.log('토큰 없음');
+          // ...
+      }
+  
+  }).catch((err) => {
+      console.log('토큰 가져오기 오류', err);
+      // ...
+  });
+  // if ("serviceWorker" in navigator) {
+  //       navigator.serviceWorker
+  //         .register("firebase-messaging-sw.js")
+  //         .then(function (registration) {
+  //           console.log("ServiceWorker registration successful with scope: ");
+  //         });
+  //     }
+
+
 const goNext = (qIdx) => {
   if(qIdx === endPoint){
     goResult();
@@ -306,7 +374,7 @@ const setShare = () => {
   const shareTitle = 'POPBTI 테스트 결과'
   const shareDes = infoList[resultAlt].name;
   // console.log(resultAlt + '**') 
-  const shareImage = '/src/assets/images/popbti-img/popbti-img-' + resultAlt + '.svg';
+  const shareImage = '/@/assets/images/popbti-img/popbti-img-' + resultAlt + '.svg';
   const shareURL = url + '/popbti/' + resultAlt;
   Kakao.Share.sendDefault({
     objectType: 'feed',
@@ -329,6 +397,28 @@ const setShare = () => {
       },
     ]
   });
+
+  setTimeout(function(){
+    axios.post("https://fcm.googleapis.com/fcm/send",
+      {
+        "notification": {
+          "body": "테스트입니다. 내용",
+          "title": "테스트입니다. 제목",
+          "click_action": "https://i10c211.p.ssafy.io/",
+        },
+        "to": fcmToken.value,
+      },
+      {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer AAAAfqZOMi0:APA91bHvDTS4BwItOV4czAPBV-me02F6I2LsBPY7qgnDROrC0kkj6wsHWz6Y4YI2YBVsizzWV7mOXxWcNvV47gL9WLIRr-NvhdQOXEWOoVxs1pth4dGXUx7t2J-krufxZJbYzegpmHIt"
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data, response.config.data);
+    })
+  }, 15000)
 }
 
 

@@ -14,6 +14,7 @@ export const useMemberStore = defineStore (
     const isLogin = ref(false);
     const isLoginError = ref(false);
     const userInfo = ref(null);
+    const userType = ref(null);
     // const isValidToken = ref(false);
 
     const userLogin = async (loginUser) => {
@@ -58,7 +59,7 @@ export const useMemberStore = defineStore (
         decodeToken.userId,
         (response) => {
           console.log("findById 결과 >> ", response.data);
-          userInfo.value = response.data; //< - 확인 후 등록 
+          userInfo.value = response.data; // <- 확인 후 등록 
           if(userInfo.value.userImagePath==null){
             userInfo.value.userImagePath="https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/noProfile.png";
           }
@@ -124,7 +125,7 @@ export const useMemberStore = defineStore (
             isLogin.value = false;
             userInfo.value = null;
             // isValidToken.value = false;
-            sessionStorage.clear();
+            localStorage.clear();
             // planBox.value = [];
             // storeBox.value = [];
           } else {

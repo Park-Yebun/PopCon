@@ -3,11 +3,11 @@
   <section id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
     <h3 class="pt-5">당신의 결과는?!</h3>
     <div class="resultname">
-      <p> {{ infoList[point].name}}</p>
+      <p class=""> {{ infoList[point].name}}</p>
     </div>
 
     <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-      <img :src="'src/assets/images/popbti-img/popbti-img-' + point + '.svg'" class="img-fluid">
+      <img :src="'@/assets/images/popbti-img/popbti-img-' + point + '.svg'" class="img-fluid">
     </div>
 
     <div class="resultDesc">
