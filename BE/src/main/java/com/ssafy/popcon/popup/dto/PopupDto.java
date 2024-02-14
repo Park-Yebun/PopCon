@@ -28,7 +28,7 @@ public class PopupDto {
     private String popupEvent;
     private int popupView;
     private char popupCar;
-    private char popupEntryFee;
+    private char popupEntryfee;
     private char popupWifi;
     private char popupEat;
     private String popupSite;

@@ -15,18 +15,18 @@ public class StatisticsUtil {
     // 리뷰 통계 내서 top3 값 반환해주기
     public Map<String,Integer> countTop3Tags(Map<String, BigDecimal> reviewTags) {
 
-        hashMap.put("reviewQuality","품질이 좋아요");
-        hashMap.put("reviewCost","가성비가 좋아요");
-        hashMap.put("reviewType","종류가 다양해요");
-        hashMap.put("reviewDesign","독특한 디자인이 많아요");
-        hashMap.put("reviewTrendy","트렌디해요");
-        hashMap.put("reviewNew","신상품이 많아요");
-        hashMap.put("reviewKindness","친절해요");
-        hashMap.put("reviewArea","매장이 넓어요");
-        hashMap.put("reviewCar","주차하기 편해요");
-        hashMap.put("reviewConcept","컨셉이 독특해요");
-        hashMap.put("reviewClean","시설이 깔끔해요");
-        hashMap.put("reviewGift","선물하기 좋아요");
+        hashMap.put("reviewQuality","\uD83D\uDC8E 품질이 좋아요");
+        hashMap.put("reviewCost","\uD83C\uDF69 가성비가 좋아요");
+        hashMap.put("reviewType","\uD83C\uDFAF 종류가 다양해요");
+        hashMap.put("reviewDesign","\uD83D\uDD2E 독특한 디자인이 많아요");
+        hashMap.put("reviewTrendy","\uD83D\uDC84 트렌디해요");
+        hashMap.put("reviewNew","\uD83C\uDF81 신상품이 많아요");
+        hashMap.put("reviewKindness","\uD83D\uDC81 친절해요");
+        hashMap.put("reviewArea","\uD83C\uDF0D 매장이 넓어요");
+        hashMap.put("reviewCar","\uD83D\uDE97 주차하기 편해요");
+        hashMap.put("reviewConcept","\uD83D\uDCAB 컨셉이 독특해요");
+        hashMap.put("reviewClean","\uD83E\uDDF9 시설이 깔끔해요");
+        hashMap.put("reviewGift","\uD83C\uDF81 선물하기 좋아요");
 
         // sum 구하기
         // BigDecimal 값들의 합 구하기 (Java 8 이상)
@@ -46,7 +46,7 @@ public class StatisticsUtil {
             int cal=(int)(((double)entry.getValue().intValue()/ (double)sum.intValue())*100);
             System.out.println(cal);
 
-            resultMap.put(hashMap.get(entry.getKey()),cal);
+            resultMap.put(hashMap.get(entry.getKey()),(int)entry.getValue().intValue());
         }
 
         return resultMap;

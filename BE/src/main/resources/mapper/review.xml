@@ -149,6 +149,7 @@
     <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 (이미지 링크까지) -->
     <select id="getReview" parameterType="int" resultMap="reviewResult">
         SELECT
+            review_id,
             review_content, popup_id,review.user_id, review_date, review_like, review_quality, review_cost,
             review_type, review_design, review_trendy, review_new, review_kindness, review_area,
             review_car, review_concept, review_clean, review_gift, review_image.review_image_path as reviewImagePath,
@@ -164,17 +165,18 @@
     <!-- 해당 팝업의 모든 리뷰를 9개만 불러오는 코드 (이미지 링크까지) -->
     <select id="getReviewTop9" parameterType="int" resultMap="reviewResult">
         SELECT
+            review.review_id,
             review.review_content, review.popup_id,review.user_id, review.review_date, review.review_like, review.review_quality, review.review_cost,
             review.review_type, review.review_design, review.review_trendy, review.review_new, review.review_kindness, review.review_area,
             review.review_car, review.review_concept, review.review_clean, review.review_gift, review_image.review_image_path as reviewImagePath,
             user.user_image_path as userImagePath,
             user.user_nickname as userNickname
         FROM review
-                 inner join review_image on review.review_id=review_image.review_id
+                 left join review_image on review.review_id=review_image.review_id
                  inner join user on review.user_id=user.user_id
         WHERE popup_id = #{popupId}
         ORDER BY review.review_id desc
-        limit 9;
+        ;
     </select>
 
 

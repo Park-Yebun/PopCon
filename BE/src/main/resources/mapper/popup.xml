@@ -78,10 +78,22 @@
         <result property="reviewGift" column="reviewGift" />
     </resultMap>
 
+    <resultMap id="popupSearchDto" type="PopupSearchDto">
+        <result property="popupId" column="popup_id" />
+        <result property="previewImagePath" column="preview_image_path"/>
+        <result property="popupName" column="popup_name"/>
+        <result property="popupStart" column="popup_start"/>
+        <result property="popupEnd" column="popup_end" />
+        <result property="popupLocation" column="popup_location" />
+    </resultMap>
+
+
     <!-- 모든 팝업 정보를 가져오는 SQL문 -->
     <select id="getPopup" resultMap="popupResultMap">
         SELECT * FROM popcon.popup
     </select>
+
+
 
     <!-- 팝업 등록을 하는 SQL문 -->
     <insert id="registerPopup" parameterType="com.ssafy.popcon.popup.dto.PopupDto" useGeneratedKeys="true" keyProperty="popupId">
@@ -270,6 +282,44 @@
             pt.popup_id
         ORDER BY
             pt.popup_id;
+    </select>
+
+    <select id="getPopupByFilter" parameterType="map" resultMap="popupSearchDto">
+        select p.popup_id as popup_id, p.popup_name as popup_name, p.popup_location as popup_location,
+        p.popup_start as popup_start, p.popup_end as popup_end,
+        (select popup_image_path from popup_image where popup_image.popup_id=p.popup_id
+        order by popup_image.popup_image_id limit 1) as preview_image_path
+        from popup p join popup_category c on p.popup_id=c.popup_id
+        <where>
+            <if test="startDate != '' and startDate != null">
+                and p.popup_end between #{startDate} and #{endDate}
+            </if>
+            <if test="area != '전체' and area!='' and area!=null">
+                and p.popup_location like concat('%',#{area},'%')
+            </if>
+            <if test="status !='' and status!=null">
+                and
+                <if test="status=='진행중'">
+                    curdate() between p.popup_start and p.popup_end
+                </if>
+                <if test="status=='종료'">
+                    p.popup_end <![CDATA[<]]> curdate()
+                </if>
+                <if test="status=='오픈예정'">
+                    p.popup_start <![CDATA[>]]> curdate()
+                </if>
+            </if>
+            <if test="category != '전체' and category!='' and category!=null">
+                and c.category_name=#{category}
+            </if>
+        </where>
+        group by p.popup_id
+    </select>
+
+
+    <select id="getLikeOrNot" parameterType="map" resultType="int">
+        select count(*) from popcon.popup_recommend
+        where popup_id=#{popupId} and user_id=#{userId};
     </select>
 
 </mapper>
