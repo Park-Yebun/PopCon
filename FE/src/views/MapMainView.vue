@@ -1,8 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
-import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import "@webzlodimir/vue-bottom-sheet/dist/style.css";
 import { map } from "@/api/popup";
 
 const router = useRouter()
@@ -43,9 +41,9 @@ const goPopupDetail = (popupId) => {
 
 const categoryClick = (event) => {
   // 현재 지도 화면의 중심 좌표 가져오기
-  console.log(mapRef + "밸류확인");
+  // console.log(mapRef + "밸류확인");
   const center = mapRef.getCenter();
-  console.log("현재 지도 화면의 중심 좌표:", center);
+  // console.log("현재 지도 화면의 중심 좌표:", center);
   centerlat.value = center.y;
   centerlng.value = center.x;
 
@@ -64,6 +62,7 @@ const goCategoryAll = () => {
     param,
     ({ data }) => {
       // console.log(data);
+      data.sort((a, b) => a.distance - b.distance);
       popups.value = data;
       // 이전에 생성된 마커들을 제거
       markers.value.forEach((marker) => marker.setMap(null));
@@ -154,6 +153,7 @@ const getNearbyPopups = () => {
     ({ data }) => {
       // console.log("정상!");
       // console.log(data);
+      data.sort((a, b) => a.distance - b.distance);
       popups.value = data;
       console.log(popups.value, '팝업 데이터 이렇게 들어옴');
       loadMap(currentlat.value, currentlng.value);
@@ -488,7 +488,7 @@ onMounted(() => {
           style="width: 300px; height: 145px; object-fit:cover"
         />
         <div class="card-body">
-          <h4 class="card-text">{{popup.popupName}}</h4>
+          <p class="card-text">{{popup.popupName}}</p>
           <p class="card-text">{{ popup.popupStart }} - {{ popup.popupEnd }}</p>
           <div class="location">
             <i class="bi bi-geo-alt-fill"></i>
@@ -509,10 +509,11 @@ onMounted(() => {
 
 .card {
   width: 300px;
-  margin-bottom: 20px; /* 각 카드 아래에 20px 여백 추가 */
+  margin-bottom: 30px; /* 각 카드 아래에 20px 여백 추가 */
 }
 .location {
   color: gray;
+  font-size: 12px;
 }
 .likes {
   color: red;
@@ -536,7 +537,7 @@ onMounted(() => {
   position: relative;
 }
 .wrap {
-  max-width: 400px;
+  max-width: 350px;
   margin: 10px auto;
   position: absolute;
   top: 50px;
@@ -557,10 +558,10 @@ onMounted(() => {
 }
 
 .map {
-  width: 360px;
-  height: 800px;
+  width: 100%;
+  height: 700px;
   z-index: 0;
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 .category-btn,
 .my-location-btn {
   background-color: #fff;
