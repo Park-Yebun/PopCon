@@ -187,16 +187,14 @@ public class PopupRegisterService {
         }
     }
 
-    public List<ReviewDto> getReviewTop9(int popupId) { // 팝업 상세 페이지 진입시
+    public List<ReviewDto> getReviewTop9(Map<String,Object> map) { // 팝업 상세 페이지 진입시
         try {
             // 팝업 번호에 맞춰 리뷰 조회하는 MyBatis 매퍼 메서드 호출
-            return reviewMapper.getReviewTop9(popupId);
-
+            return reviewMapper.getReviewTop9(map);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve popups");
         }
     }
-
 
     // 팝업 이미지 조회
 //    @Transactional(readOnly = true)

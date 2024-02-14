@@ -22,7 +22,7 @@
         <result column="review_clean" property="reviewClean"/>
         <result column="review_gift" property="reviewGift"/>
         <result column="review_date" property="reviewDate"/>
-        <result column="review_like   ke" property="reviewLike"/>
+        <result column="review_like" property="reviewLike"/>
         <result column="user_id" property="userId"/>
         <result column="review_parent_id" property="reviewParentId"/>
     </resultMap>
@@ -153,8 +153,9 @@
             review_content, popup_id,review.user_id, review_date, review_like, review_quality, review_cost,
             review_type, review_design, review_trendy, review_new, review_kindness, review_area,
             review_car, review_concept, review_clean, review_gift, review_image.review_image_path as reviewImagePath,
-            user.user_image_path as userImatePath,
-            user.user_nickname as userNickname
+            user.user_image_path as userImagePath,
+            user.user_nickname as userNickname,
+            review_like
         FROM review
                  inner join review_image on review.review_id=review_image.review_id
                  inner join user on review.user_id=user.user_id
@@ -162,20 +163,23 @@
         ORDER BY review_date desc;
     </select>
 
-    <!-- 해당 팝업의 모든 리뷰를 9개만 불러오는 코드 (이미지 링크까지) -->
-    <select id="getReviewTop9" parameterType="int" resultMap="reviewResult">
+    <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 (이미지 링크까지) -->
+    <select id="getReviewTop9" parameterType="map" resultMap="reviewResult">
         SELECT
             review.review_id,
             review.review_content, review.popup_id,review.user_id, review.review_date, review.review_like, review.review_quality, review.review_cost,
             review.review_type, review.review_design, review.review_trendy, review.review_new, review.review_kindness, review.review_area,
             review.review_car, review.review_concept, review.review_clean, review.review_gift, review_image.review_image_path as reviewImagePath,
             user.user_image_path as userImagePath,
-            user.user_nickname as userNickname
+            user.user_nickname as userNickname,
+            (SELECT COUNT(*) FROM review_recommend WHERE review_recommend.review_id=review.review_id
+                AND review_recommend.user_id=#{userId}) AS userReviewLike
         FROM review
                  left join review_image on review.review_id=review_image.review_id
                  inner join user on review.user_id=user.user_id
         WHERE popup_id = #{popupId}
-        ORDER BY review.review_id desc
+        group by user_id
+        ORDER BY review.review_like desc
         ;
     </select>
 
@@ -208,7 +212,7 @@
     </select>
 
     <!-- 좋아요 취소 -->
-    <update id="cancelLikeToReview" parameterType="int">
+    <update id="cancelLikeToReview" parameterType="map">
         UPDATE popcon.review SET review_like = review_like - 1 WHERE popup_id = #{popupId} AND review_id = #{reviewId}
     </update>
 

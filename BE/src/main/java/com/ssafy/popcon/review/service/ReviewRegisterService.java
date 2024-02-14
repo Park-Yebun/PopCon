@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -205,7 +207,7 @@ public class ReviewRegisterService {
             logger.error("Failed to add review recommendation", e);
             throw new RuntimeException("Failed to add review recommendation", e);
         }
-        reviewMapper.addLikeToReview(reviewId);
+        reviewMapper.addLikeToReview(existingReview);   // 좋아요 수 + 1
 
         ReviewRecommendDto reviewRecommendDto = new ReviewRecommendDto();
         reviewRecommendDto.setReviewId(reviewId);
@@ -244,7 +246,10 @@ public class ReviewRegisterService {
                 return "alreadyCancel"; // 또는 예외를 던지거나 원하는 대응을 수행
             }
             // 1. popup_like를 감소시키는 업데이트 쿼리 수행
-            reviewMapper.cancelLikeToReview(reviewId);
+            Map<String,Object> map=new HashMap<>();
+            map.put("popupId",popupId);
+            map.put("reviewId",reviewId);
+            reviewMapper.cancelLikeToReview(map);
 
             // 2. popup_recommend 테이블에서 해당 사용자와 팝업 정보 삭제
             ReviewRecommendDto reviewRecommendDto = new ReviewRecommendDto();

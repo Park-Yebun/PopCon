@@ -29,7 +29,7 @@
         <result column="user_email" property="userEmail"/>
         <result column="user_image_path" property="userImagePath"/>
         <result column="user_password" property="userPassword"/>
-        <result column="user_platform" property="userPlatForm"/>
+        <result column="user_platform" property="userPlatform"/>
         <result column="user_nickname" property="userNickname"/>
         <result column="user_birth" property="userBirth"/>
         <result column="user_sex" property="userSex"/>

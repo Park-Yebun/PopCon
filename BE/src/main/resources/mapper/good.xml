@@ -13,21 +13,21 @@
 
 
     <select id="findUserGoodResult" resultMap="good">
-        SELECT a.popup_image_path as preview_image, b.popup_name, b.popup_id
+        SELECT a.popup_image_path, b.popup_name, b.popup_id
         FROM popcon.popup AS b
                  JOIN popcon.popup_image AS a ON b.popup_id = a.popup_id
         WHERE b.popup_id IN (
             SELECT DISTINCT pc.popup_id
             FROM popcon.popup_category pc
                      JOIN (
-                SELECT popcon.popup_category.category_Name
+                SELECT popcon.popup_category.category_name
                 FROM popcon.popup_category
                          JOIN popcon.popup_recommend ON popcon.popup_category.popup_id = popcon.popup_recommend.popup_id
                 WHERE popcon.popup_recommend.user_id = #{user_id}
-                GROUP BY popcon.popup_category.category_Name
+                GROUP BY popcon.popup_category.category_name
                 ORDER BY COUNT(*) DESC
                 LIMIT 3
-            ) AS top_categories ON pc.category_Name = top_categories.category_Name
+            ) AS top_categories ON pc.category_name = top_categories.category_name
             WHERE pc.popup_id NOT IN (
                 SELECT popup_id
                 FROM popcon.popup_recommend
