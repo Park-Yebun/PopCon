@@ -140,13 +140,6 @@ const uploadImage = async() => {
 
 // popbti 쿠키 확인하고 있으면 추천리스트 가져오기, 없으면 검사페이지로 라우팅
 onMounted(() => {
-  let token = localStorage.getItem("accessToken");
-  const IdToken=token.split(" ");
-  let decodeToken = jwtDecode(IdToken[1]);
-  loginuserId.value = decodeToken.userId
-  console.log(loginuserId.value)
-
-  
   const getCookie = function(name) {
   const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
   return value? value[2] : null
@@ -167,6 +160,7 @@ onMounted(() => {
   })
   }
 
+// 좋아요 api 요청 
 const accessToken = localStorage.getItem("accessToken")
 axios.get('/recommends/good', { headers: {
   Authorization: accessToken
