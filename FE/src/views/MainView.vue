@@ -202,6 +202,26 @@ const router = useRouter()
 const popupend = ref()
 const popupgood = ref()
 
+axios.post("https://fcm.googleapis.com/fcm/send",
+      {
+        "notification": {
+          "body": "테스트입니다. 내용",
+          "title": "테스트입니다. 제목",
+          "click_action": "https://i10c211.p.ssafy.io/",
+        },
+        "to": "dalnNkhHLrrkk2QrBkmOAd:APA91bFPwZvuqhQIHDuXJ6pbRP1F_ARJeC0g70OgUR2zdFEuO9sCbTrPyvMFfrTUmQXpOsWoT6dhq6BuXwR6oPRkoG-Ay0uBxXqUqBtiM5s4055WU_JmUi4E33_YAKsq71MqsQyGn5PH",
+      },
+      {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer AAAAfqZOMi0:APA91bHvDTS4BwItOV4czAPBV-me02F6I2LsBPY7qgnDROrC0kkj6wsHWz6Y4YI2YBVsizzWV7mOXxWcNvV47gL9WLIRr-NvhdQOXEWOoVxs1pth4dGXUx7t2J-krufxZJbYzegpmHIt"
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data, response.config.data);
+    })
+
 onMounted(() => {
   home(
     ({ data }) => {

@@ -139,7 +139,6 @@ import './fonts/NanumSquareNeo.css'
 
 const router = useRouter()
 const store = useCounterStore()
-console.log(store.personalToken)
 
 // 이거 실행이 안되는 것 같아서 일단 주석처리 해놨습니당.. 콘솔에 출력이 안되네용..-예분-
 // onMounted(()=>{
