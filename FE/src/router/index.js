@@ -22,6 +22,7 @@ import MemberOtherPage from '@/views/MemberOtherPage.vue'
 import ReportPopupStore from '@/views/ReportPopupStore.vue'
 import AdminOtherPage from '@/views/AdminOtherPage.vue'
 import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
+import PersonalOtherPage from '@/views/PersonalOtherPage.vue'
 
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
@@ -163,7 +164,7 @@ const router = createRouter({
           component: MyPageViewVue
         },
         {
-          path: 'other',
+          path: 'other/member',
           name: 'other-member',
           beforeEnter: onlyAuthUser,
           component: MemberOtherPage
@@ -177,7 +178,12 @@ const router = createRouter({
           path: 'other/corporate',
           name: 'other-corporate',
           component: BusinessOtherPage
-        }
+        },
+        {
+          path: 'other',
+          name: 'other',
+          component: PersonalOtherPage
+        },
       ]
     },
     

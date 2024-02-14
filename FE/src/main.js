@@ -62,7 +62,7 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8085"
   onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
   
-      //  // Customize notification here
+       // Customize notification here
       // const notificationTitle = payload.notification.title;
       // const notificationOptions = {
       //   body: payload.notification.title.body,

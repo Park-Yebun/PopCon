@@ -19,13 +19,13 @@ messaging.onBackgroundMessage((payload) => {
         payload
     );
     // Customize notification here
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: playload.notification.body,
-        icon: '/icon.png'
-    };
+    // const notificationTitle = payload.notification.title;
+    // const notificationOptions = {
+    //     body: payload.notification.body,
+    //     icon: '/icon.png'
+    // };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
+    // self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 // 추가코드
@@ -47,7 +47,7 @@ self.addEventListener('notificationclick', function(event) {
     event.notification.close(); // 알림 닫기
   
     // 알림 클릭 후 이동할 URL 설정
-    var urlToOpen = 'https://example.com';
+    var urlToOpen = 'https://i10c211.p.ssafy.io';
   
     // 클라이언트 창이 열려 있으면 포커스를 해당 창으로 이동
     event.waitUntil(

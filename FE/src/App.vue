@@ -135,10 +135,12 @@ import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
+import { useMemberStore } from '@/stores/user';
 import './fonts/NanumSquareNeo.css'
 
 const router = useRouter()
 const store = useCounterStore()
+const member = useMemberStore()
 
 // 이거 실행이 안되는 것 같아서 일단 주석처리 해놨습니당.. 콘솔에 출력이 안되네용..-예분-
 // onMounted(()=>{
@@ -172,40 +174,21 @@ const goRec = function() {
 }
 
 const goOthers = function() {
-  // 만약 현재 로그인한 유저가 개인회원이라면
-  if (store.modifyUser.userType == "GENERAL") {
-    router.push({name : 'other-member'})
+  if (member.isLogin.value) {
+    // 만약 현재 로그인한 유저가 개인회원이라면
+    if (member.decodeToken.value.userType == "GENERAL") {
+      router.push({name : 'other-member'})
+    }
+    // 만약 현재 로그인한 유저가 기업회원이라면
+    else if (member.decodeToken.value.userType == "CORP") {
+      router.push({name : 'other-corporate'})
+    }
+  } else {
+    // 만약 현재 로그인한 유저가 비회원이라면
+    router.push({name : 'login'})
   }
-  // 만약 현재 로그인한 유저가 기업회원이라면
-  else if (store.modifyUser.userType == "CORP") {
-    router.push({name : 'other-corporate'})
-  }
-  // 만약 현재 로그인한 유저가 비회원이라면
-  else {
-    
-  }
-  router.push({name : 'other-member'})
 }
 
-import { useMemberStore } from "@/stores/user";
 
-
-// others 페이지 인증권한 확인용 함수
-const onlyAuthUser = async (to, from, next) => {
-  const memberStore = useMemberStore();
-  const { userInfo } = storeToRefs(memberStore);
-  const { getUserInfo } = memberStore;
-
-  let token = localStorage.getItem("accessToken");
-
-  if(token!=null){  // 토큰이 있으면 아이디 찾아오기
-    console.log(1); 
-    await getUserInfo(token);
-    next();
-  } else {  // 없으면 로그인 시키기 
-    next({name:"user-login"});
-  }
-
-};
 
 </script>

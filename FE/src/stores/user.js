@@ -14,6 +14,7 @@ export const useMemberStore = defineStore (
     const isLogin = ref(false);
     const isLoginError = ref(false);
     const userInfo = ref(null);
+    const decodeToken = ref(null);
     // const isValidToken = ref(false);
 
     const userLogin = async (loginUser) => {
@@ -51,11 +52,11 @@ export const useMemberStore = defineStore (
       // console.log("getUserInfo 토큰 !!!!! ", token);
       const accessToken=token.split(" ");
       // console.log("accessToken : ",accessToken);
-      let decodeToken = jwtDecode(accessToken[1]);
+      decodeToken = jwtDecode(accessToken[1]);
       // 2. decodeToken {userId: 'tmddus', userType: 'GENERAL', iat: 1706765617, exp: 1707370417}
 
       await findById(
-        decodeToken.userId,
+        decodeToken.value.userId,
         (response) => {
           console.log("findById 결과 >> ", response.data);
           userInfo.value = response.data; //< - 확인 후 등록 
