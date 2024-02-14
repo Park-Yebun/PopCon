@@ -16,7 +16,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage  } from "firebase/messaging";
 import axios from 'axios'
 
-axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
+axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8085"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -57,13 +57,13 @@ axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8080"
   const app1 = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app1);
   
-  if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("firebase-messaging-sw.js")
-          .then(function (registration) {
-            console.log("ServiceWorker registration successful with scope: ");
-          });
-      }
+  // if ("serviceWorker" in navigator) {
+  //       navigator.serviceWorker
+  //         .register("firebase-messaging-sw.js")
+  //         .then(function (registration) {
+  //           console.log("ServiceWorker registration successful with scope: ");
+  //         });
+  //     }
 
 const app = createApp(App)
 
