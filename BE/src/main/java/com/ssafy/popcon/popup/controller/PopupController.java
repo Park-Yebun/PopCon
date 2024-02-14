@@ -162,4 +162,14 @@ public class PopupController {
                 .body(popupSearchDtos);
     }
 
+    // 좋아요 클릭 여부 반환
+    @GetMapping("/{popupId}/like")
+    public ResponseEntity<?> getLikeOrNot(@PathVariable int popupId,@RequestHeader("Authorization") String token) throws Exception {
+        int like=popupRegisterService.getLikeOrNot(popupId, token);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(like);
+    }
+
 }

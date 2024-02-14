@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -63,4 +64,6 @@ public interface PopupMapper {
     List<PopupDto> getPopupImageGood3();
 
     List<PopupDto> getPopupEnd();
+
+    int getLikeOrNot(Map<String,Object> info) throws SQLException;
 }

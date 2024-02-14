@@ -89,6 +89,8 @@ public class PopupRegisterService {
                 popupDto.getReviewTagSummary().put("reviewSummary",top3Tags);
             }
 
+
+
             return popupDto;
         } catch (Exception e) {
             logger.error("Failed to retrieve popup details", e);
@@ -301,5 +303,13 @@ public class PopupRegisterService {
     // 여러가지 조건들로 팝업 조회
     public List<PopupSearchDto> getPopupByFilter(Map<String,String> filter) throws Exception {
         return popupMapper.getPopupByFilter(filter);
+    }
+
+    public int getLikeOrNot(int popupId, String token) throws Exception {
+        String userId=jwtUtil.getUsername(token.split(" ")[1]);
+        Map<String,Object> map=new HashMap<>();
+        map.put("popupId",popupId);
+        map.put("userId",userId);
+        return popupMapper.getLikeOrNot(map);
     }
 }
