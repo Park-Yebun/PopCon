@@ -3,8 +3,9 @@
         <br>
         <br>
         <div title="날짜 옵션">
-          <div class="title">날짜
-            <ul class="button-group">
+          <div class="title">
+            <span style="font-weight:bold; color:darkslategray;">날짜</span>
+            <ul class="button-group1">
                 <li class="date select">오늘</li>
                 <li class="date">+7일</li>
                 <li class="date">+2주</li>
@@ -17,8 +18,9 @@
           </div>
         </div>
         <div title="지역 옵션">
-            <div class="title">지역
-                <ul class="button-group">
+            <div class="title">
+                <span style="font-weight:bold; color:darkslategray;">지역</span>
+                <ul class="button-group1">
                     <li class="region select">전체</li>
                     <li class="region">서울특별시</li>
                     <li class="region">광주광역시</li>
@@ -28,8 +30,9 @@
             </div>
         </div>
         <div title="운영상태 옵션">
-            <div class="title">운영상태
-                <ul class="button-group">
+            <div class="title">
+                <span style="font-weight:bold; color:darkslategray;">운영상태</span>
+                <ul class="button-group1">
                     <li class="status select">진행중</li>
                     <li class="status">오픈 예정</li>
                     <li class="status">종료</li>
@@ -37,38 +40,42 @@
             </div>
         </div>
         <div title="카테고리 옵션">
-            <div class="search-category-title">카테고리</div>
-                <ul class="button-group" style="margin-left: 40px;">
+            <div class="search-category-title title">
+                <span style="font-weight:bold; color:darkslategray;">카테고리</span>
+                <ul class="button-group1" >
                     <div v-for="(value, key) in categoryGroup" class="search-category-option">
                         <!-- 카테고리 변수 안에 값이 들어있고 key값과 같으면 select이미지로 대체 -->
                         <img v-if="category !== '' && category == value " class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_a.png'" :alt="value + ' 아이콘'">
                         <img v-else @click="selectCategory(value)" class="search-category-img" :src="'/src/assets/images/option_' + key + '.png'" :alt="value + ' 아이콘'">
-                        <div class="search-category-text">{{ value }}</div>
+                        <div class="search-category-text"><span>{{value}}</span></div>
                     </div>
                 </ul>
+            </div>
         </div>
 
         <div class="button-container">
-            <button @click="goSearch" type="button" class="btn btn-light">검색</button>
+            <button @click="goSearch" type="button" class="btn btn-light" style="padding:10px 20px; margin:10px 0px; border-radius: 15px; border:2px solid #FF534C; color:gray; font-size:14px;">검색</button>
         </div>
+
+        <hr>
 
         <div title="팝업스토어 정렬">
             <div class="dropdown-li">
-                <select name="selectBox" id="selectBox" @change="changeSelect()">
-                    <option value="">최신순</option>
-                    <option value="">리뷰 많은순</option>
-                    <option value="">좋아요 순</option>
-                    <option value="">조회수</option>
-                    <option value="">마감순</option>
+                <select name="selectBox" id="selectBox" @change="changeSelect()" style="height:40px; width:120px; border-radius:15px; border:1px solid gray;">
+                    <option value="" >최신순</option>
+                    <option value="" >리뷰 많은순</option>
+                    <option value="" >좋아요 순</option>
+                    <option value="" >조회수</option>
+                    <option value="" >마감순</option>
                 </select>
             </div>
             <div v-for="popup in popupList" :key="popup" class="search-popup-group">
                 <div @click="goDetail(popup.popupId)" class="search-popup">
                     <img class="search-popup-img" :src= popup.previewImagePath alt="정렬된 팝업 목록">
                     <div class="search-popup-info">
-                        <div class="search-popup-info-title">{{ popup.popupName }}</div>
-                        <div class="search-popup-info-content">{{ popup.popupStart }} ~ {{ popup.popupEnd }}</div>
-                        <div class="search-popup-info-content">{{ popup.popupLocation }}</div>
+                        <div class="search-popup-info-title"><span>{{ popup.popupName }}</span></div>
+                        <div class="search-popup-info-date"><span>{{ popup.popupStart }} ~ {{ popup.popupEnd }}</span></div>
+                        <div class="search-popup-info-location"><span>{{ popup.popupLocation }}</span></div>
                     </div>
                 </div>
             </div>
@@ -316,7 +323,7 @@ const goDetail = (popupId) => {
 
 .search-category-title {
     margin-top: 25px;
-    margin-left: 40px;
+    /* margin-left: 40px; */
 
     font-size: 16px;
     font-family: Inter;
@@ -325,8 +332,26 @@ const goDetail = (popupId) => {
     word-wrap: break-word"
 }
 
+.button-group1 {
+    list-style: none;
+    margin-right: 28px;
+    padding:0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    word-break: keep-all;
 
-.button-group {
+    /* 가로 스크롤 설정 */
+    overflow-x: scroll;
+    /* white-space: nowrap; */
+    -ms-overflow-style: none;
+}
+
+.button-group1::-webkit-scrollbar {
+  display: none; /* 가려진 스크롤바를 숨깁니다 */
+}
+
+/* .button-group {
     list-style: none;
     margin-right: 28px;
 
@@ -335,13 +360,14 @@ const goDetail = (popupId) => {
     justify-content: flex-start;
     word-break: keep-all;
 
-    /* 가로 스크롤 설정 */
+
     overflow-x: scroll;
     white-space: nowrap;
-}
+} */
 
 .select {
-    background: var(--4, #616266);
+    background-color: var(--4,#FF534C);
+    /* background: var(--4, #616266); */
     color: #FFF;
 }
 
@@ -350,7 +376,7 @@ div>ul>li {
     white-space: nowrap;
     border: 1px solid #E6E6E6;
     border-radius: 18px;
-    padding: 8px 22px;
+    padding: 5px 10px;
     padding-inline: 1.5rem;
     background: none;
 
@@ -398,29 +424,31 @@ li + li {
 /* 정렬 결과 */
 .dropdown-li {
     margin-top: 48.97px;
-    margin-left: 36px;
+    /* margin-left: 36px; */
 }
 
 .search-popup-group {
-    margin-top: 26px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
+    /* padding-top: 20px; */
 }
 
 .search-popup {
     width: 340px;
     height: 88px;
-    flex-shrink: 0;
-    box-shadow: 0px 1px 4px rgba(34, 34, 34, 0.06);
-    border-radius: 10px;
+    /* flex-shrink: 0; */
+    /* box-shadow: 0px 1px 4px rgba(34, 34, 34, 0.1); */
+    border-bottom: 1px solid rgb(231, 231, 231);
+    /* border-radius: 10px; */
     align-content: center;
-
     position: relative;
-    margin-left: 0px;
+    /* margin-left: 0px; */
+    /* margin-top: 10px; */
 }
 
 .search-popup + .search-popup {
-    margin-top: 10px;
+    /* margin-top: 10px; */
 }
 
 .search-popup-img {
@@ -449,19 +477,44 @@ li + li {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-
     margin-top: 13px;
+
+       
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.search-popup-info-content{
+.search-popup-info-date{
     color: #6B7280;
     font-family: Inter;
-    font-size: 10px;
+    font-size: 13px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
 
-    margin-top: 6px;
+    margin-top: 8px;
+
+       
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-popup-info-location{
+    color: darkslategray;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    margin-top: 8px;
+
+       
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 검색 버튼 오른쪽으로 정렬하기 */
@@ -488,4 +541,7 @@ ul.button-group {
     list-style: none;
     padding: 0;
 } */
+
+
+
 </style>

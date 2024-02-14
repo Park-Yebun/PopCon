@@ -16,7 +16,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage  } from "firebase/messaging";
 import axios from 'axios'
 
-axios.defaults.baseURL = "http://i10c211.p.ssafy.io:8085"
+axios.defaults.baseURL = "https://i10c211.p.ssafy.io:8085"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
