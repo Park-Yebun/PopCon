@@ -46,6 +46,7 @@ function map(param, success, fail) {
 function popbti(param, success, fail) {
     local.get('/recommends/popbti', { params: param }).then(success).catch(fail);
 }
+
 // 지도화면에서 검색
 function mapSearch(param, success, fail) {
     local.get('/maps/search', { params: param }).then(success).catch(fail);
@@ -53,5 +54,5 @@ function mapSearch(param, success, fail) {
 
 
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch,getLikeOrNot
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch, getLikeOrNot
 };

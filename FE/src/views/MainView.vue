@@ -328,6 +328,7 @@ img {
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 30px;
+  background-color: red;
 }
 
 .main-category-logo {
