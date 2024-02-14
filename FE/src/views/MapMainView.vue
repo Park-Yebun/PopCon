@@ -479,18 +479,17 @@ onMounted(() => {
     </div>
     <div style="margin-bottom: 40px"></div>
     <div class="bottom_box">
-      <div v-for="popup in popups" :key="popup" class="card" style="width: 300px; height: 275px; position: relative">
+      <div v-for="popup in popups" @click=goPopupDetail(popup.popupId) :key="popup" class="card " style="width: 300px; height: 400px; position: relative ">
         <img
-          @click=goPopupDetail(popup.popupId)
           :src="popup.previewImagePath"
           class="card-img-top "
           alt="posterimage"
-          style="width: 300px; height: 145px; object-fit:cover"
+          style="width: 300px; height: 300px; object-fit:cover"
         />
         <div class="card-body">
-          <p class="card-text">{{popup.popupName}}</p>
-          <p class="card-text">{{ popup.popupStart }} - {{ popup.popupEnd }}</p>
-          <div class="location">
+          <p class="card-text" style="font-weight: bold; margin-bottom: 2px;">{{popup.popupName}}</p>
+          <p class="card-text" style="font-size: 14px; margin-bottom: 2px;">{{ popup.popupStart }} - {{ popup.popupEnd }}</p>
+          <div class="card-text" style="color: gray; font-size: 12px;">
             <i class="bi bi-geo-alt-fill"></i>
             <span>{{popup.popupLocation}}</span>
           </div>
@@ -506,15 +505,19 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.card-text{
+  width: 300px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
 
 .card {
   width: 300px;
-  margin-bottom: 30px; /* 각 카드 아래에 20px 여백 추가 */
+  margin-bottom: 20px; /* 각 카드 아래에 20px 여백 추가 */
 }
-.location {
-  color: gray;
-  font-size: 12px;
-}
+
 .likes {
   color: red;
   background-color: whitesmoke;
@@ -695,6 +698,7 @@ border: #FF534C solid 4px;
   position: fixed;
   bottom: 0;
   width: 100%;
+  /* width: 380px; 카드랑 딱 맞아떨어지는 크기 */
   height: 15%;
   min-height: 14%; /* 최소 높이 설정 */
   border-top-left-radius: 30px;
