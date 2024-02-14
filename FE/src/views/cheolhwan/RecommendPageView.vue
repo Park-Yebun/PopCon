@@ -7,16 +7,20 @@
         <div class="d-flex justify-content-between m-3">
           <div style="font-weight: bold;"> {{ loginuserId }}님을 위한 POPBTI 추천</div>
         </div>
-        <h4>검사 결과가 없습니다</h4>
-        <button class="btn btn-warning" type="button">팝BTI 검사하러 가기</button>
+        <p class="center" style="color: gray;">검사 결과가 없습니다</p>
+        <div class="center">
+          <button class="btn btn-warning center" type="button">팝BTI 검사하러 가기</button>
+        </div>
       </div>
       <div v-else class="d-flex justify-content-between m-3">
         <div style="font-weight: bold;">{{ loginuserId }}님을 위한 팝BTI</div>
       </div>
-      <div v-for="a in AList" :key="a" title="팝bti" class="popup-group">
-        <div class="popup">
-          <img :src="a.previewImage" class="popup-img" alt="">
-          <h5 class="popup-title">{{ a.popupName }}</h5>
+      <div title="POPBTI 추천" class="popup-group">
+        <div v-for="a in AList" :key="a">
+          <div class="popup">
+            <img :src="a.previewImage" class="popup-img" alt="">
+            <h5 class="popup-title">{{ a.popupName }}</h5>
+          </div>
         </div>
       </div>
     </div>
@@ -27,7 +31,7 @@
         <div style="font-weight: bold;">{{ loginuserId }}님을 위한 AI 추천</div>
       </div>
       
-      <div title="AI추천" class="popup-group">
+      <div title="AI 추천" class="popup-group">
         <div class="popup">
           <!-- <form @submit.prevent="uploadImage" enctype="multipart/form-data"> -->
             <div>
@@ -42,7 +46,7 @@
             <!-- <input type="submit" value="업로드"> -->
           <!-- </form> -->
         </div>
-        <div v-for="b in BList" :key="b" class="popup-group-child">
+        <div v-for="b in BList" :key="b">
           <div class="popup">
             <img :src="b.previewImage" class="popup-img" alt="">
             <h5 class="popup-title">{{ b.popupName }}</h5>
@@ -57,10 +61,12 @@
         <div style="font-weight: bold;">{{ loginuserId }}님을 위한 맞춤 추천</div>
       </div>
 
-      <div v-for="c in CList" :key="c" title="좋아요추천" class="popup-group">
-        <div class="popup">
-          <img :src="c.previewImage" class="popup-img" alt="">
-          <h5 class="popup-title">{{ c.popupName }}</h5>
+      <div title="좋아요 추천" class="popup-group">
+        <div v-for="c in CList" :key="c" title="좋아요추천">
+          <div class="popup">
+            <img :src="c.previewImage" class="popup-img" alt="">
+            <h5 class="popup-title">{{ c.popupName }}</h5>
+          </div>
         </div>
       </div>
     </div>
@@ -126,8 +132,25 @@ const uploadImage = async() => {
       yoloClassName.value = response.data.message
 
       console.log(`클래스 네임: ${yoloClassName.value}`)
-   
-      // 성공적으로 업로드되었을 때 처리
+      // 이미지 분석 후 클래스 네임이 올바르게 들어온다면, api 요청을 통해 팝업스토어 매칭하기
+      const accessToken = localStorage.getItem("accessToken")
+          axios({
+            method: 'get',
+            url: "/recommends/ai",
+            headers: {
+              Authorization: accessToken
+            },
+            params: {
+              className: yoloClassName.value
+            }
+    })
+    .then((response) => {
+      BList.value = response.data
+    })
+    .catch((error) => {
+      console.log("요청실패")
+    })
+
     } catch (error) {
       console.error('Upload error:', error);
       // 업로드 중 오류 발생 시 처리
@@ -171,6 +194,7 @@ axios.get('/recommends/good', { headers: {
 .then((response) => {
   console.log("좋아요 데이터 요청 완료!")
   CList.value = response.data
+  console.log(CList.value, '이렇게들어와요')
 })
 .catch((error) => {
   console.log("좋아요 데이터 요청 실패..")
@@ -191,6 +215,22 @@ const goTest = function() {
 </script>
   
   <style scoped>
+  .popup {
+  width: 130px;
+  height: 195.78px;
+  margin-right: 10px;
+  border-radius: 10%;
+  display:flex;
+  flex-direction:column;
+  padding: 0px 5px;
+
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+  }
+
   .recommendations {
     display: flex;
   }
@@ -217,30 +257,24 @@ const goTest = function() {
   overflow-x: scroll;
   white-space: nowrap;
   display: flex;
+  align-items: flex-start;
+  -ms-overflow-style: none;
 }
 
-.popup {
-  margin-left: 10px;
-  width: 120px;
-}
+
 
 /* ai추천 결과 리스트 정렬 */
-.popup-group-child {
-  height: 170px;
-  overflow-x: scroll;
-  white-space: nowrap;
-  display: flex;
-}
 
 .popup-title {
+  width: 120px;
   margin-top: 5px;
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
 }
 
-/* 스크롤 안보이게 숨기기 */
-.popup-group{
-   -ms-overflow-style: none;
-}
 .popup-group::-webkit-scrollbar{
   display:none;
 }
