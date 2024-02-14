@@ -141,8 +141,28 @@ const removeKeyword = (keyword) => {
 
 // Function to search using a keyword from recent searches
 const searchKeywordFromHistory = (keyword) => {
-  searchTerm.value = keyword;
-  handleSearch();
+  // 검색어가 입력되면 최근 검색어를 숨깁니다.
+  document.querySelector('.search-keywords').style.display = 'none';
+  
+  if (keyword === '') {
+  // 검색어가 비어있을 때는 최근 검색어를 보여줍니다.
+  document.querySelector('.search-keywords').style.display = 'flex';
+} else {
+  // 검색어가 입력되면 최근 검색어를 숨깁니다.
+  document.querySelector('.search-keywords').style.display = 'none';
+}
+  const param = { keyword, lat: lat.value, lng: lng.value };
+    mapSearch(
+      param,
+      ({ data }) => {
+        console.log(data);
+        searchList.value = data;
+        console.log(searchList);
+      },
+      ({ response }) => {
+        console.log(response);
+      }
+    );  
 }
 
 function hideRecentSearches() {
