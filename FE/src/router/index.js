@@ -6,6 +6,8 @@ import ReviewView from '@/views/ReviewView.vue'
 import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
 import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
+import LoginPageViewVue2 from '@/views/LoginPageView2.vue'
+
 import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
 import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
 import MapMainView from '@/views/MapMainView.vue'
@@ -60,9 +62,14 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: MainView
+      name: 'fakehome',
+      component: LoginPageViewVue2
     },
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   component: MainView
+    // },
     {
       path: '/error',
       name: 'error',
@@ -127,7 +134,7 @@ const router = createRouter({
         },
         {
           path: 'searchId',
-          name: 'user-search-Id',
+          name: 'user-search-id',
           component: SearchIdViewVue
         },
         {

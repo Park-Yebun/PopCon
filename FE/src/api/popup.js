@@ -22,9 +22,20 @@ function getLikeOrNot(popupId,success,fail) {
     local.get(`${url}/${popupId}/like`).then(success).catch(fail);
 }
 
+// 좋아요 클릭 
+function addLike(popupId,param,success,fail) {
+    local.post(`${url}/${popupId}/like`,param).then(success).catch(fail);
+}
+
+// 좋아요 취소 
+function cancelLike(popupId,param,success,fail) {
+    local.delete(`${url}/${popupId}/like`,{params:param}).then(success).catch(fail);
+}
+
+
 // 팝업의 리뷰 조회 
-function getPopupReviewsTop9(popupId,success,fail) {
-    local.get(`${url}/${popupId}/reviews`).then(success).catch(fail)
+function getPopupReviewsTop9(popupId,param,success,fail) {
+    local.get(`${url}/${popupId}/reviews`,{params:param}).then(success).catch(fail)
 }
 
 // 통합 검색 팝업 조회 
@@ -54,5 +65,6 @@ function mapSearch(param, success, fail) {
 
 
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch, getLikeOrNot
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch, getLikeOrNot,
+    addLike, cancelLike
 };
