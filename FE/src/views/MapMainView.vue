@@ -478,9 +478,9 @@ onMounted(() => {
         <img
           @click=goPopupDetail(popup.popupId)
           :src="popup.previewImagePath"
-          class="card-img-top img-fluid"
+          class="card-img-top "
           alt="posterimage"
-          style="width: 300px; height: 145px"
+          style="width: 300px; height: 145px; object-fit:cover"
         />
         <div class="card-body">
           <h4 class="card-text">{{popup.popupName}}</h4>
@@ -501,6 +501,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.card {
+  width: 300px;
+  margin-bottom: 20px; /* 각 카드 아래에 20px 여백 추가 */
+}
 .location {
   color: gray;
 }
