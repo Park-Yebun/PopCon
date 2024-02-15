@@ -200,7 +200,7 @@ const setResult = () => {
 
   var resultImg = document.createElement('img');
   const imgDiv = document.querySelector('#resultImg');
-  var imgURL = '/@/assets/images/popbti-img/popbti-img-' + point + '.svg';
+  var imgURL = 'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg';
   
   // console.log(imgURL)
   resultImg.src = imgURL;

@@ -490,7 +490,7 @@ onMounted(() => {
           <p class="card-text" style="font-weight: bold; margin-bottom: 2px;">{{popup.popupName}}</p>
           <p class="card-text" style="font-size: 14px; margin-bottom: 2px;">{{ popup.popupStart }} - {{ popup.popupEnd }}</p>
           <div class="card-text" style="color: gray; font-size: 12px;">
-            <i class="bi bi-geo-alt-fill"></i>
+            <i class="bi bi-geo-alt-fill" style="margin-right: 2px;"></i>
             <span>{{popup.popupLocation}}</span>
           </div>
         </div>
@@ -506,7 +506,7 @@ onMounted(() => {
 
 <style scoped>
 .card-text{
-  width: 300px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
+  width: 280px; /* 부모 요소인 card 너비 넘어가지 않도록 20px 작게 조정 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

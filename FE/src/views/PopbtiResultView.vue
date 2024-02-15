@@ -7,7 +7,7 @@
     </div>
 
     <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-      <img :src="'@/assets/images/popbti-img/popbti-img-' + point + '.svg'" class="img-fluid">
+      <img :src="'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg'" class="img-fluid">
     </div>
 
     <div class="resultDesc">
