@@ -621,7 +621,7 @@ const goReviewLike = function(like, reviewId){
                   class="rounded-profile"
                 />  
                 <img v-else="review.userImagePath==null"
-                  src="https://s3.ap-southeast-2.amazonaws.com/popcon.s3.bucket/profileImages/noProfile.png"
+                  src="https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/profileImages/noProfile.png"
                 />
               </div>
               <div class="review-date">

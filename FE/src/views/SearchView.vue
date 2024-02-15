@@ -45,8 +45,10 @@
                 <ul class="button-group1" >
                     <div v-for="(value, key) in categoryGroup" class="search-category-option">
                         <!-- 카테고리 변수 안에 값이 들어있고 key값과 같으면 select이미지로 대체 -->
-                        <img v-if="category !== '' && category == value " class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_a.png'" :alt="value + ' 아이콘'">
-                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="'/src/assets/images/option_' + key + '.png'" :alt="value + ' 아이콘'">
+                        <img v-if="category !== '' && category == value " class="search-category-img" :src="categoryGroupUrl[key][1]" :alt="value + ' 아이콘'">
+                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="categoryGroupUrl[key][0]" :alt="value + ' 아이콘'">
+                        <!-- <img v-if="category !== '' && category == value " class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_a.png'" :alt="value + ' 아이콘'">
+                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="'/src/assets/images/option_' + key + '.png'" :alt="value + ' 아이콘'"> -->
                         <div class="search-category-text"><span>{{value}}</span></div>
                     </div>
                 </ul>
@@ -179,6 +181,21 @@ const categoryGroup = ref({
 const getKeyByValue = function(obj, value) {
       return Object.keys(obj).find(key => obj[key] === value)
     }
+
+// 카테고리 이미지 주소 // 
+const categoryGroupUrl=ref({
+    'beauty':['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_beauty.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_beauty_c.png'],
+    'foods': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_foods.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_foods_c.png'], 
+    'content': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_content.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_content_c.png'], 
+    'hobby': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_hobby.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_hobby_c.png'],
+    'finance': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_finance.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_finance_c.png'],
+    'entertain': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_entertain.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_entertain_c.png'],
+    'digital': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_digital.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_digital_c.png'],
+    'living': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_living.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_living_c.png'],
+    'game': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_game.png','https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_game_c.png'],
+    'character': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_character.png', 'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_character_c.png']
+});
+
 
 // 팝업 리스트 담아둘 변수
 const popupList = ref()
