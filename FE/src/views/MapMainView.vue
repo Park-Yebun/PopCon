@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 import { map } from "@/api/popup";
 
-const router = useRouter()
+const router = useRouter();
 const overlay = ref(true);
 const maxWidth = ref(360);
 const maxHeight = ref(800);
@@ -11,6 +11,11 @@ const clickToClose = ref(true);
 const overlayColorSelect = ref("#0000004D");
 const canSwipe = ref(true);
 const myBottomSheet = ref(null);
+
+window.onload = function () {
+  // body 요소의 스타일을 변경합니다.
+  document.body.style.width = "300px";
+};
 
 const param = ref({
   lat: "",
@@ -36,8 +41,8 @@ onMounted(async () => {
 });
 
 const goPopupDetail = (popupId) => {
-  router.push(`/popup/${popupId}`)
-}
+  router.push(`/popup/${popupId}`);
+};
 
 const categoryClick = (event) => {
   // 현재 지도 화면의 중심 좌표 가져오기
@@ -155,7 +160,7 @@ const getNearbyPopups = () => {
       // console.log(data);
       data.sort((a, b) => a.distance - b.distance);
       popups.value = data;
-      console.log(popups.value, '팝업 데이터 이렇게 들어옴');
+      console.log(popups.value, "팝업 데이터 이렇게 들어옴");
       loadMap(currentlat.value, currentlng.value);
     },
     ({ response }) => {
@@ -247,12 +252,12 @@ const CustomMapMarker = function (data) {
     // "</div>",
     "</div>",
     '<div style="margin: 0; display: table; padding: 0.5rem; table-layout: auto; border-radius: 2.3rem; border: 0.2rem solid #FF534C; background: white; cursor: pointer; position: relative; z-index: 2">',
-        '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
-                data.popupName,
-        '</div>',
-        // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
-        // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: blue transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
-    '</div>',
+    '<div style="max-width: 7rem; height: 1rem;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: table-cell; vertical-align: middle; cursor: pointer; font-size: 0.7rem; letter-spacing: -0.04rem; font-weight: 600; line-height: 1rem;">',
+    data.popupName,
+    "</div>",
+    // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: #ffffff transparent; display: block; width: 0; z-index: 1; top: 4.8rem; left: 1.4rem;"></span>',
+    // '<span style="position: absolute; border-style: solid; border-width: 1.2rem 1rem 0 1rem; border-color: blue transparent; display: block; width: 0; z-index: 0; top: 5.05rem; left: 1.4rem;"></span>',
+    "</div>",
   ];
 
   return mobileContentArray.join("");
@@ -355,7 +360,7 @@ onMounted(() => {
       >
         <div class="search-btn-content">
           <i class="bi bi-search"></i>
-          <p>지역 혹은 이름을 검색해보세요.</p>
+          <p class="search-btn-content2">지역 혹은 이름을 검색해보세요.</p>
         </div>
       </button>
 
@@ -468,8 +473,6 @@ onMounted(() => {
       <button @click="getLocation()" id="find-me">내 위치 보기</button>
       {{ currentlat }}, {{ currentlng }}
     </div> -->
-
-    
   </div>
 
   <div class="up_sensor"></div>
@@ -479,24 +482,34 @@ onMounted(() => {
     </div>
     <div style="margin-bottom: 40px"></div>
     <div class="bottom_box">
-      <div v-for="popup in popups" @click=goPopupDetail(popup.popupId) :key="popup" class="card " style="width: 300px; height: 400px; position: relative ">
+      <div
+        v-for="popup in popups"
+        @click="goPopupDetail(popup.popupId)"
+        :key="popup"
+        class="card"
+        style="width: 276px; height: 400px; position: relative"
+      >
         <img
           :src="popup.previewImagePath"
-          class="card-img-top "
+          class="card-img-top"
           alt="posterimage"
-          style="width: 300px; height: 300px; object-fit:cover"
+          style="width: 274px; height: 300px; object-fit: cover"
         />
         <div class="card-body">
-          <p class="card-text" style="font-weight: bold; margin-bottom: 2px;">{{popup.popupName}}</p>
-          <p class="card-text" style="font-size: 14px; margin-bottom: 2px;">{{ popup.popupStart }} - {{ popup.popupEnd }}</p>
-          <div class="card-text" style="color: gray; font-size: 12px;">
-            <i class="bi bi-geo-alt-fill" style="margin-right: 2px;"></i>
-            <span>{{popup.popupLocation}}</span>
+          <p class="card-text" style="font-weight: bold; margin-bottom: 2px">
+            {{ popup.popupName }}
+          </p>
+          <p class="card-text" style="font-size: 14px; margin-bottom: 2px">
+            {{ popup.popupStart }} - {{ popup.popupEnd }}
+          </p>
+          <div class="card-text" style="color: gray; font-size: 12px">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>{{ popup.popupLocation }}</span>
           </div>
         </div>
 
         <p class="likes" style="position: absolute; top: 0; right: 0">
-          ❤+{{popup.popupLike}}
+          ❤+{{ popup.popupLike }}
         </p>
         <!-- 우측 상단 like수 -->
       </div>
@@ -505,12 +518,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.card-text{
-  width: 280px; /* 부모 요소인 card 너비 넘어가지 않도록 20px 작게 조정 */
+.card-text {
+  width: 250px; /* 부모 요소인 .deadline-popup의 너비에 맞추어 조정 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-
 }
 
 .card {
@@ -528,7 +540,7 @@ onMounted(() => {
 
 .top-bar {
   position: absolute;
-  top: 0px;
+  top: 5px;
   display: flex;
   gap: 5px;
   justify-content: space-between; /* 두 요소를 각각 양쪽 끝에 정렬합니다. */
@@ -536,11 +548,12 @@ onMounted(() => {
   z-index: 100;
 }
 /* 기본 구조 */
+
 .home-container {
   position: relative;
 }
 .wrap {
-  max-width: 350px;
+  max-width: 330px;
   margin: 10px auto;
   position: absolute;
   top: 50px;
@@ -561,17 +574,27 @@ onMounted(() => {
 }
 
 .map {
-  width: 360px;
-  height: 800px;
+  width: 330px;
+  height: 700px;
   z-index: 0;
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-.category-btn,
+}
+.category-btn {
+  background-color: #fff;
+  border-radius: 40px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  transition: all 0.3s ease;
+  height: 35px;
+}
 .my-location-btn {
   background-color: #fff;
   border-radius: 40px;
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
   transition: all 0.3s ease;
+  height: 35px;
+  width: 35px;
+  margin-left:5px;
 }
 
 .search-btn {
@@ -581,11 +604,17 @@ onMounted(() => {
   background: #fff;
   transition: all 0.3s ease;
   font-size: 12px;
-  width: 250px;
+  width: 280px;
 }
 .search-btn-content {
   display: flex;
   align-items: center;
+  height: 15px;
+}
+
+.search-btn-content2 {
+  margin-top: 16px;
+  margin-left: 5px;
 }
 
 .search-form {
@@ -703,7 +732,7 @@ border: #FF534C solid 4px;
   min-height: 14%; /* 최소 높이 설정 */
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  background-color: #ffffff transparent ;
+  background-color: #ffffff transparent;
   overflow-y: auto;
   flex-direction: column;
   align-items: center;
@@ -753,5 +782,14 @@ border: #FF534C solid 4px;
   bottom: 0;
   height: 10%;
   transition-duration: 1s;
+}
+
+a {
+  padding: 0; /* 좌우 패딩 제거 */
+}
+
+.bi-crosshair {
+  margin-left: -8px; /* 원하는 마진 값을 설정합니다. */
+  margin-top: -2px;
 }
 </style>

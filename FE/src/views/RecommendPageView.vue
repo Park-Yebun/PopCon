@@ -18,7 +18,7 @@
       <div title="POPBTI 추천" class="popup-group">
         <div v-for="a in AList" :key="a">
           <div class="popup">
-            <img :src="a.previewImage" class="popup-img" alt="">
+            <img @click="goPopupDetail(a.popupId)" :src="a.previewImage" class="popup-img" alt="">
             <h5 class="popup-title">{{ a.popupName }}</h5>
           </div>
         </div>
@@ -48,7 +48,7 @@
         </div>
         <div v-for="b in BList" :key="b">
           <div class="popup">
-            <img :src="b.previewImage" class="popup-img" alt="">
+            <img @click="goPopupDetail(b.popupId)" :src="b.previewImage" class="popup-img" alt="">
             <h5 class="popup-title">{{ b.popupName }}</h5>
           </div>
         </div>
@@ -64,7 +64,7 @@
       <div title="좋아요 추천" class="popup-group">
         <div v-for="c in CList" :key="c" title="좋아요추천">
           <div class="popup">
-            <img :src="c.popupImagePath" class="popup-img" alt="">
+            <img @click="goPopupDetail(c.popupId)" :src="c.popupImagePath" class="popup-img" alt="">
             <h5 class="popup-title">{{ c.popupName }}</h5>
           </div>
         </div>
@@ -91,9 +91,12 @@ const imageAI = ref(null);
 
 const AList = ref()
 const isHaveCookie = ref(false)
-
 const BList = ref()
 const CList = ref()
+const goPopupDetail = (popupId) => {
+  router.push(`/popup/${popupId}`);
+};
+
 
 
 // ai추천 이미지 플라스크로 보내서 검사하기
