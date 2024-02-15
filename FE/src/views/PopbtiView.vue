@@ -627,4 +627,8 @@ const goBack = function() {
   padding: 10px;
 }
 
+
+.router-view{
+  margin:0;
+}
 </style>

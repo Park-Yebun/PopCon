@@ -1,4 +1,4 @@
-<template>
+<template v-if="isLoaded">
     <div>
         <br>
         <br>
@@ -42,28 +42,25 @@
         <div title="카테고리 옵션">
             <div class="search-category-title title">
                 <span style="font-weight:bold; color:darkslategray;">카테고리</span>
-                <ul class="button-group1" >
-                    <div v-for="(value, key) in categoryGroup" class="search-category-option">
-                        <!-- 카테고리 변수 안에 값이 들어있고 key값과 같으면 select이미지로 대체 -->
-                        <img v-if="category !== '' && category == value " class="search-category-img" :src="categoryGroupUrl[key][1]" :alt="value + ' 아이콘'">
-                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="categoryGroupUrl[key][0]" :alt="value + ' 아이콘'">
-                        <!-- <img v-if="category !== '' && category == value" class="search-category-img" :src="require('@/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_c.png')" :alt="value + ' 아이콘'">
-                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="require('@/assets/images/option_' + getKeyByValue(categoryGroup, value) + '.png')" :alt="value + ' 아이콘'"> -->
-                        <div class="search-category-text"><span>{{value}}</span></div>
-                    </div>
+                <ul class="button-group1">
+                    <li v-for="(categoryname, index) in categoryNames" :key="index" 
+                    :class="{ 'select': categoryname === category }"
+                    @click="selectCategory(categoryname)">
+                        {{ categoryname }}
+                    </li>
                 </ul>
             </div>
         </div>
 
         <div class="button-container">
-            <button @click="goSearch" type="button" class="btn btn-light" style="padding:10px 20px; margin:10px 0px; border-radius: 15px; border:2px solid #FF534C; color:gray; font-size:14px;">검색</button>
+            <button @click="goSearch" type="button" class="btn" style="padding:10px 20px; margin:10px 0px; border-radius: 15px; border:2px solid gray; color:gray; font-size:14px;">검색</button>
         </div>
 
         <hr>
 
         <div title="팝업스토어 정렬">
             <div class="dropdown-li">
-                <select name="selectBox" id="selectBox" @change="changeSelect()" style="height:40px; width:120px; border-radius:15px; border:1px solid gray;">
+                <select name="selectBox" id="selectBox" @change="changeSelect()" style="height:40px; width:120px; border-radius:15px; border:2px solid gray;">
                     <option value="" >최신순</option>
                     <option value="" >리뷰 많은순</option>
                     <option value="" >좋아요 순</option>
@@ -162,9 +159,24 @@ const category = ref(route.params.category)
 const selectCategory = function(v) {
     this.router.replace({ params: { category: v }})
     category.value = v
+    console.log(category.value);
 }
 
 // 카테고리 버튼 //
+const categoryNames=ref([
+    '패션뷰티',
+    '식음료', 
+    '콘텐츠', 
+    '취미여가',
+    '금융',
+    '연예',
+    '가전/디지털',
+    '리빙',
+    '게임',
+    '캐릭터'
+])
+
+
 const categoryGroup = ref({
     'beauty': '패션뷰티',
     'foods': '식음료', 
@@ -196,6 +208,7 @@ const categoryGroupUrl=ref({
     'character': ['https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_character.png', 'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/categoryImages/option_character_c.png']
 });
 
+const isLoaded=ref(false);
 
 // 팝업 리스트 담아둘 변수
 const popupList = ref()
@@ -213,7 +226,9 @@ onMounted(() => {
     category: null
 }})
     .then((response) => {
-        popupList.value = response.data
+        popupList.value = response.data;
+        startDate.value=setInputDate(0);
+        endDate.value=setInputDate(1);
     })
     .then((response) => {
         // 클릭한 옵션값 감시
@@ -273,6 +288,8 @@ onMounted(() => {
     .catch((error) => {
         console.log(error);
     })
+
+    isLoaded.value=true;
 })
 
 // 팝업리스트 정렬 변경!!
@@ -309,14 +326,17 @@ const changeSelect = function() {
 // 검색버튼 누르면 결과 새로고침
 const goSearch = function() {
     axios.get('/popups/search', {params : {
-    startDate: startDate.value,
-    endDate: endDate.value,
-    area: area.value,
-    status: status.value,
-    category: category.value
-}})
+        startDate: startDate.value,
+        endDate: endDate.value,
+        area: area.value,
+        status: status.value,
+        category: category.value
+    }})
     .then((response) => {
-        popupList.value = response.data
+        console.log("검색 결과!!");
+        console.log(response.data);
+        popupList.value = response.data;
+
         console.log("검색버튼 요청완료!!")
         console.log(startDate.value, endDate.value, area.value, status.value, category.value)
     })

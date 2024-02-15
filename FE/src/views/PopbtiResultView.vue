@@ -38,6 +38,7 @@ import { popbti } from '@/api/popup'
 const route = useRoute()
 const point = route.params.mbtiId
 const recpopup = ref()
+const isLoaded=ref(false);
 
 onMounted(() => {
   const param = { code: point };
@@ -52,6 +53,7 @@ onMounted(() => {
       console.log(response);
     }
   );
+  isLoaded.value=true;
 })
 
 const goPopupDetail = (popupId) => {
@@ -67,7 +69,7 @@ const mbtimatch = {'ISTJ':0, 'ISTP':1, 'ISFJ':2, 'ISFP':3,
                     'ESTJ':8, 'ESTP':9, 'ESFJ':10, 'ESFP':11,
                     'ENTJ':12,'ENTP':13,'ENFJ':14, 'ENFP':15}
 
-                    const infoList = [
+const infoList = [
   {
     name: 'ISTJ : 성실한 관리자',
     desc: '당신은 실용적이고 조직적인 성향을 가진 사람입니다. 일 처리에 있어서 신중하고 책임감이 강하며 안정적인 모습을 보입니다. 미루지 않고 철저하게 과제를 완수하는 모습이 돋보이는군요! 어울리는 팝업 스토어는 사무용품이나 조직용품을 판매하는 곳일 겁니다.'

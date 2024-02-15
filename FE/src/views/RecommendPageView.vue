@@ -1,6 +1,6 @@
-<template>
+<template v-if="pageLoaded">
   <i class="bi bi-arrow-left"></i>
-  <div v-if="pageLoaded">
+  <div>
     <!-- 추천 유형 A -->
     <div>
       <div class="d-flex justify-content-between m-3">
@@ -84,7 +84,7 @@
         </div>
 
       </div>
-    </div>
+  </div>
 
 </template>
   
@@ -97,7 +97,6 @@ import {findById} from "@/api/user";
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useMemberStore } from "@/stores/user";
-
 
 const router = useRouter();
 
