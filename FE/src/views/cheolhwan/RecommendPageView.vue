@@ -64,7 +64,7 @@
       <div title="좋아요 추천" class="popup-group">
         <div v-for="c in CList" :key="c" title="좋아요추천">
           <div class="popup">
-            <img :src="c.previewImage" class="popup-img" alt="">
+            <img :src="c.popupImagePath" class="popup-img" alt="">
             <h5 class="popup-title">{{ c.popupName }}</h5>
           </div>
         </div>
