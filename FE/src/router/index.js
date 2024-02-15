@@ -3,25 +3,27 @@ import MainView from '@/views/MainView.vue'
 import SearchView from '@/views/SearchView.vue'
 import ReviewView from '@/views/ReviewView.vue'
 
-import EditMemberPageVue from '@/views/cheolhwan/EditMemberPage.vue'
-import EditCompanyPageVue from '@/views/cheolhwan/EditCompanyPage.vue'
-import LoginPageViewVue from '@/views/cheolhwan/LoginPageView.vue'
-import MyPageViewVue from '@/views/cheolhwan/MyPageView.vue'
-import RecommendPageViewVue from '@/views/cheolhwan/RecommendPageView.vue'
+import EditMemberPageVue from '@/views/EditMemberPage.vue'
+import EditCompanyPageVue from '@/views/EditCompanyPage.vue'
+import LoginPageViewVue from '@/views/LoginPageView.vue'
+
+import MyPageViewVue from '@/views/MyPageView.vue'
+import RecommendPageViewVue from '@/views/RecommendPageView.vue'
 import MapMainView from '@/views/MapMainView.vue'
-import ReportReviewPageViewVue from '@/views/cheolhwan/ReportReviewPageView.vue'
+import ReportReviewPageViewVue from '@/views/ReportReviewPageView.vue'
 import PopupStoreCorporateReport from '@/views/PopupStoreCorporateReport.vue'
-import SearchIdViewVue from '@/views/cheolhwan/SearchIdView.vue'
-import SearchPasswordViewVue from '@/views/cheolhwan/SearchPasswordView.vue'
-import SignUpCheckViewVue from '@/views/cheolhwan/SignUpCheckView.vue'
-import SignUpCompanyViewVue from '@/views/cheolhwan/SignUpCompanyView.vue'
-import SignUpMemberViewVue from '@/views/cheolhwan/SignUpMemberView.vue'
-import ErrorPageViewVue from '@/views/cheolhwan/ErrorPageView.vue'
+import SearchIdViewVue from '@/views/SearchIdView.vue'
+import SearchPasswordViewVue from '@/views/SearchPasswordView.vue'
+import SignUpCheckViewVue from '@/views/SignUpCheckView.vue'
+import SignUpCompanyViewVue from '@/views/SignUpCompanyView.vue'
+import SignUpMemberViewVue from '@/views/SignUpMemberView.vue'
+import ErrorPageViewVue from '@/views/ErrorPageView.vue'
 
 import MemberOtherPage from '@/views/MemberOtherPage.vue'
 import ReportPopupStore from '@/views/ReportPopupStore.vue'
 import AdminOtherPage from '@/views/AdminOtherPage.vue'
 import BusinessOtherPage from '@/views/BusinessOtherPage.vue'
+import PersonalOtherPage from '@/views/PersonalOtherPage.vue'
 
 import NoticeList from '@/views/NoticeList.vue'
 import FAQ from '@/views/FAQ.vue'
@@ -31,9 +33,14 @@ import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 import PopbtiViewVue from '@/views/PopbtiView.vue'
 import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
+// import GibonView2 from '@/views/GibonView2.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
+
+import { useRouter } from 'vue-router';
+const router2 = useRouter()
+
 
 
 const onlyAuthUser = async (to, from, next) => {
@@ -44,11 +51,12 @@ const onlyAuthUser = async (to, from, next) => {
   let token = localStorage.getItem("accessToken");
 
   if(token!=null){  // 토큰이 있으면 아이디 찾아오기
-    console.log(1); 
+    // console.log(1); 
     await getUserInfo(token);
     next();
   } else {  // 없으면 로그인 시키기 
-    next({name:"user-login"});
+    // next({name:"user-login"});
+    router.push({name:"user-login"});
   }
 
 };
@@ -59,7 +67,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: MainView
+      component: MainView,
+      beforeRouteEnter (to, from, next) {
+        window.location.reload();
+      }
     },
     {
       path: '/error',
@@ -125,7 +136,7 @@ const router = createRouter({
         },
         {
           path: 'searchId',
-          name: 'user-search-Id',
+          name: 'user-search-id',
           component: SearchIdViewVue
         },
         {
@@ -162,7 +173,7 @@ const router = createRouter({
           component: MyPageViewVue
         },
         {
-          path: 'other',
+          path: 'other/member',
           name: 'other-member',
           beforeEnter: onlyAuthUser,
           component: MemberOtherPage
@@ -176,7 +187,12 @@ const router = createRouter({
           path: 'other/corporate',
           name: 'other-corporate',
           component: BusinessOtherPage
-        }
+        },
+        {
+          path: 'other',
+          name: 'other',
+          component: PersonalOtherPage
+        },
       ]
     },
     
@@ -192,7 +208,7 @@ const router = createRouter({
           component: ReportPopupStore,
           beforeEnter : onlyAuthUser
         },
-        {   // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
+        { // 제보 ; 기업 회원만 접근 가능 -> beforeEnter 변경 
           path: '/popup/register',
           name: 'popup-register',
           component: PopupStoreCorporateReport,
@@ -207,7 +223,7 @@ const router = createRouter({
     },
 
     {
-      path: '/reportreview',  // 댓글 신고 
+      path: '/popup/:popupId/report/:reviewId',  // 댓글 신고 
       name: 'reportreview',
       component: ReportReviewPageViewVue
     },
@@ -237,7 +253,7 @@ const router = createRouter({
       component: SignUpMemberViewVue
     },
     {
-      path: '/review',
+      path: '/popup/:popupId/review',
       name: 'review',
       component: ReviewView
     },
@@ -256,7 +272,6 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
-  
 
   ]
 })

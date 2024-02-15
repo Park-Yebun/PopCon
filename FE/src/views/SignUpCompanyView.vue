@@ -54,7 +54,7 @@ const isValidEmailBoolean=ref(false);
 const isValidEmail=ref('');
 
 const checkEmailAvailability = function() {
-  console.log(emailInput.value);
+  // console.log(emailInput.value);
   param.value.type="email";
   param.value.value=emailInput.value;
   dupCheck(
@@ -100,11 +100,11 @@ const join=function(){
     userJoin(
     joinUser.value,
     ({data})=>{
-      console.log(data);
+      // console.log(data);
       router.push({ name: "home" });
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   )
   }
