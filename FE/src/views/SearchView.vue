@@ -47,8 +47,8 @@
                         <!-- 카테고리 변수 안에 값이 들어있고 key값과 같으면 select이미지로 대체 -->
                         <img v-if="category !== '' && category == value " class="search-category-img" :src="categoryGroupUrl[key][1]" :alt="value + ' 아이콘'">
                         <img v-else @click="selectCategory(value)" class="search-category-img" :src="categoryGroupUrl[key][0]" :alt="value + ' 아이콘'">
-                        <!-- <img v-if="category !== '' && category == value " class="search-category-img" :src="'/src/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_a.png'" :alt="value + ' 아이콘'">
-                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="'/src/assets/images/option_' + key + '.png'" :alt="value + ' 아이콘'"> -->
+                        <!-- <img v-if="category !== '' && category == value" class="search-category-img" :src="require('@/assets/images/option_' + getKeyByValue(categoryGroup, value) + '_c.png')" :alt="value + ' 아이콘'">
+                        <img v-else @click="selectCategory(value)" class="search-category-img" :src="require('@/assets/images/option_' + getKeyByValue(categoryGroup, value) + '.png')" :alt="value + ' 아이콘'"> -->
                         <div class="search-category-text"><span>{{value}}</span></div>
                     </div>
                 </ul>

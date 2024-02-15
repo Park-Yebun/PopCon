@@ -312,7 +312,7 @@ const goReviewLike = function(like, reviewId){
 </script>
 
 <template>
-  <div class="home-container">
+  <div v-if="popupLoaded" class="home-container">
     <br>
     <br>
 
@@ -545,10 +545,10 @@ const goReviewLike = function(like, reviewId){
       <div>
         <span style="font-weight:bold;">방문자 사진 영상</span>
       </div>
-      <div>
+      <!-- <div>
         <i class="bi bi-pencil-square"></i>
         <span style="font-size:small;"  @click="$router.push({name:'review',params:{popupId}})"> 리뷰 쓰기</span>
-      </div>
+      </div> -->
     </div>
     <div class="grid-container">
         <div v-for="(review, index) in photoReview" :key="index" class="grid-item">

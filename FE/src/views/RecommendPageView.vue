@@ -19,7 +19,7 @@
         <div v-if="AList!=null" title="POPBTI 추천" class="popup-group">
           <div v-for="a in AList" :key="a">
             <div class="popup">
-              <img :src="a.previewImage" class="popup-img" alt="">
+              <img :src="a.previewImage" class="popup-img" alt="" @click="goPopupDetail(a.popupId)">
               <h5 class="popup-title" style="font-weight:500;">{{ a.popupName }}</h5>
             </div>
           </div>
@@ -52,32 +52,10 @@
             </div>
             <div v-for="b in BList" :key="b">
               <div class="popup">
-                <img :src="b.previewImage" class="popup-img" alt="">
+                <img :src="b.previewImage" class="popup-img" @click="goPopupDetail(b.popupId)"  alt="">
                 <h5 class="popup-title">{{ b.popupName }}</h5>
               </div>
             </div>
-
-          <!-- <div v-if="userInfo!=null">
-            <div class="popup">
-              <div>
-                <input type="file" ref="fileInput" id="upload-image" hidden @change="getFileName($event.target.files)">
-                <label for="upload-image" v-if="!inputImagebutton">
-                  <img src="../../assets/images/upload_image.png" class="popup-img"/>
-                </label>
-                <img v-if="imgPreview" :src="imgPreview" class="popup-img" id="preview">
-                <img v-if="imageUrl" :src="imageAI" class="popup-img">
-              </div>
-              <button type="submit" class="btnStyle" @click="uploadImage">업로드</button>
-        
-            </div>
-            <div v-for="b in BList" :key="b">
-              <div class="popup">
-                <img :src="b.previewImage" class="popup-img" alt="">
-                <h5 class="popup-title">{{ b.popupName }}</h5>
-              </div>
-            </div>
-          </div> -->
-
         </div>
 
         <div v-else class="center">
@@ -95,7 +73,7 @@
         <div v-if="userInfo!=null" title="좋아요 추천" class="popup-group">
           <div v-for="c in CList" :key="c" title="좋아요추천">
               <div class="popup">
-                <img :src="c.popupImagePath" class="popup-img" alt="">
+                <img :src="c.popupImagePath" class="popup-img" @click="goPopupDetail(c.popupId)" alt="">
                 <h5 class="popup-title">{{ c.popupName }}</h5>
               </div>
             </div>
@@ -174,7 +152,7 @@ const uploadImage = async() => {
     try {
       const response = await axios.post('https://i10c211.p.ssafy.io:5005/upload', formData);
 
-      getImage.value = response.data.file_path
+      getImage.value = response.data.image
       if (getImage.value) {
         imageAI.value = `data:image/jpeg;base64,${getImage.value}`;
         imageUrl.value = true
@@ -195,6 +173,8 @@ const uploadImage = async() => {
             }
     })
     .then((response) => {
+      console.log(response.data);
+      BList.value=null;
       BList.value = response.data
     })
     .catch((error) => {
@@ -257,6 +237,7 @@ onMounted(async() => {
   // 좋아요 api 요청 
   const accessToken = localStorage.getItem("accessToken")
   console.log(accessToken)
+  BList.value=null;
 
   if(accessToken!=null) {
     axios.get('/recommends', { headers: {
@@ -265,6 +246,7 @@ onMounted(async() => {
     })
     .then((response) => {
       console.log("좋아요 데이터 요청 완료!")
+      // console.log(response.data.ai);
       BList.value=response.data.ai;
       CList.value = response.data.good
       console.log(CList.value, '이렇게들어와요')

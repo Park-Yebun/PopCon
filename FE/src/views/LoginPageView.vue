@@ -106,7 +106,7 @@ const login = async() => {
             <p>계정이 없으신가요?</p>
           </div>
           <div class="col-5">
-            <span @click="goSignUp" style="color: #ff534c;">회원가입</span>
+            <span @click="goSignUp" style="color: #ff534c; cursor:pointer;">회원가입</span>
           </div>
         </div>
 
