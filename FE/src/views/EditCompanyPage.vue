@@ -69,11 +69,11 @@
     methods: {
       checkEmailAvailability() {
         // 이메일 중복 확인 로직을 추가할 수 있습니다.
-        console.log('이메일 중복 확인');
+        // console.log('이메일 중복 확인');
       },
       submitForm() {
         // 회원가입 폼 제출 로직을 추가할 수 있습니다.
-        console.log('회원가입 폼 제출');
+        // console.log('회원가입 폼 제출');
         // 여기에 실제로 서버로 회원가입 정보를 전송하는 로직을 추가합니다.
       }
     }

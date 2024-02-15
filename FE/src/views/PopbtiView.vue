@@ -219,17 +219,17 @@ const setResult = () => {
   resultDesc.innerHTML = infoList[point].desc;
   resultDesc.style.margin='30px 10px';
 
-  console.log(point)
+  // console.log(point)
   const param = { code: point };
   popbti(
     param,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       recpopup.value = data
-      console.log(recpopup)
+      // console.log(recpopup)
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   
   );
@@ -435,7 +435,7 @@ const setShare = () => {
       }
     )
     .then((response) => {
-      console.log(response.data, response.config.data);
+      // console.log(response.data, response.config.data);
     })
   }, 15000)
 }

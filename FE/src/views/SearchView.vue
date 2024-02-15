@@ -140,8 +140,8 @@ $(function() {
 $('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
     endDate.value = picker.endDate.format('YYYY-MM-DD')
     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' ~ ' + picker.endDate.format('YYYY-MM-DD'))
-    console.log(startDate.value)
-    console.log(endDate.value)
+    // console.log(startDate.value)
+    // console.log(endDate.value)
 })
   // 취소 버튼 누르면 날짜 초기화
 $('input[name="datetimes"]').on('cancel.daterangepicker', function(ev, picker) {
@@ -157,9 +157,9 @@ const category = ref(route.params.category)
 
 // 카테고리 버튼을 선택하면 라우트 매개변수와 함께 카테고리 값이 저장된 변수를 변경시키기
 const selectCategory = function(v) {
-    this.router.replace({ params: { category: v }})
+    // this.router.replace({ params: { category: v }})
     category.value = v
-    console.log(category.value);
+    // console.log(category.value);
 }
 
 // 카테고리 버튼 //
@@ -213,7 +213,7 @@ const isLoaded=ref(false);
 // 팝업 리스트 담아둘 변수
 const popupList = ref()
 watch(popupList, () => {
-    console.log('popupList가 변경되었습니다.')
+    // console.log('popupList가 변경되었습니다.')
 })
 
 // 현재 파일이 생성되면 api요청을 통해 팝업리스트 데이터를 가져온 후, 옵션을 클릭할때 실시간으로 활성/비활성 시키기
@@ -273,20 +273,20 @@ onMounted(() => {
         this.classList.add('select')
         if (event.target.innerText == "오늘") {
             endDate.value = setInputDate(1)
-            console.log(endDate.value)
+            // console.log(endDate.value)
         } else if (event.target.innerText == "+7일") {
             endDate.value = setInputDate(3)
-            console.log(endDate.value)
+            // console.log(endDate.value)
         } else if (event.target.innerText == "+2주") {
             endDate.value = setInputDate(14)
-            console.log(endDate.value)
+            // console.log(endDate.value)
         }
         })
     }
 
     })
     .catch((error) => {
-        console.log(error);
+        // console.log(error);
     })
 
     isLoaded.value=true;
@@ -294,32 +294,32 @@ onMounted(() => {
 
 // 팝업리스트 정렬 변경!!
 const changeSelect = function() {
-    console.log("정렬함수 실행됨")
+    // console.log("정렬함수 실행됨")
     const selectedOption = document.querySelector('#selectBox > option:checked')
     if (selectedOption.innerText == "최신순") {
         popupList.value.sort((a, b) => a.popupId - b.popupId)
-        console.log("최신순")
-        console.log(popupList.value)
+        // console.log("최신순")
+        // console.log(popupList.value)
     }
     else if (selectedOption.innerText == "리뷰 많은순") {
         popupList.value.sort((a, b) => b.reviewCnt - a.reviewCnt)
-        console.log("리뷰 많은순")
-        console.log(popupList.value)
+        // console.log("리뷰 많은순")
+        // console.log(popupList.value)
     }
     else if (selectedOption.innerText == "좋아요 순") {
         popupList.value.sort((a, b) => b.popupLike - a.popupLike)
-        console.log("좋아요순")
-        console.log(popupList.value)
+        // console.log("좋아요순")
+        // console.log(popupList.value)
     }
     else if (selectedOption.innerText == "조회수") {
         popupList.value.sort((a, b) => b.popupView - a.popupView)
-        console.log("조회수")
-        console.log(popupList.value)
+        // console.log("조회수")
+        // console.log(popupList.value)
     }
     else if (selectedOption.innerText == "마감순") {
         popupList.value.sort((a, b) => a.popupEnd - b.popupEnd)
-        console.log("마감순")
-        console.log(popupList.value)
+        // console.log("마감순")
+        // console.log(popupList.value)
     }
 }
 
@@ -333,15 +333,15 @@ const goSearch = function() {
         category: category.value
     }})
     .then((response) => {
-        console.log("검색 결과!!");
-        console.log(response.data);
+        // console.log("검색 결과!!");
+        // console.log(response.data);
         popupList.value = response.data;
 
-        console.log("검색버튼 요청완료!!")
-        console.log(startDate.value, endDate.value, area.value, status.value, category.value)
+        // console.log("검색버튼 요청완료!!")
+        // console.log(startDate.value, endDate.value, area.value, status.value, category.value)
     })
     .catch((error) => {
-        console.log(error)
+        // console.log(error)
     })
 }
 

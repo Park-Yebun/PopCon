@@ -14,10 +14,10 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    console.log(
-        '[firebase-messaging-sw.js] Received background message ',
-        payload
-    );
+    // console.log(
+    //     '[firebase-messaging-sw.js] Received background message ',
+    //     payload
+    // );
     // Customize notification here
     // const notificationTitle = payload.notification.title;
     // const notificationOptions = {
@@ -34,11 +34,11 @@ self.addEventListener("install", function (e) {
 });
   
 self.addEventListener("activate", function (e) {
-    console.log("fcm sw activate..");
+    // console.log("fcm sw activate..");
 });
 
 self.addEventListener("notificationclose", function (event) {
-    console.log("Notification closed");
+    // console.log("Notification closed");
     // Add your custom handling for notification close event here
 });
 

@@ -189,10 +189,10 @@ const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 
               decodeToken.userId,
               (response) => {
                 userType.value = response.data.userType
-                console.log(userType.value)
+                // console.log(userType.value)
               },
               (error) => {
-                console.log(error);
+                // console.log(error);
                 router.push({name:"user-login"});
               }
             );
