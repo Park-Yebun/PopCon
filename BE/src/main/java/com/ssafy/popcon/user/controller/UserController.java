@@ -138,7 +138,7 @@ public class UserController {
     // 로그아웃 -> 디바이스 토큰 삭제하기
     @PostMapping("/logout")
     public ResponseEntity<?> userTokenRemove(@RequestHeader("Authorization") String token) throws Exception{
-        notificationService.removeToken(token);
+//        notificationService.removeToken(token);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
