@@ -445,7 +445,11 @@ const goBack = function() {
   display:none;
 }
 .popup-title{
+  width: 120px;
   font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .popup-img {
   width: 120px;
