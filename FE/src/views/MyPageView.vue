@@ -33,7 +33,7 @@ const removeUser=function(){
       router.push({name:"user-login"});
     },
     ({response}) => {
-      console.log("error");
+      // console.log("error");
     }
   )
 }

@@ -19,7 +19,7 @@ onMounted(async ()=>{
   await findById(
     decodeToken.userId,
     (response) => {
-          console.log("findById 결과 >> ", response.data);
+          // console.log("findById 결과 >> ", response.data);
           userInfo.value = response.data; // <- 확인 후 등록 
           if(userInfo.value.userImagePath==null){
             userInfo.value.userImagePath="https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/profileImages/noProfile.png";
@@ -27,7 +27,7 @@ onMounted(async ()=>{
           pageLoaded.value=true;
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
         }
   )
 
@@ -37,12 +37,12 @@ onMounted(async ()=>{
 const userLogout=function(){
   logout(
     ({data})=>{
-      console.log("정상!");
+      // console.log("정상!");
       localStorage.removeItem("accessToken");
       router.push({name:"home"});
     },
     ({response})=>{
-      console.log("error");
+      // console.log("error");
     }
   )
 

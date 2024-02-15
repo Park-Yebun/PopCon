@@ -23,8 +23,8 @@ const param=ref({
 
 // 네이버 지도 API 로드
 const loadNaverMapScript = (lat, lng) => {
-  console.log('2')
-  console.log(lng, "로드되는 경도")
+  // console.log('2')
+  // console.log(lng, "로드되는 경도")
   const script = document.createElement("script");
   script.src =
     "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4khl77l611";
@@ -73,7 +73,7 @@ onMounted(async () => {
     await getLikeOrNot(
       route.params.popupId,
       ({data})=>{
-        console.log("좋아요 여부!!!");
+        // console.log("좋아요 여부!!!");
         // console.log(data);
         isLogin.value=true;
 
@@ -82,10 +82,10 @@ onMounted(async () => {
         } else {
           isLike.value=false;
         }
-        console.log(isLike.value);
+        // console.log(isLike.value);
       },
       (error)=>{
-        console.log(error);
+        // console.log(error);
       }
     )
   }
@@ -97,7 +97,7 @@ onMounted(async () => {
 
       popupId.value=route.params.popupId;
 
-      console.log(data);  // data 에 팝업스토어 정보 존재 
+      // console.log(data);  // data 에 팝업스토어 정보 존재 
       popup.value=data;
 
       // console.log(popup.value.popupLatitude + '위도확인')
@@ -153,8 +153,8 @@ onMounted(async () => {
         route.params.popupId,
         reviewParam.value,
         ({data})=>{
-          console.log("리뷰 데이터 조회 ! ");
-          console.log(data);  // data 에 팝업스토어 리뷰 정보 존재 
+          // console.log("리뷰 데이터 조회 ! ");
+          // console.log(data);  // data 에 팝업스토어 리뷰 정보 존재 
           // console.log(data[0]);
 
           let cnt=0;
@@ -173,12 +173,12 @@ onMounted(async () => {
           loadNaverMapScript(lat.value, lng.value);
         },
         (error)=>{
-          console.log(error);
+          // console.log(error);
         }
       )
     },
     (error)=>{
-      console.log(error);
+      // console.log(error);
     }
   )
 });
@@ -221,7 +221,7 @@ const getImageUrl=function(index) {
 
 // 좋아요 버튼 api 요청
 const goLike = function() {
-  console.log("버튼눌림")
+  // console.log("버튼눌림")
 
   if(userInfo.value==null) {
     alert('로그인 하세요!');
@@ -232,17 +232,17 @@ const goLike = function() {
   param.value.userId=userInfo.value.userId;
 
   if(isLike.value) {  // 좋아요 취소 
-    console.log("좋아요 취소하자!!");
+    // console.log("좋아요 취소하자!!");
     cancelLike(
       route.params.popupId,
       param.value,
       ({data})=>{
-        console.log("좋아요 취소 완료!");
+        // console.log("좋아요 취소 완료!");
         popup.value.popupLike=popup.value.popupLike-1;
         isLike.value=!isLike.value;
       },
       (error)=>{
-        console.log(error);
+        // console.log(error);
       }
     )
 
@@ -253,14 +253,14 @@ const goLike = function() {
     route.params.popupId,
     param.value,
     ({data})=>{
-      console.log("좋아요 추가 완료!");
-      console.log(data);
+      // console.log("좋아요 추가 완료!");
+      // console.log(data);
       popup.value.popupLike=popup.value.popupLike+1;
       isLike.value=!isLike.value;
     },
     (error)=>{
-      console.log("좋아요 추가 오류");
-      console.log(error);
+      // console.log("좋아요 추가 오류");
+      // console.log(error);
     }
    )
 

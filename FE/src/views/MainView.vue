@@ -206,14 +206,14 @@ const popupLoaded=ref(false);
 onMounted(() => {
   home(
     ({ data }) => {
-      console.log(data);
-      console.log(data.popupend);
+      // console.log(data);
+      // console.log(data.popupend);
       popupend.value = data.popupend;
       popupgood.value = data.popupgood;
       popupLoaded.value=true;
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
   // 카테고리버튼 클릭 이벤트 감시

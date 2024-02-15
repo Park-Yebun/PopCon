@@ -37,7 +37,7 @@ axios.defaults.baseURL = "https://i10c211.p.ssafy.io:8085"
   navigator.serviceWorker
       .register("firebase-messaging-sw.js")
       .then(function (registration) {
-        console.log("Service worker successfully registered.");
+        // console.log("Service worker successfully registered.");
         return registration;
       })
       .catch(function (err) {

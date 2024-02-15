@@ -6,7 +6,6 @@ import ReviewView from '@/views/ReviewView.vue'
 import EditMemberPageVue from '@/views/EditMemberPage.vue'
 import EditCompanyPageVue from '@/views/EditCompanyPage.vue'
 import LoginPageViewVue from '@/views/LoginPageView.vue'
-import LoginPageViewVue2 from '@/views/LoginPageView2.vue'
 
 import MyPageViewVue from '@/views/MyPageView.vue'
 import RecommendPageViewVue from '@/views/RecommendPageView.vue'
@@ -34,7 +33,7 @@ import MapSearchView from '@/views/MapSearchView.vue'
 import PopupDetailView from '@/views/PopupDetailView.vue'
 import PopbtiViewVue from '@/views/PopbtiView.vue'
 import PopbtiResultViewVue from '@/views/PopbtiResultView.vue'
-import GibonView2 from '@/views/GibonView2.vue'
+// import GibonView2 from '@/views/GibonView2.vue'
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
@@ -52,7 +51,7 @@ const onlyAuthUser = async (to, from, next) => {
   let token = localStorage.getItem("accessToken");
 
   if(token!=null){  // 토큰이 있으면 아이디 찾아오기
-    console.log(1); 
+    // console.log(1); 
     await getUserInfo(token);
     next();
   } else {  // 없으면 로그인 시키기 
@@ -65,11 +64,6 @@ const onlyAuthUser = async (to, from, next) => {
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'fakehome',
-    //   component: LoginPageViewVue2
-    // },
     {
       path: '/',
       name: 'home',
@@ -278,12 +272,6 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQ
     },
-    {
-      path:'/gibon2',
-      name:'gibon2',
-      component:GibonView2
-    }
-  
 
   ]
 })

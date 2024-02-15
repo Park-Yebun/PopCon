@@ -51,11 +51,11 @@ const modify=function(){
       formData,
       // modifyUser.value,
     ({data})=>{
-      console.log(data);
+      // console.log(data);
       router.push({ name: "home" });
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   )
   }
@@ -84,9 +84,9 @@ const getFileName = async (file) => {
 
   try {
     await Promise.all([promise]); // Promise가 완료될 때까지 기다림
-    console.log("파일 처리 완료");
+    // console.log("파일 처리 완료");
   } catch (err) {
-    console.error("파일 처리 중 에러 발생:", err);
+    // console.error("파일 처리 중 에러 발생:", err);
   }
 };
 

@@ -47,12 +47,12 @@ onMounted(() => {
   popbti(
     param,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       recpopup.value = data
-      console.log(recpopup)
+      // console.log(recpopup)
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
   isLoaded.value=true;
@@ -138,7 +138,7 @@ const infoList = [
   },
 ]  
 
-console.log(point)
+// console.log(point)
 </script>
 
 <style scoped>

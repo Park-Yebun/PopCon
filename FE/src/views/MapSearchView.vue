@@ -225,13 +225,13 @@ const searchKeywordFromHistory = (keyword) => {
   mapSearch(
     param,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       data.sort((a, b) => a.distance - b.distance);
       searchList.value = data;
-      console.log(searchList);
+      // console.log(searchList);
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
 };
@@ -261,10 +261,10 @@ const goCategoryAll = () => {
       data.sort((a, b) => a.distance - b.distance);
       // 거리 가까운 순서로 정렬
       searchList.value = data;
-      console.log(searchList);
+      // console.log(searchList);
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
 };
@@ -274,13 +274,13 @@ const goCategory = (text) => {
   mapSearch(
     param,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       data.sort((a, b) => a.distance - b.distance);
       const Data = data.filter((item) => item.popupCategory.includes(text));
       searchList.value = Data;
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
 };
@@ -310,7 +310,7 @@ function goMapMain() {
 
 function searchKeyword(event) {
   const keyword = event.target.value.trim(); // 입력된 검색어
-  console.log(keyword);
+  // console.log(keyword);
 
   // 검색어가 입력되면 최근 검색어를 숨깁니다.
   document.querySelector(".search-keywords").style.display = "none";
@@ -332,13 +332,13 @@ function searchKeyword(event) {
   mapSearch(
     param,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       data.sort((a, b) => a.distance - b.distance);
       searchList.value = data;
-      console.log(searchList);
+      // console.log(searchList);
     },
     ({ response }) => {
-      console.log(response);
+      // console.log(response);
     }
   );
 
