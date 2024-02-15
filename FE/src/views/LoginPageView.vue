@@ -46,7 +46,7 @@ const login = async() => {
     <div class="row mb-3">
       <div class="col-3"></div>
       <div class="col-6">
-        <img class="w-100 popcon-logo-size" src="../../assets/logo/POPCON_로고_배경제거.png" alt="">
+        <img class="w-100 popcon-logo-size" src="@/assets/logo/POPCON_로고_배경제거.png" alt="">
       </div>
       <div class="col-3"></div>
     </div>
