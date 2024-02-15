@@ -95,6 +95,8 @@
 
 .nav-item {
   justify-content: center;
+  align-items: center;
+  text-align:center;
 }
 .nav-text {
   color: #2C3550;
