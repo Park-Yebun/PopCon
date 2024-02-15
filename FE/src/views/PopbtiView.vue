@@ -284,15 +284,12 @@ const addAnswer = (answerText, qIdx, idx) => {
 const messaging = getMessaging();
 onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
-  
-       // Customize notification here
-      // const notificationTitle = payload.notification.title;
-      // const notificationOptions = {
-      //   body: payload.notification.title.body,
-      //   icon: '/icon.png'
-      // };
+      const notificationTitle = payload.notification.title;
+      const notificationOptions = {
+        body: payload.notification.title.body,
+      };
     
-      // self.registration.showNotification(notificationTitle, notificationOptions);
+      self.registration.showNotification(notificationTitle, notificationOptions);
   
   
     let notificationPermission = Notification.permission;

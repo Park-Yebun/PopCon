@@ -281,18 +281,28 @@ const changeSelect = function() {
     const selectedOption = document.querySelector('#selectBox > option:checked')
     if (selectedOption.innerText == "최신순") {
         popupList.value.sort((a, b) => a.popupId - b.popupId)
+        console.log("최신순")
+        console.log(popupList.value)
     }
     else if (selectedOption.innerText == "리뷰 많은순") {
         popupList.value.sort((a, b) => b.reviewCnt - a.reviewCnt)
+        console.log("리뷰 많은순")
+        console.log(popupList.value)
     }
     else if (selectedOption.innerText == "좋아요 순") {
         popupList.value.sort((a, b) => b.popupLike - a.popupLike)
+        console.log("좋아요순")
+        console.log(popupList.value)
     }
     else if (selectedOption.innerText == "조회수") {
         popupList.value.sort((a, b) => b.popupView - a.popupView)
+        console.log("조회수")
+        console.log(popupList.value)
     }
     else if (selectedOption.innerText == "마감순") {
         popupList.value.sort((a, b) => a.popupEnd - b.popupEnd)
+        console.log("마감순")
+        console.log(popupList.value)
     }
 }
 
