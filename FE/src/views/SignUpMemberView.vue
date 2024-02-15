@@ -177,10 +177,10 @@ const join=function(){
           또는
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/구글logo.png" alt="구글로고">  구글 로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="@/assets/logo/구글logo.png" alt="구글로고">  구글 로그인</button>
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="@/assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
     
         </div>
         <div class="row" style="font-size: 11px; text-align: center;">

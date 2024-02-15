@@ -37,7 +37,7 @@
             <div>
               <input type="file" ref="fileInput" id="upload-image" hidden @change="getFileName($event.target.files)">
               <label for="upload-image" v-if="!inputImagebutton">
-                <img src="../../assets/images/upload_image.png" class="popup-img"/>
+                <img src="@/assets/images/upload_image.png" class="popup-img"/>
               </label>
               <img v-if="imgPreview" :src="imgPreview" class="popup-img" id="preview">
               <img v-if="imageUrl" :src="imageAI" class="popup-img">
@@ -64,7 +64,7 @@
       <div title="좋아요 추천" class="popup-group">
         <div v-for="c in CList" :key="c" title="좋아요추천">
           <div class="popup">
-            <img :src="c.previewImage" class="popup-img" alt="">
+            <img :src="c.popupImagePath" class="popup-img" alt="">
             <h5 class="popup-title">{{ c.popupName }}</h5>
           </div>
         </div>
