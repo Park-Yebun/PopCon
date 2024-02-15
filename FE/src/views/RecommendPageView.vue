@@ -1,85 +1,130 @@
 <template>
   <i class="bi bi-arrow-left"></i>
-  <div>
+  <div v-if="pageLoaded">
     <!-- 추천 유형 A -->
     <div>
-      <div v-if="isHaveCookie == false" @click="goTest" >
-        <div class="d-flex justify-content-between m-3">
-          <div style="font-weight: bold;"> {{ loginuserId }}님을 위한 POPBTI 추천</div>
+      <div class="d-flex justify-content-between m-3">
+          <div v-if="userInfo!=null" style="font-weight: bold; font-size:large;"> {{ userInfo.userNickname }} 님을 위한 POPBTI 추천 💖</div>
+          <div v-else style="font-weight:bold; font-size:large;">POPBTI 추천 💖</div>
         </div>
-        <p class="center" style="color: gray;">검사 결과가 없습니다</p>
+
+      <!-- cookie 가 있는 경우 -->
+      <div v-if="isHaveCookie == false">
         <div class="center">
-          <button class="btn btn-warning center" type="button">팝BTI 검사하러 가기</button>
+          <div class="popbtiBtn" @click="goTest">POPBTI 검사하러 가기</div>
         </div>
       </div>
-      <div v-else class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 팝BTI</div>
-      </div>
-      <div title="POPBTI 추천" class="popup-group">
-        <div v-for="a in AList" :key="a">
-          <div class="popup">
-            <img @click="goPopupDetail(a.popupId)" :src="a.previewImage" class="popup-img" alt="">
-            <h5 class="popup-title">{{ a.popupName }}</h5>
+
+      <div v-else>
+        <div v-if="AList!=null" title="POPBTI 추천" class="popup-group">
+          <div v-for="a in AList" :key="a">
+            <div class="popup">
+              <img :src="a.previewImage" class="popup-img" alt="">
+              <h5 class="popup-title" style="font-weight:500;">{{ a.popupName }}</h5>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   
       <!-- 추천 유형 B -->
       <div>
-      <div class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 AI 추천</div>
-      </div>
+        <div class="d-flex justify-content-between m-3">
+          <div v-if="userInfo!=null" style="font-weight: bold;  font-size:large;">{{ userInfo.userNickname }} 님을 위한 AI 추천 🌟</div>
+          <div v-else style="font-weight: bold;  font-size:large;">AI 추천 🌟</div>
+        </div>
       
-      <div title="AI 추천" class="popup-group">
-        <div class="popup">
-          <!-- <form @submit.prevent="uploadImage" enctype="multipart/form-data"> -->
-            <div>
-              <input type="file" ref="fileInput" id="upload-image" hidden @change="getFileName($event.target.files)">
-              <label for="upload-image" v-if="!inputImagebutton">
-                <img src="@/assets/images/upload_image.png" class="popup-img"/>
-              </label>
-              <img v-if="imgPreview" :src="imgPreview" class="popup-img" id="preview">
-              <img v-if="imageUrl" :src="imageAI" class="popup-img">
-            </div>
-            <button type="submit" class="btnStyle" @click="uploadImage">업로드</button>
-            <!-- <input type="submit" value="업로드"> -->
-          <!-- </form> -->
-        </div>
-        <div v-for="b in BList" :key="b">
+        <div title="AI 추천" class="popup-group" v-if="userInfo!=null">
           <div class="popup">
-            <img @click="goPopupDetail(b.popupId)" :src="b.previewImage" class="popup-img" alt="">
-            <h5 class="popup-title">{{ b.popupName }}</h5>
-          </div>
+            <!-- <form @submit.prevent="uploadImage" enctype="multipart/form-data"> -->
+              <div>
+                <input type="file" ref="fileInput" id="upload-image" hidden @change="getFileName($event.target.files)">
+                <label for="upload-image" v-if="!inputImagebutton">
+                  <img src="../assets/images/upload_image.png" class="popup-img"/>
+                </label>
+                <img v-if="imgPreview" :src="imgPreview" class="popup-img" id="preview">
+                <img v-if="imageUrl" :src="imageAI" class="popup-img">
+              </div>
+              <button type="submit" class="btnStyle" @click="uploadImage">업로드</button>
+              <!-- <input type="submit" value="업로드"> -->
+            <!-- </form> -->
+            </div>
+            <div v-for="b in BList" :key="b">
+              <div class="popup">
+                <img :src="b.previewImage" class="popup-img" alt="">
+                <h5 class="popup-title">{{ b.popupName }}</h5>
+              </div>
+            </div>
+
+          <!-- <div v-if="userInfo!=null">
+            <div class="popup">
+              <div>
+                <input type="file" ref="fileInput" id="upload-image" hidden @change="getFileName($event.target.files)">
+                <label for="upload-image" v-if="!inputImagebutton">
+                  <img src="../../assets/images/upload_image.png" class="popup-img"/>
+                </label>
+                <img v-if="imgPreview" :src="imgPreview" class="popup-img" id="preview">
+                <img v-if="imageUrl" :src="imageAI" class="popup-img">
+              </div>
+              <button type="submit" class="btnStyle" @click="uploadImage">업로드</button>
+        
+            </div>
+            <div v-for="b in BList" :key="b">
+              <div class="popup">
+                <img :src="b.previewImage" class="popup-img" alt="">
+                <h5 class="popup-title">{{ b.popupName }}</h5>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+
+        <div v-else class="center">
+            <div class="aiBtn" @click="$router.push({name:'user-login'})">로그인 하고 AI 검사하러 가기 </div>
         </div>
       </div>
-    </div>
 
       <!-- 추천 유형 C -->
       <div>
-      <div class="d-flex justify-content-between m-3">
-        <div style="font-weight: bold;">{{ loginuserId }}님을 위한 맞춤 추천</div>
-      </div>
-
-      <div title="좋아요 추천" class="popup-group">
-        <div v-for="c in CList" :key="c" title="좋아요추천">
-          <div class="popup">
-            <img @click="goPopupDetail(c.popupId)" :src="c.popupImagePath" class="popup-img" alt="">
-            <h5 class="popup-title">{{ c.popupName }}</h5>
-          </div>
+        <div class="d-flex justify-content-between m-3">
+          <div v-if="userInfo!=null" style="font-weight: bold; font-size:large;">{{ userInfo.userNickname }} 님을 위한 맞춤 추천 🔮</div>
+          <div v-else style="font-weight: bold; font-size:large;">맞춤 추천 🔮</div>
         </div>
+
+        <div v-if="userInfo!=null" title="좋아요 추천" class="popup-group">
+          <div v-for="c in CList" :key="c" title="좋아요추천">
+              <div class="popup">
+                <img :src="c.popupImagePath" class="popup-img" alt="">
+                <h5 class="popup-title">{{ c.popupName }}</h5>
+              </div>
+            </div>
+        </div>
+
+        <div v-else class=center>
+          <div class="goodBtn" @click="$router.push({name:'user-login'})">로그인하고 맞춤 추천 받으러 가기</div>
+        </div>
+
       </div>
     </div>
-  </div>
+
 </template>
   
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import router from '@/router';
+// import router from '@/router';
 import { jwtDecode } from "jwt-decode";
+import {findById} from "@/api/user";
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useMemberStore } from "@/stores/user";
 
-const loginuserId = ref(null)
+
+const router = useRouter();
+
+const userInfo=ref(null); // 로그인한 경우 현재 로그인한 유저의 정보가 담겨짐 
+const isLogin = ref(false)
 const fileInput = ref(null);
 const getImage = ref(null);
 const imageUrl = ref(null);
@@ -87,6 +132,7 @@ const yoloClassName = ref(null);
 const inputImagebutton = ref();
 const imgPreview = ref(null);
 const imageAI = ref(null);
+const pageLoaded=ref(false);
 
 
 const AList = ref()
@@ -165,43 +211,70 @@ const uploadImage = async() => {
 
 
 // popbti 쿠키 확인하고 있으면 추천리스트 가져오기, 없으면 검사페이지로 라우팅
-onMounted(() => {
-  const getCookie = function(name) {
-  const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
-  return value? value[2] : null
-}
-  if (getCookie("mbtiResult")) {    /// 만약 쿠키가 존재한다면 변수값 true로 바꿔주고 DB에 요청 보내기
-    isHaveCookie.value = true
-    const personalCookie = getCookie("mbtiResult")
+onMounted(async() => {
 
-    axios.get('/recommends/popbti', {params : {
-    code: personalCookie
+  // 로그인한 유저 정보 가져오기 
+  if(localStorage.getItem("accessToken")!=null) {
+    var token=localStorage.getItem("accessToken").split(" ");
+    var decodeToken=jwtDecode(token[1]);
+
+    await findById(
+      decodeToken.userId,
+      (response) => {
+        console.log("findById 결과 >> ", response.data);
+        userInfo.value = response.data; // <- 확인 후 등록 
+        if(userInfo.value.userImagePath==null){
+          userInfo.value.userImagePath="https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/profileImages/noProfile.png";
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  } 
+
+    const getCookie = function(name) {
+      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
+      return value? value[2] : null
     }
-  })
-  .then((response) => {
-    AList.value = response.data
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+    if (getCookie("mbtiResult")) {    /// 만약 쿠키가 존재한다면 변수값 true로 바꿔주고 DB에 요청 보내기
+      isHaveCookie.value = true
+      const personalCookie = getCookie("mbtiResult")
+
+      axios.get('/recommends/popbti', {params : {
+      code: personalCookie
+      }
+    })
+    .then((response) => {
+      AList.value = response.data
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    }
+
+  // 좋아요 api 요청 
+  const accessToken = localStorage.getItem("accessToken")
+  console.log(accessToken)
+
+  if(accessToken!=null) {
+    axios.get('/recommends', { headers: {
+      Authorization: accessToken
+    }
+    })
+    .then((response) => {
+      console.log("좋아요 데이터 요청 완료!")
+      BList.value=response.data.ai;
+      CList.value = response.data.good
+      console.log(CList.value, '이렇게들어와요')
+    })
+    .catch((error) => {
+      console.log("좋아요 데이터 요청 실패..")
+    })
   }
 
-// 좋아요 api 요청 
-const accessToken = localStorage.getItem("accessToken")
-console.log(accessToken)
 
-axios.get('/recommends/good', { headers: {
-  Authorization: accessToken
-}
-})
-.then((response) => {
-  console.log("좋아요 데이터 요청 완료!")
-  CList.value = response.data
-  console.log(CList.value, '이렇게들어와요')
-})
-.catch((error) => {
-  console.log("좋아요 데이터 요청 실패..")
-})
+  pageLoaded.value=true;
 })
 
 // popbti 검사하러가기 버튼 누르면 검사페이지로 라우팅
@@ -219,14 +292,14 @@ const goTest = function() {
   
   <style scoped>
   .popup {
-  width: 130px;
-  height: 195.78px;
-  margin-right: 10px;
-  border-radius: 10%;
-  display:flex;
-  flex-direction:column;
-  padding: 0px 5px;
-
+    width: 130px;
+    height: 195.78px;
+    margin-right: 10px;
+    border-radius: 10%;
+    display:flex;
+    flex-direction:column;
+    padding: 0px 5px;
+    align-items:center;
   }
 
   .center {
@@ -255,9 +328,11 @@ const goTest = function() {
   
   .popup-group {
   margin-top: 5.31px;
+  margin-bottom: 50px;
   min-width: 201.78px;
-  height: 170px;
+  height: 150px;
   overflow-x: scroll;
+  overflow-y: hidden;
   white-space: nowrap;
   display: flex;
   align-items: flex-start;
@@ -287,4 +362,32 @@ const goTest = function() {
   height: 120px;
   border-radius: 20px;
 }
+
+.popbtiBtn{
+  background-color: #FF534C;
+  padding: 15px 15px;
+  border-radius: 30px;
+  margin: 30px;
+  color:white;
+  cursor: pointer;
+}
+
+.aiBtn{
+  background-color: #FF534C;
+  padding: 15px 15px;
+  border-radius: 30px;
+  margin: 30px;
+  color:white;
+  cursor: pointer;
+}
+
+.goodBtn{
+  background-color: #FF534C;
+  padding: 15px 15px;
+  border-radius: 30px;
+  margin: 30px;
+  color:white;
+  cursor: pointer;
+}
+
   </style>
