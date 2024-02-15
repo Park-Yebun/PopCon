@@ -157,7 +157,11 @@ console.log(point)
 }
 
 .popup-title{
+  width: 120px;
   font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .popup-group::-webkit-scrollbar{
   display:none;
