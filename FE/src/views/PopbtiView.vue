@@ -487,7 +487,7 @@ const goBack = function() {
 
 #main {
   background-color: whitesmoke;
-  margin-top:10%;
+  /* margin-top:10%; */
   width: 90%;
   height: 800px;
   text-align: center;
