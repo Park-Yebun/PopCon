@@ -1,19 +1,24 @@
 <template>
   <div class="container">
     <section v-show="showMain" id="main" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-out': !showMain }">
-      <h3 class="pt-5">✨POPBTI로 알아보는 나의 팝업 취향✨</h3>
-      <div class="col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-        <img src="@/assets/images/pop-up-store.png" alt="mainImage" class="img-fluid">
+      <div class="main-inner-container">
+        <p style="font-size:large; font-weight:bold;"> POPBTI로 알아보는</p>
+        <p style="font-size:large; font-weight:bold;">✨ 나의 팝업 취향 ✨</p>
+        <div class="col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto" style="margin-top:40px;">
+          <img src="@/assets/images/pop-up-store.png" alt="mainImage" class="img-fluid">
+        </div>
+        <p style="margin-top: 40px; ">
+          POPBTI로 당신의 취향 저격 팝업을
+        </p>
+        <p> 찾아보세요!</p>
+        <!-- <div @click="begin" class="startBtn">시작하기</div> -->
       </div>
-      <p>
-       POPBTI로 당신의 취향 저격 팝업을 찾아보세요!
-      </p>
-      <button @click="begin" type="button" class="mt-2 btn btn-outline-danger">시작하기</button>
+      <button @click="begin" class="startBtn">시작하기</button>
     </section>
 
 
     <section v-show="showQna" id="qna" :class="{ 'fade-in': showQna, 'fade-out': !showQna }" >
-      <div class="status mx-auto mt-5">
+      <div class="status mx-auto">
         <div class="statusBar">
         </div>
       </div>
@@ -26,8 +31,8 @@
     </section>
 
 
-    <section v-show="showResult" id="result" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
-      <p class="pt-5">당신의 결과는?!</p>
+    <section v-show="showResult" id="result" class="mx-auto py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
+      <p style="font-size:25px; font-weight:bold;" >당신의 결과는?! 🍭</p>
       <div class="resultname">
       </div>
 
@@ -37,25 +42,21 @@
       <div class="resultDesc">
       </div>
 
-      <p>당신에게 추천드리는 팝업스토어</p>
+      <p style="font-weight:bold; font-size:15.5px">🏬 당신에게 추천드리는 팝업스토어 🏬</p>
       <div>
       <div title="recpopup" class="popup-group">
         <div v-for="popup in recpopup" class="popup" key="popup">
           <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
-          <p class="popup-title">{{popup.popupName}}</p>
+          <p class="popup-title" style="font-weight:bold; padding:5px">{{popup.popupName}}</p>
         </div>
       </div>
     </div>
 
-
-      
-    <div class="d-grid">
-      <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3">공유하기</button>
+    <div class="buttons">
+      <button @click="setShare" type="button" class="kakao mt-3 py-2 px-3" style="background-color: #FF534C;">공유하기</button>
       <button @click="goBack" type="button" class="kakao mt-3 py-2 px-3">돌아가기</button>
     </div>
     </section>
-
-
 
 
   </div>
@@ -80,7 +81,6 @@ const select = [];
 const recpopup = ref()
 
 const fcmToken = ref()
-
 
 
 
@@ -188,6 +188,7 @@ const setResult = () => {
   let point = calResult();
   const resultName = document.querySelector('.resultname');
   resultName.innerHTML = infoList[point].name;
+  resultName.style.fontWeight='bold';
 
   // mbti 포인트 쿠키 세션에 저장하기
   const setCookie = function(name, value, exp) { 
@@ -205,12 +206,19 @@ const setResult = () => {
   // console.log(imgURL)
   resultImg.src = imgURL;
   resultImg.alt = point;
-  resultImg.classList.add('img-fluid');
-  imgDiv.appendChild(resultImg);
 
+  
+// 이미지 스타일 설정
+  resultImg.style.width = '150px'; // 이미지 너비를 200px로 설정
+  resultImg.style.height = '150px'; // 이미지 높이를 자동으로 설정
+
+  // resultImg.classList.add('img-fluid');
+  imgDiv.appendChild(resultImg);
 
   const resultDesc = document.querySelector('.resultDesc');
   resultDesc.innerHTML = infoList[point].desc;
+  resultDesc.style.margin='30px 10px';
+
   console.log(point)
   const param = { code: point };
   popbti(
@@ -257,9 +265,22 @@ const addAnswer = (answerText, qIdx, idx) => {
   var answer = document.createElement('button');
   answer.classList.add('my-3');
   answer.classList.add('py-3');
-  answer.classList.add('mx-auto');
+  // answer.classList.add('mx-auto');
   answer.classList.add('answerList');
   answer.classList.add('fade-in');
+
+  // 스타일을 추가합니다.
+  answer.style.backgroundColor = 'whitesmoke'; // 배경색 지정
+  // answer.style.color = 'gray'; // 글자색 지정
+  answer.style.padding = '10px 20px'; // 내부 여백 지정
+  answer.style.border = 'none'; // 테두리 없애기
+  answer.style.borderRadius = '20px'; // 모서리 둥글게 만들기
+  answer.style.cursor = 'pointer'; // 마우스 커서 모양 변경
+  
+  answer.addEventListener('mouseenter', function() {
+    answer.style.border = '2px solid #FF534C';
+  });
+
 
   a.appendChild(answer);
   answer.innerHTML = answerText;
@@ -365,6 +386,7 @@ const begin = () => {
 const url = 'https://i10c211.p.ssafy.io'
 // 배포 후 URL 수정
 const setShare = () => {
+  console.log("setShare");
   var resultImg = document.querySelector('#resultImg');
   var resultAlt = resultImg.firstElementChild.alt;
   // resultAlt는 MBTI 코드
@@ -443,10 +465,11 @@ const goBack = function() {
 }
 .popup-title{
   width: 120px;
-  font-size: 10px;
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color:gray;
 }
 .popup-img {
   width: 120px;
@@ -459,25 +482,34 @@ const goBack = function() {
   width: 360px;
   height: 800px;
   background-color: pink;
+  position: relative; 
 }
 
 #main {
   background-color: whitesmoke;
-  width: 80%;
+  margin-top:10%;
+  width: 90%;
+  height: 800px;
   text-align: center;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   opacity: 1;
+  /* height:90%; */
+  /* position:absolute; */
 }
 
 #result {
   background-color: whitesmoke;
-  width: 80%;
+  width: 90%;
+  height: 800px;
   text-align: center;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   opacity: 1;
+  /* display:flex;
+  flex-direction: column; */
 }
 .resultname{
-  font-size: 14px;
+  font-size: 16px;
+  margin: 10px;
 }
 .resultDesc{
   font-size: 14px;
@@ -485,18 +517,18 @@ const goBack = function() {
 .kakao{
   color: white;
   background-color: #FEE500;
-  font-size: 20px;
+  font-size: 15px;
   border: 0px;
   border-radius: 20px;
 
 }
 
-.kakao:hover, .kakao:focus{
+/* .kakao:hover, .kakao:focus{
   background-color: whitesmoke;
   color: #FEE500;
   width: 80%;
 
-}
+} */
 .fade-in {
   animation: fadeIn 0.5s;
   
@@ -532,6 +564,9 @@ const goBack = function() {
   text-align: center;
   border-radius: 20px;
   width: 80%;
+  font-size: 20px;
+  padding: 20px;
+  font-weight: 600;
 }
 
 .answerList{
@@ -558,6 +593,7 @@ const goBack = function() {
 }
 
 .statusBar{
+  margin-top: 10%;
   height: 100%;
   border-radius: 20px;
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#febbbb+0,fe9090+45,ff5c5c+100 */
@@ -565,6 +601,30 @@ const goBack = function() {
 
 }
 
+.startBtn{
+  background-color: #ff534c;
+  border: none;
+  border-radius: 20px;
+  color:white;
+  padding: 5px 10px;
+  font-size: 15px;
+  width:100px;
+  height: 40px;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  /* font-weight: bold; */
+}
 
+.buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly; 
+}
+
+#qna{
+  /* background-color: green; */
+  padding: 10px;
+}
 
 </style>
