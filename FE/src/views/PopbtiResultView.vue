@@ -1,28 +1,30 @@
 <template>
   <div class="container">
-  <section id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
-    <h3 class="pt-5">당신의 결과는?!</h3>
+  <section id="shareResult" class="mx-auto py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
+    <p style="font-size:25px; font-weight:bold;" >당신의 결과는?! 🍭</p>
     <div class="resultname">
-      <p class=""> {{ infoList[point].name}}</p>
+      {{ infoList[point].name}}
     </div>
 
     <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-      <img :src="'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg'" class="img-fluid">
+      <img :src="'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg'" class="resultImage">
     </div>
 
-    <div class="resultDesc">
-      <P>{{ infoList[point].desc }}</P>
+    <div class="resultDesc" style="padding:10px; 5px;">
+      <p>{{ infoList[point].desc }}</p>
     </div>
 
-    <p>당신에게 추천드리는 팝업스토어</p>
-    <div title="recpopup" class="popup-group">
+    <p style="font-weight:bold; font-size:15.5px">🏬 당신에게 추천드리는 팝업스토어 🏬</p>    <div title="recpopup" class="popup-group">
       <div v-for="popup in recpopup" class="popup" key="popup">
         <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
-        <p class="popup-title">{{popup.popupName}}</p>
+        <p class="popup-title" style="font-weight:bold; padding:5px; color:gray;">{{popup.popupName}}</p>
       </div>
     </div>
 
-    <button @click="moveHome" type="button" class="mt-2 btn btn-outline-danger">나도 참여하기</button>
+    <div class="buttons">
+      <button @click="moveHome" type="button" class="kakao mt-3 py-2 px-3" style="background-color: #FF534C;">나도 참여하기</button>
+    </div>
+    <!-- <button @click="moveHome" type="button" class="mt-2 btn btn-outline-danger">나도 참여하기</button> -->
   </section>
 
   </div>
@@ -160,7 +162,7 @@ console.log(point)
 
 .popup-title{
   width: 120px;
-  font-size: 10px;
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -173,21 +175,25 @@ console.log(point)
   font-size: 14px;
 }
 .resultname{
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .container {
   width: 360px;
   height: 800px;
   background-color: pink;
+  position:relative;
 }
 
 #shareResult {
   background-color: whitesmoke;
-  width: 80%;
+  width: 90%;
   text-align: center;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   opacity: 1;
+  height:800px;
+  margin-top:0px;
 }
 
 .goHome{
@@ -203,4 +209,29 @@ console.log(point)
   background-color: whitesmoke;
   color: pink;
 }
+
+
+.router-view{
+  margin:0;
+}
+
+.resultImage{
+  width:150px;
+  height:150px;
+}
+
+.buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly; 
+}
+
+.kakao{
+  color: white;
+  font-size: 15px;
+  border: 0px;
+  border-radius: 20px;
+
+}
+
 </style>
