@@ -302,55 +302,55 @@ const addAnswer = (answerText, qIdx, idx) => {
 }
 
 // FCM 메세지 수신 설정
-const messaging = getMessaging();
-onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-      const notificationTitle = payload.notification.title;
-      const notificationOptions = {
-        body: payload.notification.title.body,
-      };
+// const messaging = getMessaging();
+// onMessage(messaging, (payload) => {
+//     console.log('Message received. ', payload);
+//       const notificationTitle = payload.notification.title;
+//       const notificationOptions = {
+//         body: payload.notification.title.body,
+//       };
     
-      self.registration.showNotification(notificationTitle, notificationOptions);
+//       self.registration.showNotification(notificationTitle, notificationOptions);
   
   
-    let notificationPermission = Notification.permission;
+//     let notificationPermission = Notification.permission;
   
-    if (notificationPermission === "granted") {
-              //Notification을 이미 허용한 사람들에게 보여주는 알람창
-             new Notification(payload.notification.title,{
-                  body:payload.notification.body,
-                  icon: '/icon.png',
-                  image:payload.notification.image
-                      });
-          } else if (notificationPermission !== 'denied') {
-              //Notification을 거부했을 경우 재 허용 창 띄우기
-              Notification.requestPermission(function (permission) {
-                  if (permission === "granted") {
-                    new Notification(payload.notification.title, {
-                  body:payload.notification.body
-                      });
-                  }else {
-                      alert("알람 허용이 거부되었습니다.")
-                  }
-              });
-          }
-  });
+//     if (notificationPermission === "granted") {
+//               //Notification을 이미 허용한 사람들에게 보여주는 알람창
+//              new Notification(payload.notification.title,{
+//                   body:payload.notification.body,
+//                   icon: '/icon.png',
+//                   image:payload.notification.image
+//                       });
+//           } else if (notificationPermission !== 'denied') {
+//               //Notification을 거부했을 경우 재 허용 창 띄우기
+//               Notification.requestPermission(function (permission) {
+//                   if (permission === "granted") {
+//                     new Notification(payload.notification.title, {
+//                   body:payload.notification.body
+//                       });
+//                   }else {
+//                       alert("알람 허용이 거부되었습니다.")
+//                   }
+//               });
+//           }
+//   });
   
-  getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' }).then((currentToken) => {
-      if (currentToken) {
-          // Send the token to your server and update the UI if necessary
-          fcmToken.value = currentToken
-          // ...
-      } else {
-          // Show permission request UI
-          console.log('토큰 없음');
-          // ...
-      }
+//   getToken(messaging, { vapidKey: 'BJK9lVeFIvJ5u3jvtWKGabTSNOqbX69MT2m2gbl110ZDyvUFsvpkKKHRKZRd4wEdjopFz_NxuGgfZoET1kTeqGs' }).then((currentToken) => {
+//       if (currentToken) {
+//           // Send the token to your server and update the UI if necessary
+//           fcmToken.value = currentToken
+//           // ...
+//       } else {
+//           // Show permission request UI
+//           console.log('토큰 없음');
+//           // ...
+//       }
   
-  }).catch((err) => {
-      console.log('토큰 가져오기 오류', err);
-      // ...
-  });
+//   }).catch((err) => {
+//       console.log('토큰 가져오기 오류', err);
+//       // ...
+//   });
   // if ("serviceWorker" in navigator) {
   //       navigator.serviceWorker
   //         .register("firebase-messaging-sw.js")
@@ -487,7 +487,7 @@ const goBack = function() {
 
 #main {
   background-color: whitesmoke;
-  margin-top:10%;
+  /* margin-top:10%; */
   width: 90%;
   height: 800px;
   text-align: center;
@@ -627,4 +627,8 @@ const goBack = function() {
   padding: 10px;
 }
 
+
+.router-view{
+  margin:0;
+}
 </style>

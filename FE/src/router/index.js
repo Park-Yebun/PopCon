@@ -39,6 +39,10 @@ import GibonView2 from '@/views/GibonView2.vue'
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
 
+import { useRouter } from 'vue-router';
+const router2 = useRouter()
+
+
 
 const onlyAuthUser = async (to, from, next) => {
   const memberStore = useMemberStore();
@@ -52,7 +56,8 @@ const onlyAuthUser = async (to, from, next) => {
     await getUserInfo(token);
     next();
   } else {  // 없으면 로그인 시키기 
-    next({name:"user-login"});
+    // next({name:"user-login"});
+    router.push({name:"user-login"});
   }
 
 };
@@ -68,7 +73,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: MainView
+      component: MainView,
+      beforeRouteEnter (to, from, next) {
+        window.location.reload();
+      }
     },
     {
       path: '/error',
@@ -173,6 +181,7 @@ const router = createRouter({
         {
           path: 'other/member',
           name: 'other-member',
+          beforeEnter: onlyAuthUser,
           component: MemberOtherPage
         },
         {

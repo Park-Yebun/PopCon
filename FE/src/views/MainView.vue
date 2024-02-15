@@ -1,4 +1,4 @@
-<template>
+<template v-if="popupLoaded">
   <!-- 캐루셀 -->
   <div
     title="캐루셀"
@@ -201,6 +201,7 @@ const router = useRouter()
 
 const popupend = ref()
 const popupgood = ref()
+const popupLoaded=ref(false);
 
 onMounted(() => {
   home(
@@ -209,6 +210,7 @@ onMounted(() => {
       console.log(data.popupend);
       popupend.value = data.popupend;
       popupgood.value = data.popupgood;
+      popupLoaded.value=true;
     },
     ({ response }) => {
       console.log(response);

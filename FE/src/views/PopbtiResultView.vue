@@ -1,28 +1,30 @@
 <template>
   <div class="container">
-  <section id="shareResult" class="mx-auto my-5 py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
-    <h3 class="pt-5">당신의 결과는?!</h3>
+  <section id="shareResult" class="mx-auto py-5 px-3" :class="{ 'fade-in': showResult, 'fade-out': !showResult }">
+    <p style="font-size:25px; font-weight:bold;" >당신의 결과는?! 🍭</p>
     <div class="resultname">
-      <p class=""> {{ infoList[point].name}}</p>
+      {{ infoList[point].name}}
     </div>
 
     <div id="resultImg" class="my-3 col-lg-6 col-md-6 col-sm-6 cpl-12 mx-auto">
-      <img :src="'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg'" class="img-fluid">
+      <img :src="'https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/mbti/popbti-img-' + point + '.svg'" class="resultImage">
     </div>
 
-    <div class="resultDesc">
-      <P>{{ infoList[point].desc }}</P>
+    <div class="resultDesc" style="padding:10px; 5px;">
+      <p>{{ infoList[point].desc }}</p>
     </div>
 
-    <p>당신에게 추천드리는 팝업스토어</p>
-    <div title="recpopup" class="popup-group">
+    <p style="font-weight:bold; font-size:15.5px">🏬 당신에게 추천드리는 팝업스토어 🏬</p>    <div title="recpopup" class="popup-group">
       <div v-for="popup in recpopup" class="popup" key="popup">
         <img @click=goPopupDetail(popup.popupId) :src="popup.previewImage" class="popup-img" alt="추천팝업이미지">
-        <p class="popup-title">{{popup.popupName}}</p>
+        <p class="popup-title" style="font-weight:bold; padding:5px; color:gray;">{{popup.popupName}}</p>
       </div>
     </div>
 
-    <button @click="moveHome" type="button" class="mt-2 btn btn-outline-danger">나도 참여하기</button>
+    <div class="buttons">
+      <button @click="moveHome" type="button" class="kakao mt-3 py-2 px-3" style="background-color: #FF534C;">나도 참여하기</button>
+    </div>
+    <!-- <button @click="moveHome" type="button" class="mt-2 btn btn-outline-danger">나도 참여하기</button> -->
   </section>
 
   </div>
@@ -38,6 +40,7 @@ import { popbti } from '@/api/popup'
 const route = useRoute()
 const point = route.params.mbtiId
 const recpopup = ref()
+const isLoaded=ref(false);
 
 onMounted(() => {
   const param = { code: point };
@@ -52,6 +55,7 @@ onMounted(() => {
       console.log(response);
     }
   );
+  isLoaded.value=true;
 })
 
 const goPopupDetail = (popupId) => {
@@ -67,7 +71,7 @@ const mbtimatch = {'ISTJ':0, 'ISTP':1, 'ISFJ':2, 'ISFP':3,
                     'ESTJ':8, 'ESTP':9, 'ESFJ':10, 'ESFP':11,
                     'ENTJ':12,'ENTP':13,'ENFJ':14, 'ENFP':15}
 
-                    const infoList = [
+const infoList = [
   {
     name: 'ISTJ : 성실한 관리자',
     desc: '당신은 실용적이고 조직적인 성향을 가진 사람입니다. 일 처리에 있어서 신중하고 책임감이 강하며 안정적인 모습을 보입니다. 미루지 않고 철저하게 과제를 완수하는 모습이 돋보이는군요! 어울리는 팝업 스토어는 사무용품이나 조직용품을 판매하는 곳일 겁니다.'
@@ -158,7 +162,7 @@ console.log(point)
 
 .popup-title{
   width: 120px;
-  font-size: 10px;
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -171,21 +175,25 @@ console.log(point)
   font-size: 14px;
 }
 .resultname{
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .container {
   width: 360px;
   height: 800px;
   background-color: pink;
+  position:relative;
 }
 
 #shareResult {
   background-color: whitesmoke;
-  width: 80%;
+  width: 90%;
   text-align: center;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   opacity: 1;
+  height:800px;
+  margin-top:0px;
 }
 
 .goHome{
@@ -201,4 +209,29 @@ console.log(point)
   background-color: whitesmoke;
   color: pink;
 }
+
+
+.router-view{
+  margin:0;
+}
+
+.resultImage{
+  width:150px;
+  height:150px;
+}
+
+.buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly; 
+}
+
+.kakao{
+  color: white;
+  font-size: 15px;
+  border: 0px;
+  border-radius: 20px;
+
+}
+
 </style>
