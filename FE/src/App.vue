@@ -178,8 +178,7 @@ const goRec = function() {
   router.push({name : 'recommend'})
 }
 
-// 토큰으로 로그인한 사용자의 유저타입 확인 후 해당되는 others 페이지로 라우팅
-const Token = localStorage.getItem("accessToken")
+
 
 const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 정보를 가져오기 위해 사용 , userInfo 저장함 
       const accessToken=token.split(" ");
@@ -197,7 +196,13 @@ const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 
             );
 }
 
-getUserInfo(Token)
+
+// 토큰으로 로그인한 사용자의 유저타입 확인 후 해당되는 others 페이지로 라우팅
+const Token = localStorage.getItem("accessToken")
+if(Token!=null) {
+  getUserInfo(Token)
+}
+
 const goOthers = function() {
   if (userType.value == "GENERAL") {
       router.push({name : 'other-member'})
