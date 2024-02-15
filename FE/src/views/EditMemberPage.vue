@@ -52,7 +52,7 @@ const modify=function(){
       // modifyUser.value,
     ({data})=>{
       console.log(data);
-      router.push({ name: "user-mypage" });
+      router.push({ name: "home" });
     },
     ({ response }) => {
       console.log(response);

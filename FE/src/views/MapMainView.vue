@@ -574,7 +574,7 @@ onMounted(() => {
 }
 
 .map {
-  width: 330px;
+  width: 345px;
   height: 700px;
   z-index: 0;
 }

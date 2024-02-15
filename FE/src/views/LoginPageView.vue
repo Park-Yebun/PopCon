@@ -32,6 +32,7 @@ const login = async() => {
   await userLogin(loginUser.value); // 로그인을 pinia 에서 
   if(isLogin.value){
     router.push({name:"home"});
+    // router.go({name:"home"});
   } else {
     isValid.value="아이디 또는 비밀번호를 다시 확인해주세요.";
     isValidBoolean.value=true;
