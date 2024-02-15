@@ -295,31 +295,27 @@
         (select count(*) from review where review.popup_id=p.popup_id) as reviewCnt
         from popup p join popup_category c on p.popup_id=c.popup_id
         <where>
-            <if test="startDate != '' and startDate != null">
-                and p.popup_end between #{startDate} and #{endDate}
+            <if test='startDate != "" and startDate != null'>
+                and (p.popup_end <![CDATA[>=]]> #{startDate} and
+                p.popup_start <![CDATA[<=]]> #{endDate})
             </if>
-            <if test="area != '전체' and area!='' and area!=null">
-                and p.popup_location like concat('%',#{area},'%')
+            <if test='area != "전체" and area!="" and area!=null'>
+                and (p.popup_location like concat('%',#{area},'%'))
             </if>
-            <if test="status !='' and status!=null">
-                and
-                <if test="status=='진행중'">
-                    curdate() between p.popup_start and p.popup_end
-                </if>
-                <if test="status=='종료'">
-                    p.popup_end <![CDATA[<]]> curdate()
-                </if>
-                <if test="status=='오픈예정'">
-                    p.popup_start <![CDATA[>]]> curdate()
-                </if>
+            <if test='status=="진행중"'>
+                and (curdate() between p.popup_start and p.popup_end)
             </if>
-            <if test="category != '전체' and category!='' and category!=null">
-                and c.category_name=#{category}
+            <if test='status=="종료"'>
+                and (p.popup_end <![CDATA[<]]> curdate())
+            </if>
+            <if test='status=="오픈예정"'>
+                and (p.popup_start <![CDATA[>]]> curdate())
+            </if>
+            <if test='category != "전체" and category!="" and category!=null'>
+                and (c.category_name=#{category})
             </if>
         </where>
-        group by p.popup_id
     </select>
-
 
 
     <select id="getLikeOrNot" parameterType="map" resultType="int">

@@ -3,6 +3,8 @@ package com.ssafy.popcon.popup.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class PopupSearchDto {
@@ -18,6 +20,7 @@ public class PopupSearchDto {
     private int reviewCnt;  // resultMap선언 x
     private int popupView;
     private int popupLike;
+    private String time;
 
     // parameter 부분
 //    private String startDate;
