@@ -1,0 +1,13 @@
+1. pip install -r requirements.txt를 진행한다
+2. pip install --upgrade ultralytics
+3. pip install --force-reinstall ultralytics
+3-2. pip install flask_cors
+
+4. 터미널을 두 개 켠다.(FE경로에서 실행하기)
+5. set FLASK_APP=app 입력
+6. flask run --debug 입력 (flask내용 수정하면 c+z 후 다시 실행해야 빌드됌)
+7. 다른 터미널에는 vue를 켠다.
+8. 서버통신을 확인한다.
+
+9. yolo통해서 만들어지는 파일은 static에 들어가고, static경로를 통해 뷰로 보여지고있음.
+10. best.pt는 직접 커스텀 데이터를 넣어서 만든 햄깅니 찾기 모델이다.
