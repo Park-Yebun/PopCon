@@ -12,11 +12,9 @@ import uuid
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'static'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# RESULT_FOLDER = os.path.join('static')
-# app.config['RESULT_FOLDER'] = RESULT_FOLDER
-CORS(app)
+RESULT_FOLDER = os.path.join('static')
+app.config['RESULT_FOLDER'] = RESULT_FOLDER
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 model = YOLO('best.pt')
 
@@ -34,7 +32,7 @@ def upload_image():
         return jsonify({'error': 'No selected file'})
     if file:
         filename = str(uuid.uuid4()) + os.path.splitext(file.filename)[1]
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join(app.config['RESULT_FOLDER'], filename)
         file.save(file_path)
         
         img = cv2.imread(file_path)
@@ -60,7 +58,7 @@ def upload_image():
                 cv2.putText(img, label, (x1, y1 - 2), 0, 1, [255, 255, 255], thickness=1, lineType=cv2.LINE_AA)
 
         # 결과 이미지 저장
-        output_path = os.path.join(app.config['UPLOAD_FOLDER'], 'detected_' + filename)
+        output_path = os.path.join(app.config['RESULT_FOLDER'], 'detected_' + filename)
         cv2.imwrite(output_path, img)
 
         # 파일 경로를 반환
