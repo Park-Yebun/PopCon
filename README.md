@@ -3,7 +3,7 @@
 <br>
 <br>
 
-<img src="/uploads/02f55410da8ac91c04ce5056f493eff7/main.JPG"/>
+<img src="/uploads/16d83ba791d5d459c034774529a9f8b0/main.JPG"/>
 
 <br>
 <br>
@@ -39,15 +39,15 @@ SSAFY 10기 2학기 공통 프로젝트
 
 |||
 |---|---|
-|<img src="/uploads/681912edcb276feddd17f639a9e0229f/pwa01.gif" width="300" height="500">|<img src="/uploads/ecd95021b96cca8b5d834f7bac0b5d03/main01.gif" width="300" height="500">|
+|<img src="/uploads/d8b59f584542a34a2f4d2e77f5991c08/pwa01.gif" width="300" height="500">|<img src="/uploads/e2a6fc1016055ba72fd32c3d97288f10/main01.gif" width="300" height="500">|
 |`PWA` 홈페이지, 앱|`메인 화면` 서비스 소개|
-|<img src="/uploads/6c35f41912892b47c5b337326a49b4c7/지도페이지1.gif" width="300" height="500">|<img src="/uploads/342927e96c5e99224051bc0d772f781c/상세페이지.gif" width="300" height="500">|
+|<img src="/uploads/018ed2302ec1baa05b919e08bb04147d/지도페이지1.gif" width="300" height="500">|<img src="/uploads/d2cb88cf001436013b2599e8c7eeb418/상세페이지.gif" width="300" height="500">|
 |`맵 기반 검색` 카테고리, 날짜|`상세 페이지` 소개, 꿀팁, 리뷰 통계, 리뷰|
-|<img src="/uploads/8b16cc1e54dfcc7f4abaec2a76adc775/ARCode.gif" width="300" height="500">|<img src="/uploads/1c45b6cc5ac95150174864470331080d/ARF.gif" width="300" height="500">|
+|<img src="/uploads/a4295620e46ebef33be83e5b0bf5bcaa/ARCode.gif" width="300" height="500">|<img src="/uploads/9d1d3c4bcad32078e4db3795235b524a/ARF.gif" width="300" height="500">|
 |`AR 카메라` 전면 카메라|`AR 카메라` 후면 카메라|
-|<img src="/uploads/bd3776a735932330c98ef2b02d6d2a12/팝비티아이.gif" width="300" height="500">|<img src="/uploads/29fdf6a0e442e0334a4747da0cde933e/ai01.gif" width="300" height="500">|
+|<img src="/uploads/24d4ebb3dcbd31a6f4e27d1e9ea6f770/팝비티아이.gif" width="300" height="500">|<img src="/uploads/1f3df0b90d73ae463f7034987e4f7da7/ai01.gif" width="300" height="500">|
 |`맞춤 추천` POPBTI 검사 결과 기반 추천 맟 공유|`맞춤 추천` AI 이미지 분석 결과 기반 추천|
-|<img src="/uploads/8cace30d4341d2a2a128986995c6ccfa/good01.gif" width="300" height="500">|<img src="">|
+|<img src="/uploads/4dc2d04dcb458016c1f8ea159d22e18b/good01.gif" width="300" height="500">|<img src="">|
 |`맞춤 추천` 로그인 유저 좋아요 기반 추천|`푸쉬 알림` 팝업 알림|
 
 <br>
