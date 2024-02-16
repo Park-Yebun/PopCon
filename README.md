@@ -72,7 +72,7 @@ SSAFY 10기 2학기 공통 프로젝트
 
 # 아키텍처
 
-<img width="70%" src="/uploads/537a028af037ff8efc04e0b75561085b/archi.png">
+<img width="70%" src="/uploads/349b4b68c808e50a9ab57488d32873da/archi.png">
 
 <br>
 <br>
@@ -80,7 +80,7 @@ SSAFY 10기 2학기 공통 프로젝트
 
 # ERD
 
-<img width="70%" src="/uploads/95c9055717964d2ff5711dbccf018503/popcon_erd.png">
+<img width="70%" src="/uploads/94c4c41622d48aac742b8ef0219de0e0/popcon_erd.png">
 
 <br>
 <br>
