@@ -60,7 +60,7 @@ SSAFY 10기 2학기 공통 프로젝트
 
 **BE** | `MARIADB` `S3`
  
-**BE - API** | `Java` `SpringBoot` `MyBatis` `SpringSecurity` `Postman`
+**BE - API** | `Java` `SpringBoot` `MyBatis` `SpringSecurity` `Postman` `JWT`
 
 **BE - Analysis** | `Python` `Flask`
 
