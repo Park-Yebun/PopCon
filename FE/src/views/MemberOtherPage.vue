@@ -3,22 +3,46 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useMemberStore } from "@/stores/user";
-import {  logout  } from "@/api/user";
+import {  logout, findById  } from "@/api/user";
+import { jwtDecode } from "jwt-decode";
 
 const memberStore = useMemberStore();
-const {userInfo} = storeToRefs(memberStore);
-
+const userInfo=ref(null);
+const pageLoaded=ref(false);
 const router = useRouter();
+
+onMounted(async ()=>{
+  
+  const accessToken=localStorage.getItem("accessToken").split(" ");
+  const decodeToken=jwtDecode(accessToken[1]);
+
+  await findById(
+    decodeToken.userId,
+    (response) => {
+          // console.log("findById 결과 >> ", response.data);
+          userInfo.value = response.data; // <- 확인 후 등록 
+          if(userInfo.value.userImagePath==null){
+            userInfo.value.userImagePath="https://popcon-s3-bucket.s3.ap-southeast-2.amazonaws.com/profileImages/noProfile.png";
+          }
+          pageLoaded.value=true;
+        },
+        (error) => {
+          // console.log(error);
+        }
+  )
+
+})
+
 
 const userLogout=function(){
   logout(
     ({data})=>{
-      console.log("정상!");
+      // console.log("정상!");
       localStorage.removeItem("accessToken");
       router.push({name:"home"});
     },
     ({response})=>{
-      console.log("error");
+      // console.log("error");
     }
   )
 
@@ -28,25 +52,17 @@ const userLogout=function(){
 
 
 <template>
-  <div class="home-container">
+  <div class="home-container" v-if="pageLoaded">
     <br />
     <br />
-    <h1 class="title">Others</h1>
-    <div class="image-container2">
-      <img
-        src="@/assets/images/alarm.png"
-        alt="이미지 설명"
-        width="30"
-        height="30"
-      />
-    </div>
+    <span class="title">Others</span>
     <br />
     <br />
     <!-- 이미지를 감싸는 컨테이너 추가 -->
     <div class="image-container">
       <div style="margin: 5%;">
         <img
-          :src="userInfo.userImagePath" 
+          :src="userInfo.userImagePath"
           width="80"
           height="80"
           style="display: block; margin: 0 auto; border-radius: 50%;"
@@ -63,12 +79,32 @@ const userLogout=function(){
     <div class="content">
       <!-- 버튼을 감싸는 컨테이너 추가 -->
       <div class="button-container">
-        <button @click="$router.push('/user/mypage')">마이페이지</button>
+        <button @click="$router.push({name:'edit-member'})" style="font-size:13px;">내 정보 수정</button>
         <button>체험단</button>
         <button>북마크</button>
-        <button @click="$router.push('/notice')">공지사항</button>
-        <button @click="$router.push('/onetoone')">1:1 문의</button>
-        <button @click="$router.push('/FAQ')">FAQ</button>
+        <button>공지사항</button>
+        <button>1:1 문의</button>
+        <button>FAQ</button>
+        <a href="https://drive.google.com/file/d/1hYDLfokL7lf8mQoN1RQHjPiqWRj7M_4O/view?usp=drive_link" download style="font-size: 10px">
+          <img
+            class="nav-icon-camera"
+            src="../assets/images/camerafront.png"
+            alt="카메라 아이콘"
+            style="width: 20px; height: 20px"
+          />
+          PopconARFilter.Apk
+        </a>
+        <br />
+        <a href="https://drive.google.com/file/d/1QxztoaEOomaLTLLAdzb8TF2FfJeqbWpM/view?usp=drive_link" download style="font-size: 10px">
+          <img
+            class="nav-icon-camera"
+            src="@/assets/images/cameraback.png"
+            alt="카메라 아이콘"
+            style="width: 20px; height: 20px"
+          />
+          PopconARCode.Apk
+        </a>
+
       </div>
 
       <br />
@@ -77,7 +113,7 @@ const userLogout=function(){
       <br />
       <br />
       <div class="button-container2">
-        <button @click="$router.push('/report/popup')">팝업스토어 제보</button>
+        <button>팝업스토어 제보</button>
         <button @click="userLogout">로그아웃</button>
       </div>
       <br />
@@ -92,15 +128,14 @@ const userLogout=function(){
 <style scoped>
 .title {
   margin-left: 15px; /* 왼쪽 마진을 10px로 설정 */
-  font-size: 22px;
-  font-weight: normal; /* 굵기를 일반(normal)으로 설정 */
+  font-size: 25px;
+  font-weight: bold; /* 굵기를 일반(normal)으로 설정 */
   line-height: 0;
 }
 
 .home-container {
   max-width: 400px;
   margin: 0 auto;
-  border: 2px solid gray; /* 테두리 스타일 설정 */
 }
 
 .image-container2 {

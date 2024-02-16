@@ -17,8 +17,29 @@
           <div class="nav-text">Map</div>
         </div>
         <div class="nav-item">
-          <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
+          <div class="dropup-center dropup">
+            <ul class="dropdown-menu" style="background-color: rgba(255, 255, 255, 0); border: 0px; margin-left: 4px;">
+              <li>
+                <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+                  <a href="unitydl://mylink">
+                    <img class="nav-icon-camera" src="@/assets/images/camerafront.png" alt="카메라 아이콘">
+                  </a>
+                </button>
+              </li>
+              <li>
+                <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+                  <a href="unitypc://mylink">
+                    <img class="nav-icon-camera" src="@/assets/images/cameraback.png" alt="카메라 아이콘">
+                  </a>
+                </button>
+              </li>
+            </ul>
+            <button type="button" class="btn btn-secondary dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; border: 0px;">
+              <img class="nav-icon-camera" src="@/assets/images/nav_camera.png" alt="카메라 아이콘">
+            </button> 
+          </div>
         </div>
+
         <div>
           <img @click="goRec" class="nav-icon" src="@/assets/images/nav_rec.png" alt="추천 아이콘">
           <div class="nav-text">Rec</div>
@@ -74,6 +95,8 @@
 
 .nav-item {
   justify-content: center;
+  align-items: center;
+  text-align:center;
 }
 .nav-text {
   color: #2C3550;
@@ -111,14 +134,20 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter'
+import { useMemberStore } from '@/stores/user';
+import { findById } from "@/api/user.js";
+import { jwtDecode } from "jwt-decode";
 import './fonts/NanumSquareNeo.css'
+import axios from 'axios';
 
 const router = useRouter()
 const store = useCounterStore()
-console.log(store.personalToken)
+const member = useMemberStore()
+
+const userType = ref()
 
 // 이거 실행이 안되는 것 같아서 일단 주석처리 해놨습니당.. 콘솔에 출력이 안되네용..-예분-
 // onMounted(()=>{
@@ -151,41 +180,45 @@ const goRec = function() {
   router.push({name : 'recommend'})
 }
 
-const goOthers = function() {
-  // 만약 현재 로그인한 유저가 개인회원이라면
-  if (store.modifyUser.userType == "GENERAL") {
-    router.push({name : 'other-member'})
-  }
-  // 만약 현재 로그인한 유저가 기업회원이라면
-  else if (store.modifyUser.userType == "CORP") {
-    router.push({name : 'other-corporate'})
-  }
-  // 만약 현재 로그인한 유저가 비회원이라면
-  else {
-    
-  }
-  router.push({name : 'other-member'})
+
+
+const getUserInfo = async (token) => {  // 토큰이 있는 경우에 사용자 정보를 가져오기 위해 사용 , userInfo 저장함 
+      const accessToken=token.split(" ");
+      let decodeToken = jwtDecode(accessToken[1]);
+      await findById(
+              decodeToken.userId,
+              (response) => {
+                userType.value = response.data.userType
+                // console.log(userType.value)
+              },
+              (error) => {
+                // console.log(error);
+                router.push({name:"user-login"});
+              }
+            );
 }
 
-import { useMemberStore } from "@/stores/user";
 
+// 토큰으로 로그인한 사용자의 유저타입 확인 후 해당되는 others 페이지로 라우팅
+const Token = localStorage.getItem("accessToken")
+if(Token!=null) {
+  getUserInfo(Token)
+}
 
-// others 페이지 인증권한 확인용 함수
-const onlyAuthUser = async (to, from, next) => {
-  const memberStore = useMemberStore();
-  const { userInfo } = storeToRefs(memberStore);
-  const { getUserInfo } = memberStore;
-
-  let token = localStorage.getItem("accessToken");
-
-  if(token!=null){  // 토큰이 있으면 아이디 찾아오기
-    console.log(1); 
-    await getUserInfo(token);
-    next();
-  } else {  // 없으면 로그인 시키기 
-    next({name:"user-login"});
+const goOthers = function() {
+  if (userType.value == "GENERAL") {
+      router.push({name : 'other-member'})
+    }
+    // 만약 현재 로그인한 유저가 기업회원이라면
+    else if (userType.value == "CORP") {
+      router.push({name : 'other-corporate'})
+    }
+    else if (userType.value == "ADMIN") {
+      router.push({name : 'other-admin'})
+    }
+    else {
+      router.push({name:"user-login"})
+    }   
   }
-
-};
 
 </script>
