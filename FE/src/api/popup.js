@@ -15,27 +15,9 @@ function getPopup(popupId,success,fail) {
     local.get(`${url}/${popupId}`).then(success).catch(fail);
 }
 
-
-// 좋아요 클릭 여부 가져오기 
-function getLikeOrNot(popupId,success,fail) {
-    local.defaults.headers["Authorization"]=localStorage.getItem("accessToken");
-    local.get(`${url}/${popupId}/like`).then(success).catch(fail);
-}
-
-// 좋아요 클릭 
-function addLike(popupId,param,success,fail) {
-    local.post(`${url}/${popupId}/like`,param).then(success).catch(fail);
-}
-
-// 좋아요 취소 
-function cancelLike(popupId,param,success,fail) {
-    local.delete(`${url}/${popupId}/like`,{params:param}).then(success).catch(fail);
-}
-
-
 // 팝업의 리뷰 조회 
-function getPopupReviewsTop9(popupId,param,success,fail) {
-    local.get(`${url}/${popupId}/reviews`,{params:param}).then(success).catch(fail)
+function getPopupReviewsTop9(popupId,success,fail) {
+    local.get(`${url}/${popupId}/reviews`).then(success).catch(fail)
 }
 
 // 통합 검색 팝업 조회 
@@ -57,14 +39,11 @@ function map(param, success, fail) {
 function popbti(param, success, fail) {
     local.get('/recommends/popbti', { params: param }).then(success).catch(fail);
 }
-
 // 지도화면에서 검색
 function mapSearch(param, success, fail) {
     local.get('/maps/search', { params: param }).then(success).catch(fail);
 }
 
-
 export {
-    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch, getLikeOrNot,
-    addLike, cancelLike
+    registerPopup, getPopup, getPopupReviewsTop9, getSearchedPopup, home, map, popbti, mapSearch
 };

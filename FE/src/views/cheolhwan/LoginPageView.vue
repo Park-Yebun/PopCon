@@ -32,7 +32,6 @@ const login = async() => {
   await userLogin(loginUser.value); // 로그인을 pinia 에서 
   if(isLogin.value){
     router.push({name:"home"});
-    // router.go({name:"home"});
   } else {
     isValid.value="아이디 또는 비밀번호를 다시 확인해주세요.";
     isValidBoolean.value=true;
@@ -47,7 +46,7 @@ const login = async() => {
     <div class="row mb-3">
       <div class="col-3"></div>
       <div class="col-6">
-        <img class="w-100 popcon-logo-size" src="@/assets/logo/POPCON_로고_배경제거.png" alt="">
+        <img class="w-100 popcon-logo-size" src="../../assets/logo/POPCON_로고_배경제거.png" alt="">
       </div>
       <div class="col-3"></div>
     </div>
@@ -58,22 +57,22 @@ const login = async() => {
       </div>
       <div class="form-floating mb-3">
         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="loginUser.userId">
-        <label for="floatingInput"><i class="bi bi-envelope"></i> 아이디</label>
+        <label for="floatingInput"><i class="bi bi-envelope"></i>아이디</label>
       </div>
       <div class="form-floating mb-3">
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="loginUser.userPassword">
-        <label for="floatingPassword"><i class="bi bi-key"></i> 비밀번호</label>
+        <label for="floatingPassword"><i class="bi bi-key"></i>비밀번호</label>
       </div>
       <p style="color:red;" v-show="isValidBoolean">{{ isValid }}</p>
       <div class="container text-center">
         <div class="row mb-3">
           <div class="col-5 form-check form-switch small-text">
-            <!-- <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-            <label class="form-check-label fw-bold" for="flexSwitchCheckChecked">아이디 기억하기</label> -->
-          </div> 
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label fw-bold" for="flexSwitchCheckChecked">아이디 기억하기</label>
+          </div>
           <div class="col-7 small-text text-end">
             <span class=" fw-bold" @click="goIdSearch">
-              아이디 찾기 
+              아이디 찾기
             </span>
             <span class=" fw-bold" @click="goPasswordSearch">
               비밀번호 찾기
@@ -92,7 +91,7 @@ const login = async() => {
               <div><i class="bi bi-arrow-right-circle-fill" style="color: #FFCC00"></i></div>
           </button>
         </div>
-        <!-- <div class="row d-flex justify-content-center  mb-3">
+        <div class="row d-flex justify-content-center  mb-3">
           또는
         </div>
         <div class="row">
@@ -101,13 +100,13 @@ const login = async() => {
         <div class="row">
           <button type="button" class="btn btn-light mb-3"><img class="portal-logo-size" src="../../assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
     
-        </div> -->
-        <div class="row" style="font-size: 12px; text-align: center;">
-          <div class="col-7">
+        </div>
+        <div class="row" style="font-size: 13px; text-align: center;">
+          <div class="col-8">
             <p>계정이 없으신가요?</p>
           </div>
-          <div class="col-5">
-            <span @click="goSignUp" style="color: #ff534c; cursor:pointer;">회원가입</span>
+          <div class="col-4">
+            <span @click="goSignUp" style="color: #ff534c;">회원가입</span>
           </div>
         </div>
 

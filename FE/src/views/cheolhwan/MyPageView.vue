@@ -33,7 +33,7 @@ const removeUser=function(){
       router.push({name:"user-login"});
     },
     ({response}) => {
-      // console.log("error");
+      console.log("error");
     }
   )
 }
@@ -72,23 +72,23 @@ const removeUser=function(){
     </div>
     <div title="마감임박 팝업리스트" class="popup-group">
       <div class="popup">
-        <img src="@/assets/images/poster_01.jpg" class="popup-img" alt="">
+        <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
         <h5 class="popup-title">Card title</h5>
       </div>
       <div class="popup">
-        <img src="@/assets/images/poster_02.jpg" class="popup-img" alt="">
+        <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
         <h5 class="popup-title">Card title</h5>
       </div>
       <div class="popup">
-        <img src="@/assets/images/poster_03.png" class="popup-img" alt="">
+        <img src="../../assets/images/poster_03.png" class="popup-img" alt="">
         <h5 class="popup-title">Card title</h5>
       </div>
       <div class="popup">
-        <img src="@/assets/images/poster_01.jpg" class="popup-img" alt="">
+        <img src="../../assets/images/poster_01.jpg" class="popup-img" alt="">
         <h5 class="popup-title">Card title</h5>
       </div>
       <div class="popup">
-        <img src="@/assets/images/poster_02.jpg" class="popup-img" alt="">
+        <img src="../../assets/images/poster_02.jpg" class="popup-img" alt="">
         <h5 class="popup-title">Card title</h5>
       </div>
     </div>

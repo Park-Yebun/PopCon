@@ -3,6 +3,14 @@
     <br />
     <br />
     <h1 class="title">Others</h1>
+    <div class="image-container2">
+      <img
+        src="@/assets/images/alarm.png"
+        alt="이미지 설명"
+        width="30"
+        height="30"
+      />
+    </div>
     <br />
     <br />
     <!-- 이미지를 감싸는 컨테이너 추가 -->
@@ -29,26 +37,6 @@
         <button @click="handleButtonClick(4)">공지사항</button>
         <button @click="handleButtonClick(5)">1:1 문의</button>
         <button @click="handleButtonClick(6)">FAQ</button>
-        <a href="https://drive.google.com/file/d/1hYDLfokL7lf8mQoN1RQHjPiqWRj7M_4O/view?usp=drive_link" download style="font-size: 10px">
-            <img
-              class="nav-icon-camera"
-              src="../assets/images/camerafront.png"
-              alt="카메라 아이콘"
-              style="width: 20px; height: 20px"
-            />
-            PopconARFilter.Apk
-          </a>
-          <br />
-          <a href="https://drive.google.com/file/d/1QxztoaEOomaLTLLAdzb8TF2FfJeqbWpM/view?usp=drive_link" download style="font-size: 10px">
-            <img
-              class="nav-icon-camera"
-              src="@/assets/images/cameraback.png"
-              alt="카메라 아이콘"
-              style="width: 20px; height: 20px"
-            />
-            PopconARCode.Apk
-        </a>
-
       </div>
 
       <br />

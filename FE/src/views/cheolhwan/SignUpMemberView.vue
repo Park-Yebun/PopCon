@@ -54,7 +54,7 @@ const isValidEmailBoolean=ref(false);
 const isValidEmail=ref('');
 
 const checkEmailAvailability = function() {
-  // console.log(emailInput.value);
+  console.log(emailInput.value);
   param.value.type="email";
   param.value.value=emailInput.value;
   dupCheck(
@@ -94,11 +94,11 @@ const join=function(){
     userJoin(
     joinUser.value,
     ({data})=>{
-      // console.log(data);
+      console.log(data);
       router.push({ name: "home" });
     },
     ({ response }) => {
-      // console.log(response);
+      console.log(response);
     }
   )
   }
@@ -173,22 +173,22 @@ const join=function(){
             <div><i class="bi bi-arrow-right-circle-fill" style="color: #FFCC00"></i></div>
           </button>
         </div>
-        <!-- <div class="row d-flex justify-content-center  mb-3">
+        <div class="row d-flex justify-content-center  mb-3">
           또는
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="@/assets/logo/구글logo.png" alt="구글로고">  구글 로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/구글logo.png" alt="구글로고">  구글 로그인</button>
         </div>
         <div class="row">
-          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="@/assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
+          <button type="button" class="btn btn-light mb-3"><img class="logo-size" src="../../assets/logo/Kakao_logo.jpg" alt="카카오로고">  카카오 로그인</button>
     
-        </div> -->
+        </div>
         <div class="row" style="font-size: 11px; text-align: center;">
-          <div class="col-8">
+          <div class="col-9">
             <p>이미 계정이 있으신가요?</p>
           </div>
-          <div class="col-4">
-            <a href="" @click="$router.push({name:'user-login'})" style="color:#ff534c">로그인</a>
+          <div class="col-3">
+            <a href="" style="color:#ff534c">로그인</a>
           </div>
         </div>
 
@@ -226,7 +226,6 @@ const join=function(){
     }
   };
   </script> -->
-
   
   <style scoped>
   .logo-size{
