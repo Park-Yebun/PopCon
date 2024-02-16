@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.popcon.review.mapper.ReviewMapper">
+
+    <!-- REVIEW TABLE -->
+    <resultMap id="reviewResult" type="com.ssafy.popcon.review.dto.ReviewDto">
+        <result column="review_id" property="reviewId"/>
+        <result column="popup_id" property="popupId"/>
+        <result column="review_content" property="reviewContent"/>
+        <result column="review_score" property="reviewScore"/>
+        <result column="review_quality" property="reviewQuality"/>
+        <result column="review_cost" property="reviewCost"/>
+        <result column="review_type" property="reviewType"/>
+        <result column="review_design" property="reviewDesign"/>
+        <result column="review_trendy" property="reviewTrendy"/>
+        <result column="review_new" property="reviewNew"/>
+        <result column="review_kindness" property="reviewKindness"/>
+        <result column="review_area" property="reviewArea"/>
+        <result column="review_car" property="reviewCar"/>
+        <result column="review_concept" property="reviewConcept"/>
+        <result column="review_clean" property="reviewClean"/>
+        <result column="review_gift" property="reviewGift"/>
+        <result column="review_date" property="reviewDate"/>
+        <result column="review_like" property="reviewLike"/>
+        <result column="user_id" property="userId"/>
+        <result column="review_parent_id" property="reviewParentId"/>
+    </resultMap>
+
+    <!-- REVIEW_IMAGE TABLE -->
+    <resultMap id="reviewImageResultMap" type="com.ssafy.popcon.review.dto.ReviewImageDto">
+        <result column="review_image_id" property="reviewImageId"/>
+        <result column="review_id" property="reviewId"/>
+        <result column="review_image_path" property="reviewImagePath"/>
+    </resultMap>
+
+    <!-- POPUP TABLE -->
+    <resultMap id="popupResultMap" type="com.ssafy.popcon.popup.dto.PopupDto">
+        <result column="popup_id" property="popupId"/>
+        <result column="popup_name" property="popupName"/>
+        <result column="popup_brand" property="popupBrand"/>
+        <result column="popup_content" property="popupContent"/>
+        <result column="popup_location" property="popupLocation"/>
+        <result column="popup_start" property="popupStart"/>
+        <result column="popup_end" property="popupEnd"/>
+        <result column="popup_operating" property="popupOperating"/>
+        <result column="popup_event" property="popupEvent"/>
+        <result column="popup_view" property="popupView"/>
+        <result column="popup_car" property="popupCar"/>
+        <result column="popup_entryfee" property="popupEntryfee"/>
+        <result column="popup_wifi" property="popupWifi"/>
+        <result column="popup_eat" property="popupEat"/>
+        <result column="popup_site" property="popupSite"/>
+        <result column="popup_instar" property="popupInstar"/>
+        <result column="popup_notice" property="popupNotice"/>
+        <result column="popup_phone" property="popupPhone"/>
+        <result column="popup_honey" property="popupHoney"/>
+        <result column="popup_like" property="popupLike"/>
+        <result column="user_Id" property="userId"/>
+    </resultMap>
+
+    <!-- POPUP_USER_TABLE -->
+    <resultMap type="com.ssafy.popcon.user.dto.UserDto" id="user">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_image_path" property="userImagePath"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_platform" property="userPlatform"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_token" property="userToken"/>
+        <result column="user_business" property="userBusiness"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_deleted" property="userDeleted"/>
+    </resultMap>
+
+
+
+    <insert id="registerReview" parameterType="com.ssafy.popcon.review.dto.ReviewDto" useGeneratedKeys="true" keyProperty="reviewId">
+        INSERT INTO popcon.review (popup_id, review_content, review_score, review_quality,
+                                   review_cost, review_type, review_design, review_trendy,
+                                   review_new, review_kindness, review_area, review_car,
+                                   review_concept, review_clean, review_gift, review_date,
+                                   review_like, user_id, review_parent_id)
+        VALUES (#{popupId}, #{reviewContent}, #{reviewScore}, #{reviewQuality},
+                #{reviewCost}, #{reviewType}, #{reviewDesign}, #{reviewTrendy},
+                #{reviewNew}, #{reviewKindness}, #{reviewArea}, #{reviewCar},
+                #{reviewConcept}, #{reviewClean}, #{reviewGift}, DATE_FORMAT(NOW(), '%Y-%m-%d'),
+                #{reviewLike}, #{userId}, #{reviewParentId})
+    </insert>
+
+    <insert id="registerReviewImage" parameterType="com.ssafy.popcon.review.dto.ReviewImageDto">
+        INSERT INTO popcon.review_image (review_id, review_image_path)
+        VALUES (#{reviewId}, #{reviewImagePath})
+    </insert>
+
+    <!-- 리뷰 수정 -->
+    <update id="updateReview" parameterType="com.ssafy.popcon.review.dto.ReviewDto">
+        UPDATE popcon.review
+        SET review_content = #{reviewContent}, review_score = #{reviewScore},
+            review_quality = #{reviewQuality}, review_cost = #{reviewCost},
+            review_type = #{reviewType}, review_design = #{reviewDesign},
+            review_trendy = #{reviewTrendy}, review_new = #{reviewNew},
+            review_kindness = #{reviewKindness}, review_area = #{reviewArea},
+            review_car= #{reviewCar}, review_concept = #{reviewConcept},
+            review_clean = #{reviewClean}, review_gift = #{reviewGift},
+            review_date = #{reviewDate}
+        WHERE review_id = #{reviewId}
+    </update>
+
+    <!-- 리뷰 이미지 수정 -->
+    <update id="updateReviewImage" parameterType="com.ssafy.popcon.review.dto.ReviewImageDto">
+        <!-- 해당하는 데이터베이스에 맞게 변경해야 합니다. -->
+        UPDATE popcon.review_image
+        SET review_image_path = #{reviewImagePath}
+        WHERE review_id = #{reviewId}
+    </update>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM popcon.review
+        WHERE review_id = #{reviewId}
+    </delete>
+
+    <!-- 리뷰 이미지 삭제 -->
+    <delete id="deleteReviewImage" parameterType="int">
+        <!-- 해당하는 데이터베이스에 맞게 변경해야 합니다. -->
+        DELETE FROM popcon.review_image
+        WHERE review_id = #{reviewId} AND review_image_id = #{reviewImageId}
+    </delete>
+
+    <!-- 리뷰 테이블에 해당 리뷰 존재하는지 SQL -->
+    <select id="getReviewById" resultType="com.ssafy.popcon.review.dto.ReviewDto" resultMap="reviewResult">
+        SELECT * FROM popcon.review WHERE review.popup_id = #{popupId} AND review_id = #{reviewId}
+    </select>
+
+    <!-- 팝업 테이블에 해당 팝업이 존재하는지 SQL -->
+    <select id="getPopupById" parameterType="int" resultType="com.ssafy.popcon.popup.dto.PopupDto" resultMap="popupResultMap">
+        SELECT * FROM popcon.popup WHERE popup_id = #{popupId}
+    </select>
+
+    <!-- 유저 테이블에 해당 유저가 존재하는지 SQL -->
+    <select id="getUserById" resultType="com.ssafy.popcon.user.dto.UserDto" resultMap="user">
+        SELECT * FROM popcon.user WHERE user_id = #{userId}
+    </select>
+
+    <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 (이미지 링크까지) -->
+    <select id="getReview" parameterType="int" resultMap="reviewResult">
+        SELECT
+            review_id,
+            review_content, popup_id,review.user_id, review_date, review_like, review_quality, review_cost,
+            review_type, review_design, review_trendy, review_new, review_kindness, review_area,
+            review_car, review_concept, review_clean, review_gift, review_image.review_image_path as reviewImagePath,
+            user.user_image_path as userImagePath,
+            user.user_nickname as userNickname,
+            review_like
+        FROM review
+                 inner join review_image on review.review_id=review_image.review_id
+                 inner join user on review.user_id=user.user_id
+        WHERE popup_id = #{popupId}
+        ORDER BY review_date desc;
+    </select>
+
+    <!-- 해당 팝업의 모든 리뷰를 불러오는 코드 (이미지 링크까지) -->
+    <select id="getReviewTop9" parameterType="map" resultMap="reviewResult">
+        SELECT
+            review.review_id,
+            review.review_content, review.popup_id,review.user_id, review.review_date, review.review_like, review.review_quality, review.review_cost,
+            review.review_type, review.review_design, review.review_trendy, review.review_new, review.review_kindness, review.review_area,
+            review.review_car, review.review_concept, review.review_clean, review.review_gift, review_image.review_image_path as reviewImagePath,
+            user.user_image_path as userImagePath,
+            user.user_nickname as userNickname,
+            (SELECT COUNT(*) FROM review_recommend WHERE review_recommend.review_id=review.review_id
+                AND review_recommend.user_id=#{userId}) AS userReviewLike
+        FROM review
+                 left join review_image on review.review_id=review_image.review_id
+                 inner join user on review.user_id=user.user_id
+        WHERE popup_id = #{popupId}
+        group by user_id
+        ORDER BY review.review_like desc
+        ;
+    </select>
+
+
+    <!-- 해당 팝업의 모든 리뷰를 좋아요 순 불러오는 코드 -->
+    <select id="getReviewLike" resultType="com.ssafy.popcon.review.dto.ReviewDto" resultMap="reviewResult">
+        SELECT
+            review_content, user_id, review_date, review_like, review_quality, review_cost,
+            review_type, review_design, review_trendy, review_new, review_kindness, review_area,
+            review_car, review_concept, review_clean, review_gift
+        FROM popcon.review
+        ORDER BY review_like;
+    </select>
+
+    <!-- 좋아요 추가 -->
+    <update id="addLikeToReview" parameterType="com.ssafy.popcon.review.dto.ReviewDto">
+        UPDATE popcon.review SET review_like = review_like + 1 WHERE popup_id = #{popupId} AND review_id = #{reviewId}
+    </update>
+
+    <!-- 팝업 추천 정보 추가 -->
+    <insert id="addReviewRecommend" parameterType="ReviewRecommendDto">
+        INSERT INTO popcon.review_recommend (review_id, user_id) VALUES (#{reviewId}, #{userId})
+    </insert>
+
+    <!-- 리뷰 추천 정보 등록 -->
+    <select id="duplicateReviewRecommend" resultType="java.lang.Integer" parameterType="com.ssafy.popcon.popup.dto.PopupRecommendDto">
+        SELECT COUNT(*)
+        FROM popcon.review_recommend
+        WHERE review_id = #{reviewId, jdbcType=INTEGER} AND user_id = #{userId}
+    </select>
+
+    <!-- 좋아요 취소 -->
+    <update id="cancelLikeToReview" parameterType="map">
+        UPDATE popcon.review SET review_like = review_like - 1 WHERE popup_id = #{popupId} AND review_id = #{reviewId}
+    </update>
+
+    <!-- 리뷰 추천 정보 삭제 -->
+    <delete id="deleteReviewRecommend" parameterType="ReviewRecommendDto">
+        DELETE FROM popcon.review_recommend WHERE review_id = #{reviewId} AND user_id = #{userId}
+    </delete>
+
+</mapper>
