@@ -3,7 +3,7 @@
 <br>
 <br>
 
-<img src="/uploads/16d83ba791d5d459c034774529a9f8b0/main.JPG"/>
+<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/fe916bdd-ff4d-489f-83ab-941691e070e3"/>
 
 <br>
 <br>
@@ -39,15 +39,15 @@ SSAFY 10기 2학기 공통 프로젝트
 
 |||
 |---|---|
-|<img src="/uploads/d8b59f584542a34a2f4d2e77f5991c08/pwa01.gif" width="300" height="500">|<img src="/uploads/e2a6fc1016055ba72fd32c3d97288f10/main01.gif" width="300" height="500">|
+|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/7c584677-abfc-43f9-864b-8116315831f9" width="300" height="500">|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/a973b80a-bd2b-4818-9734-d5b535fb0094" width="300" height="500">|
 |`PWA` 홈페이지, 앱|`메인 화면` 서비스 소개|
-|<img src="/uploads/018ed2302ec1baa05b919e08bb04147d/지도페이지1.gif" width="300" height="500">|<img src="/uploads/d2cb88cf001436013b2599e8c7eeb418/상세페이지.gif" width="300" height="500">|
+|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/81b01c1e-8894-4383-b60d-c3e52e557251" width="300" height="500">|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/c2c95284-f274-4ae3-a3fa-24526c1d8dbc" width="300" height="500">|
 |`맵 기반 검색` 카테고리, 날짜|`상세 페이지` 소개, 꿀팁, 리뷰 통계, 리뷰|
-|<img src="/uploads/a4295620e46ebef33be83e5b0bf5bcaa/ARCode.gif" width="300" height="500">|<img src="/uploads/9d1d3c4bcad32078e4db3795235b524a/ARF.gif" width="300" height="500">|
+|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/07c8e158-ae74-42bc-bf7f-46c790ce04b3" width="300" height="500">|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/9320ef09-92ec-46a8-afc7-a325c78416e2" width="300" height="500">|
 |`AR 카메라` 전면 카메라|`AR 카메라` 후면 카메라|
-|<img src="/uploads/24d4ebb3dcbd31a6f4e27d1e9ea6f770/팝비티아이.gif" width="300" height="500">|<img src="/uploads/1f3df0b90d73ae463f7034987e4f7da7/ai01.gif" width="300" height="500">|
+|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/b21a758d-b52d-4f73-89c9-37862d874da5" width="300" height="500">|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/42e41f79-0d4d-41ef-b9ab-c4e40da6d945" width="300" height="500">|
 |`맞춤 추천` POPBTI 검사 결과 기반 추천 맟 공유|`맞춤 추천` AI 이미지 분석 결과 기반 추천|
-|<img src="/uploads/4dc2d04dcb458016c1f8ea159d22e18b/good01.gif" width="300" height="500">|<img src="">|
+|<img src="https://github.com/Park-Yebun/PopCon/assets/139411465/08d19e38-7f4d-40fd-b495-8551d5d6ee4d" width="300" height="500">||
 |`맞춤 추천` 로그인 유저 좋아요 기반 추천|`푸쉬 알림` 팝업 알림|
 
 <br>
@@ -72,7 +72,7 @@ SSAFY 10기 2학기 공통 프로젝트
 
 # 아키텍처
 
-<img width="70%" src="/uploads/349b4b68c808e50a9ab57488d32873da/archi.png">
+<img width="70%" src="https://github.com/Park-Yebun/PopCon/assets/139411465/748ee017-5e64-4673-8f31-d6c955ef89da">
 
 <br>
 <br>
@@ -80,7 +80,7 @@ SSAFY 10기 2학기 공통 프로젝트
 
 # ERD
 
-<img width="70%" src="/uploads/94c4c41622d48aac742b8ef0219de0e0/popcon_erd.png">
+<img width="70%" src="https://github.com/Park-Yebun/PopCon/assets/139411465/3f45f096-26f0-4ea2-af11-4af58ca113fe">
 
 <br>
 <br>
